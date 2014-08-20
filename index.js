@@ -49,7 +49,8 @@ function mergeIntoEntity(entityA, entityB, entityKey) {
 
 function visitEntity(entity, entitySchema, bag) {
   var entityKey = entitySchema.getKey(),
-      id = entity.id,
+      idAttribute = entitySchema.getIdAttribute(),
+      id = entity[idAttribute],
       stored,
       normalized;
 

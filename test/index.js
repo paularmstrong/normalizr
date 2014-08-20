@@ -77,6 +77,34 @@ describe('normalizr', function () {
     });
   });
 
+  it('can normalize single entity with custom id attribute', function () {
+    var article = new Schema('articles', { idAttribute: 'slug' }),
+        input;
+
+    input = {
+      id: 1,
+      slug: 'some-article',
+      title: 'Some Article',
+      isFavorite: false
+    };
+
+    Object.freeze(input);
+
+    normalize(input, article).should.eql({
+      result: 'some-article',
+      entities: {
+        articles: {
+          'some-article': {
+            id: 1,
+            slug: 'some-article',
+            title: 'Some Article',
+            isFavorite: false
+          }
+        }
+      }
+    });
+  });
+
   it('can normalize an array', function () {
     var article = new Schema('articles'),
         input;
