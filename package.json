@@ -25,5 +25,8 @@
   "devDependencies": {
     "chai": "^1.9.1",
     "mocha": "^1.21.4"
+  },
+  "dependencies": {
+    "lodash-node": "^2.4.1"
   }
 }
