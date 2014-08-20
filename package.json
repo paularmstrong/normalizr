@@ -21,5 +21,9 @@
   "homepage": "https://github.com/gaearon/normalizr",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "chai": "^1.9.1",
+    "mocha": "^1.21.4"
   }
 }
