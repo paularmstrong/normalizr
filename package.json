@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/gaearon/normalizr",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha -R spec ./test/index.js"
   },
   "devDependencies": {
     "chai": "^1.9.1",
