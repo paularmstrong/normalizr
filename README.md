@@ -1,4 +1,6 @@
 normalizr
 =========
 
-Normalizes API responses according to schema for Flux application
+Normalizes JSON API responses according to schema for Flux application.
+
+(Work in progress)
