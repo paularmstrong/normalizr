@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/gaearon/normalizr/issues"
   },
-  "homepage": "https://github.com/gaearon/normalizr"
+  "homepage": "https://github.com/gaearon/normalizr",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
 }
