@@ -210,7 +210,6 @@ AppDispatcher.register(function (payload) {
 });
 ```
 
-```
 
 ### API
 
