@@ -146,7 +146,7 @@ var ServerActionCreators = {
     });
 
     AppDispatcher.handleServerAction({
-      type: ActionTypes.RECEIVE_RAW_ARTICLES,
+      type: ActionTypes.RECEIVE_ARTICLES,
       normalized: normalized
     });
   },
@@ -186,7 +186,7 @@ var ServerActionCreators = {
     });
 
     AppDispatcher.handleServerAction({
-      type: ActionTypes.RECEIVE_RAW_USERS,
+      type: ActionTypes.RECEIVE_USERS,
       normalized: normalized
     });
   }
