@@ -6,8 +6,9 @@ Kudos to Jing Chen for suggesting this approach.
 
 ### The Problem
 
-You have a legacy API that returns deeply nested objects.  
-You want to port your app to [Flux](https://github.com/facebook/flux) but [it's hard](https://groups.google.com/forum/#!topic/reactjs/jbh50-GJxpg) for Stores to read their data from deeply nested API responses.  
+* You have a JSON API that returns deeply nested objects;  
+* You want to port your app to [Flux](https://github.com/facebook/flux);
+* You noticed [it's hard](https://groups.google.com/forum/#!topic/reactjs/jbh50-GJxpg) for Stores to consume data from nested API responses.  
 
 Normalizr takes JSON and a schema and **replaces nested entities with their IDs, gathering all entities in dictionaries**.
 
@@ -75,15 +76,19 @@ var normalizr = require('normalizr'),
     normalize = normalizr.normalize,
     Schema = normalizr.Schema,
     arrayOf = normalizr.arrayOf;
+```
 
-// First, define a schema:
+First, define a schema for our entities:
 
+```javascript
 var article = new Schema('articles'),
     user = new Schema('users'),
     collection = new Schema('collections');
+```
 
-// Define nesting rules
+Then we define nesting rules:
 
+```javascript
 article.define({
   author: user,
   collections: arrayOf(collection)
@@ -92,32 +97,119 @@ article.define({
 collection.define({
   curator: user
 });
+```
 
-// Now we can use this schema in our API response code
+Now we can use this schema in our API response handlers:
 
+```javascript
 var ServerActionCreators = {
+
+  // These are two different XHR endpoints with different response schemas.
+  // We can use the schema objects defined earlier to express both of them:
+
   receiveArticles: function (response) {
+  
+    // Passing { articles: arrayOf(article) } as second parameter to normalize()
+    // lets it correctly traverse the response tree and gather all entities:
+    
+    // BEFORE
+    // {
+    //   articles: [{
+    //     id: 1,
+    //     title: 'Some Article',
+    //     user: {
+    //       id: 7,
+    //       name: 'Dan',
+    //     }
+    //   }, ...]
+    // }
+    //
+    // AFTER:
+    // {
+    //   result: {
+    //    articles: [1, 2, ...] // <--- Note how object array turned into ID array
+    //   },
+    //   entities: {
+    //     articles: {
+    //       1: { ... },
+    //       2: { ... },
+    //       ...
+    //     },
+    //     users: {
+    //       7: { ... },
+    //       ..
+    //     }
+    //   }
+    
     var normalized = normalize(response, {
-      articles: arrayOf(article) // Use our schema
+      articles: arrayOf(article)
     });
 
     AppDispatcher.handleServerAction({
       type: ActionTypes.RECEIVE_RAW_ARTICLES,
-      rawArticles: normalized
+      normalized: normalized
     });
   },
+  
+  // Though this is a different API endpoint, we can describe it just as well
+  // with our normalizr schema objects:
 
   receiveUsers: function (response) {
+
+    // Passing { users: arrayOf(user) } as second parameter to normalize()
+    // lets it correctly traverse the response tree and gather all entities:
+    
+    // BEFORE
+    // {
+    //   users: [{
+    //     id: 7,
+    //     name: 'Dan',
+    //     ...
+    //   }, ...]
+    // }
+    //
+    // AFTER:
+    // {
+    //   result: {
+    //    users: [7, ...] // <--- Note how object array turned into ID array
+    //   },
+    //   entities: {
+    //     users: {
+    //       7: { ... },
+    //       ..
+    //     }
+    //   }
+    
+
     var normalized = normalize(response, {
-      users: arrayOf(users) // Use our schema
+      users: arrayOf(users)
     });
 
     AppDispatcher.handleServerAction({
       type: ActionTypes.RECEIVE_RAW_USERS,
-      rawUsers: normalized
+      normalized: normalized
     });
   }
 }
+```
+
+
+Finally, different Stores can tune in to listen to all API responses and grab entity lists from `action.normalized.entities`:
+
+```javascript
+AppDispatcher.register(function (payload) {
+  var action = payload.action;
+
+  switch (action.type) {
+  case ActionTypes.RECEIVE_ARTICLES:
+  case ActionTypes.RECEIVE_USERS:
+    mergeUsers(action.normalized.entities.users);
+    UserStore.emitChange();
+    break;
+  }
+});
+```
+
 ```
 
 ### API
@@ -278,7 +370,7 @@ AppDispatcher.register(function (payload) {
   switch (action.type) {
   case ActionTypes.RECEIVE_ARTICLES:
   case ActionTypes.RECEIVE_USERS:
-    mergeUsers(action.entities.users);
+    mergeUsers(action.normalized.entities.users);
     UserStore.emitChange();
     break;
   }
