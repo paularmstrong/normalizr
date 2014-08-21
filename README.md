@@ -64,10 +64,10 @@ Note the flat structure (all nesting is gone).
 
 ### Features
 
-* Entities can be nested inside other entities, objects and arrays
-* Combine entity schemas to express any kind of API response
-* Entities with same IDs are automatically merged (with a warning if they differ)
-* Allows using a custom ID attribute (e.g. slug)
+* Entities can be nested inside other entities, objects and arrays;
+* Combine entity schemas to express any kind of API response;
+* Entities with same IDs are automatically merged (with a warning if they differ);
+* Allows using a custom ID attribute (e.g. slug).
 
 ### Usage
 
