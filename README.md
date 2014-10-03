@@ -4,6 +4,10 @@ normalizr
 Normalizes deeply nested JSON API responses according to a schema for Flux application.  
 Kudos to Jing Chen for suggesting this approach.
 
+### Sample App
+
+See **[flux-react-router-example](https://github.com/gaearon/flux-react-router-example)**.
+
 ### The Problem
 
 * You have a JSON API that returns deeply nested objects;  
