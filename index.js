@@ -2,8 +2,8 @@
 
 var EntitySchema = require('./EntitySchema'),
     ArraySchema = require('./ArraySchema'),
-    isObject = require('lodash-node/modern/objects/isObject'),
-    isEqual = require('lodash-node/modern/objects/isEqual');
+    isObject = require('lodash/lang/isObject'),
+    isEqual = require('lodash/lang/isEqual');
 
 function visitObject(obj, schema, bag) {
   var normalized = {};

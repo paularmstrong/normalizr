@@ -1,6 +1,6 @@
 {
   "name": "normalizr",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Normalizes JSON according to schema for Flux application",
   "main": "index.js",
   "repository": {
@@ -27,6 +27,6 @@
     "mocha": "^1.21.4"
   },
   "dependencies": {
-    "lodash-node": "^2.4.1"
+    "lodash": "^3.0.0"
   }
 }

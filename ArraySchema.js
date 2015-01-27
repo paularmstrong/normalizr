@@ -1,6 +1,6 @@
 'use strict';
 
-var isObject = require('lodash-node/modern/objects/isObject');
+var isObject = require('lodash/lang/isObject');
 
 function ArraySchema(itemSchema) {
   if (!isObject(itemSchema)) {
