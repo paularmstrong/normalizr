@@ -382,7 +382,7 @@ AppDispatcher.register(function (payload) {
 
 ### Dependencies
 
-* lodash-node for `isObject` and `isEqual`
+* lodash for `isObject` and `isEqual`
 
 ### Installing
 
