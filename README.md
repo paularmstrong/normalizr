@@ -135,7 +135,7 @@ var ServerActionCreators = {
     //   },
     //   entities: {
     //     articles: {
-    //       1: { ... },
+    //       1: { user: 7, ... }, // <--- Same happens for references to other entities in the schema
     //       2: { ... },
     //       ...
     //     },
