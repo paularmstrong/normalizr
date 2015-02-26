@@ -404,10 +404,7 @@ describe('normalizr', function () {
   });
 
   it('can normalize self-recursive entities', function () {
-    var article = new Schema('articles'),
-        user = new Schema('users'),
-        collection = new Schema('collections'),
-        feedSchema,
+    var user = new Schema('users'),
         input;
 
     user.define({
