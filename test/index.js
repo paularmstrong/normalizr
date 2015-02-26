@@ -301,6 +301,157 @@ describe('normalizr', function () {
     });
   });
 
+  it('can normalize mutually recursive entities', function () {
+    var article = new Schema('articles'),
+        user = new Schema('users'),
+        collection = new Schema('collections'),
+        feedSchema,
+        input;
+
+    user.define({
+      articles: arrayOf(article)
+    });
+
+    article.define({
+      collections: arrayOf(collection)
+    });
+
+    collection.define({
+      subscribers: arrayOf(user)
+    });
+
+    feedSchema = {
+      feed: arrayOf(article)
+    };
+
+    input = {
+      feed: [{
+        id: 1,
+        title: 'Some Article',
+        collections: [{
+          id: 1,
+          title: 'Awesome Writing',
+          subscribers: [{
+            id: 4,
+            name: 'Andy Warhol',
+            articles: [{
+              id: 1,
+              title: 'Some Article'
+            }]
+          }, {
+            id: 100,
+            name: 'T.S. Eliot',
+            articles: [{
+              id: 1,
+              title: 'Some Article'
+            }]
+          }]
+        }, {
+          id: 7,
+          title: 'Even Awesomer',
+          subscribers: [{
+            id: 100,
+            name: 'T.S. Eliot',
+            articles: [{
+              id: 1,
+              title: 'Some Article'
+            }]
+          }]
+        }]
+      }]
+    };
+
+    Object.freeze(input);
+
+    normalize(input, feedSchema).should.eql({
+      result: {
+        feed: [1]
+      },
+      entities: {
+        articles: {
+          1: {
+            id: 1,
+            title: 'Some Article',
+            collections: [1, 7]
+          }
+        },
+        collections: {
+          1: {
+            id: 1,
+            title: 'Awesome Writing',
+            subscribers: [4, 100]
+          },
+          7: {
+            id: 7,
+            title: 'Even Awesomer',
+            subscribers: [100]
+          }
+        },
+        users: {
+          4: {
+            id: 4,
+            name: 'Andy Warhol',
+            articles: [1]
+          },
+          100: {
+            id: 100,
+            name: 'T.S. Eliot',
+            articles: [1]
+          }
+        }
+      }
+    });
+  });
+
+  it('can normalize self-recursive entities', function () {
+    var article = new Schema('articles'),
+        user = new Schema('users'),
+        collection = new Schema('collections'),
+        feedSchema,
+        input;
+
+    user.define({
+      parent: user
+    });
+
+    input = {
+      id: 1,
+      name: 'Andy Warhol',
+      parent: {
+        id: 7,
+        name: 'Tom Dale',
+        parent: {
+          id: 4,
+          name: 'Pete Hunt'
+        }
+      }
+    };
+
+    Object.freeze(input);
+
+    normalize(input, user).should.eql({
+      result: 1,
+      entities: {
+        users: {
+          1: {
+            id: 1,
+            name: 'Andy Warhol',
+            parent: 7
+          },
+          7: {
+            id: 7,
+            name: 'Tom Dale',
+            parent: 4
+          },
+          4: {
+            id: 4,
+            name: 'Pete Hunt'
+          }
+        }
+      }
+    });
+  });
+
   it('can merge entities', function () {
     var writer = new Schema('writers'),
         book = new Schema('books'),
