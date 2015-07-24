@@ -1,7 +1,7 @@
 'use strict';
 
 var should = require('chai').should(),
-    normalizr = require('../index'),
+    normalizr = require('../lib/index'),
     normalize = normalizr.normalize,
     Schema = normalizr.Schema,
     arrayOf = normalizr.arrayOf;
