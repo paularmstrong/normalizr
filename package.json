@@ -20,7 +20,10 @@
   },
   "homepage": "https://github.com/gaearon/normalizr",
   "scripts": {
-    "test": "mocha -R spec ./test/index.js"
+    "test": "mocha -R spec ./test/index.js",
+    "prebuild": "rm -rf dist/",
+    "build": "./node_modules/.bin/webpack",
+    "prepublish": "npm run build"
   },
   "devDependencies": {
     "babel-core": "^5.8.3",
