@@ -2,7 +2,7 @@
   "name": "normalizr",
   "version": "0.1.3",
   "description": "Normalizes JSON according to schema for Flux application",
-  "main": "index.js",
+  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/gaearon/normalizr.git"
