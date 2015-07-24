@@ -21,7 +21,7 @@
   "homepage": "https://github.com/gaearon/normalizr",
   "scripts": {
     "test": "mocha -R spec ./test/index.js",
-    "prebuild": "rm -rf dist/",
+    "prebuild": "./node_modules/.bin/rimraf dist/",
     "build": "./node_modules/.bin/webpack",
     "prepublish": "npm run build"
   },
@@ -30,6 +30,7 @@
     "babel-loader": "^5.3.2",
     "chai": "^3.2.0",
     "mocha": "^2.2.5",
+    "rimraf": "^2.4.2",
     "webpack": "^1.10.5"
   },
   "dependencies": {
