@@ -51,7 +51,7 @@ function mergeIntoEntity(entityA, entityB, entityKey) {
   }
 }
 
-function visitEntity(entity, entitySchema, bag) {
+function visitEntity(entity, entitySchema, bag, assignEntity) {
   var entityKey = entitySchema.getKey(),
       idAttribute = entitySchema.getIdAttribute(),
       id = entity[idAttribute],
@@ -67,7 +67,7 @@ function visitEntity(entity, entitySchema, bag) {
   }
 
   stored = bag[entityKey][id];
-  normalized = visitObject(entity, entitySchema, bag);
+  normalized = visitObject(entity, entitySchema, bag, assignEntity);
 
   mergeIntoEntity(stored, normalized, entityKey);
 
@@ -80,7 +80,7 @@ function visit(obj, schema, bag, assignEntity) {
   }
 
   if (schema instanceof EntitySchema) {
-    return visitEntity(obj, schema, bag);
+    return visitEntity(obj, schema, bag, assignEntity);
   } else if (schema instanceof ArraySchema) {
     return visitArray(obj, schema, bag);
   } else {
