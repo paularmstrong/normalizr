@@ -5,12 +5,13 @@ var EntitySchema = require('./EntitySchema'),
     isObject = require('lodash/lang/isObject'),
     isEqual = require('lodash/lang/isEqual');
 
-function visitObject(obj, schema, bag) {
+function visitObject(obj, schema, bag, assignEntity) {
   var normalized = {};
 
   for (var prop in obj) {
     if (obj.hasOwnProperty(prop)) {
-      normalized[prop] = visit(obj[prop], schema[prop], bag);
+      var entity = visit(obj[prop], schema[prop], bag);
+      assignEntity(normalized, prop, entity);
     }
   }
 
@@ -70,7 +71,7 @@ function visitEntity(entity, entitySchema, bag) {
   return id;
 }
 
-function visit(obj, schema, bag) {
+function visit(obj, schema, bag, assignEntity) {
   if (!isObject(obj) || !isObject(schema)) {
     return obj;
   }
@@ -80,11 +81,11 @@ function visit(obj, schema, bag) {
   } else if (schema instanceof ArraySchema) {
     return visitArray(obj, schema, bag);
   } else {
-    return visitObject(obj, schema, bag);
+    return visitObject(obj, schema, bag, assignEntity);
   }
 }
 
-function normalize(obj, schema) {
+function normalize(obj, schema, assignEntity) {
   if (!isObject(obj) && !Array.isArray(obj)) {
     throw new Error('Normalize accepts an object or an array as its input.');
   }
@@ -94,7 +95,7 @@ function normalize(obj, schema) {
   }
 
   var bag = {},
-      result = visit(obj, schema, bag);
+      result = visit(obj, schema, bag, assignEntity);
 
   return {
     entities: bag,
