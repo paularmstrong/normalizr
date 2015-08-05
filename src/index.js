@@ -11,7 +11,10 @@ function visitObject(obj, schema, bag, assignEntity) {
   for (var prop in obj) {
     if (obj.hasOwnProperty(prop)) {
       var entity = visit(obj[prop], schema[prop], bag);
-      assignEntity(normalized, prop, entity);
+      if (assignEntity)
+        assignEntity(normalized, prop, entity);
+      else
+        normalized[prop] = entity;
     }
   }
 
