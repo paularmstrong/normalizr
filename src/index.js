@@ -10,7 +10,7 @@ function visitObject(obj, schema, bag, assignEntity) {
 
   for (var prop in obj) {
     if (obj.hasOwnProperty(prop)) {
-      var entity = visit(obj[prop], schema[prop], bag);
+      var entity = visit(obj[prop], schema[prop], bag, assignEntity);
       if (assignEntity)
         assignEntity(normalized, prop, entity);
       else
@@ -21,12 +21,12 @@ function visitObject(obj, schema, bag, assignEntity) {
   return normalized;
 }
 
-function visitArray(obj, arraySchema, bag) {
+function visitArray(obj, arraySchema, bag, assignEntity) {
   var itemSchema = arraySchema.getItemSchema(),
       normalized;
 
   normalized = obj.map(function (childObj) {
-    return visit(childObj, itemSchema, bag);
+    return visit(childObj, itemSchema, bag, assignEntity);
   });
 
   return normalized;
@@ -82,7 +82,7 @@ function visit(obj, schema, bag, assignEntity) {
   if (schema instanceof EntitySchema) {
     return visitEntity(obj, schema, bag, assignEntity);
   } else if (schema instanceof ArraySchema) {
-    return visitArray(obj, schema, bag);
+    return visitArray(obj, schema, bag, assignEntity);
   } else {
     return visitObject(obj, schema, bag, assignEntity);
   }
