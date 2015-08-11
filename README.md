@@ -183,7 +183,7 @@ const ServerActionCreators = {
     
 
     const normalized = normalize(response, {
-      users: arrayOf(users)
+      users: arrayOf(user)
     });
 
     AppDispatcher.handleServerAction({
