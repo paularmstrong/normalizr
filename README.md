@@ -76,18 +76,15 @@ Note the flat structure (all nesting is gone).
 ### Usage
 
 ```javascript
-var normalizr = require('normalizr'),
-    normalize = normalizr.normalize,
-    Schema = normalizr.Schema,
-    arrayOf = normalizr.arrayOf;
+import { normalize, Schema, arrayOf } from 'normalizr';
 ```
 
 First, define a schema for our entities:
 
 ```javascript
-var article = new Schema('articles'),
-    user = new Schema('users'),
-    collection = new Schema('collections');
+const article = new Schema('articles')
+const user = new Schema('users');
+const collection = new Schema('collections');
 ```
 
 Then we define nesting rules:
@@ -106,12 +103,12 @@ collection.define({
 Now we can use this schema in our API response handlers:
 
 ```javascript
-var ServerActionCreators = {
+const ServerActionCreators = {
 
   // These are two different XHR endpoints with different response schemas.
   // We can use the schema objects defined earlier to express both of them:
 
-  receiveArticles: function (response) {
+  receiveArticles(response) {
   
     // Passing { articles: arrayOf(article) } as second parameter to normalize()
     // lets it correctly traverse the response tree and gather all entities:
@@ -145,7 +142,7 @@ var ServerActionCreators = {
     //     }
     //   }
     
-    var normalized = normalize(response, {
+    const normalized = normalize(response, {
       articles: arrayOf(article)
     });
 
@@ -158,7 +155,7 @@ var ServerActionCreators = {
   // Though this is a different API endpoint, we can describe it just as well
   // with our normalizr schema objects:
 
-  receiveUsers: function (response) {
+  receiveUsers(response) {
 
     // Passing { users: arrayOf(user) } as second parameter to normalize()
     // lets it correctly traverse the response tree and gather all entities:
@@ -185,8 +182,8 @@ var ServerActionCreators = {
     //   }
     
 
-    var normalized = normalize(response, {
-      users: arrayOf(users)
+    const normalized = normalize(response, {
+      users: arrayOf(user)
     });
 
     AppDispatcher.handleServerAction({
@@ -201,8 +198,8 @@ var ServerActionCreators = {
 Finally, different Stores can tune in to listen to all API responses and grab entity lists from `action.normalized.entities`:
 
 ```javascript
-AppDispatcher.register(function (payload) {
-  var action = payload.action;
+AppDispatcher.register((payload) => {
+  const { action } = payload;
 
   switch (action.type) {
   case ActionTypes.RECEIVE_ARTICLES:
@@ -225,10 +222,10 @@ This should correspond to model in your server code.
 The `key` parameter lets you specify the name of the dictionary for this kind of entity.  
 
 ```javascript
-var article = new Schema('articles');
+const article = new Schema('articles');
 
 // You can use a custom id attribute
-var article = new Schema('articles', { idAttribute: 'slug' });
+const article = new Schema('articles', { idAttribute: 'slug' });
 ```
 
 ####`Schema.prototype.define(nestedSchema)`
@@ -236,8 +233,8 @@ var article = new Schema('articles', { idAttribute: 'slug' });
 Lets you specify relationships between different entities.  
 
 ```javascript
-var article = new Schema('articles'),
-    user = new Schema('users');
+const article = new Schema('articles');
+const user = new Schema('users');
 
 article.define({
   author: user
@@ -249,8 +246,8 @@ article.define({
 Describes an array of the schema passed as argument.
 
 ```javascript
-var article = new Schema('articles'),
-    user = new Schema('users');
+const article = new Schema('articles');
+const user = new Schema('users');
 
 article.define({
   author: user,
@@ -265,8 +262,8 @@ Passed `schema` should be a nested object reflecting the structure of API respon
 
 
 ```javascript
-var article = new Schema('articles'),
-    user = new Schema('users');
+const article = new Schema('articles');
+const user = new Schema('users');
 
 article.define({
   author: user,
@@ -275,8 +272,8 @@ article.define({
 
 // ...
 
-var json = getArticleArray(),
-    normalized = normalize(json, arrayOf(article));
+const json = getArticleArray();
+const normalized = normalize(json, arrayOf(article));
 ```
 
 ### Explanation by Example
@@ -304,8 +301,8 @@ For example, `UserStore` would include a lot of boilerplate to extract fresh use
 ```javascript
 // Without normalizr, you'd have to do this in every store:
 
-AppDispatcher.register(function (payload) {
-  var action = payload.action;
+AppDispatcher.register((payload) => {
+  const { action } = payload;
 
   switch (action.type) {
   case ActionTypes.RECEIVE_USERS:
@@ -367,8 +364,8 @@ Then `UserStore` code can be rewritten as:
 ```javascript
 // With normalizr, users are always in action.entities.users
 
-AppDispatcher.register(function (payload) {
-  var action = payload.action;
+AppDispatcher.register((payload) => {
+  const { action } = payload;
 
   switch (action.type) {
   case ActionTypes.RECEIVE_ARTICLES:
