@@ -267,7 +267,12 @@ const user = new Schema('users');
 
 article.define({
   author: user,
-  contributors: arrayOf(user)
+  contributors: arrayOf(user),
+  meta: {
+    likes: arrayOf({
+      user: user
+    })
+  }
 });
 
 // ...
