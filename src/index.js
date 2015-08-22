@@ -20,6 +20,15 @@ function visitObject(obj, schema, bag, options) {
   return normalized;
 }
 
+function visitObjectForDenorm(obj, schema, bag) {
+  var denormalized = {},
+    key = Object.keys(obj)[0];
+
+  denormalized[key] = visitForDenorm(obj[key], schema[key], bag);
+
+  return denormalized;
+}
+
 function visitArray(obj, arraySchema, bag, options) {
   const itemSchema = arraySchema.getItemSchema();
 
@@ -29,6 +38,30 @@ function visitArray(obj, arraySchema, bag, options) {
   return normalized;
 }
 
+function visitArrayForDenorm(obj, arraySchema, bag) {
+  var itemSchema = arraySchema.getItemSchema(),
+    itemSchemaKey = itemSchema.getKey(),
+    denormalized;
+
+  var item = bag[itemSchemaKey];
+
+  denormalized = [];
+  obj.forEach(function(itemKey) {
+    var keys;
+    if (item.hasOwnProperty(itemSchemaKey)) {
+      denormalized.push(visitForDenorm(item[itemKey], itemSchema[itemSchemaKey], bag));
+    } else {
+      keys = Object.keys(itemSchema);
+      if (keys.length <= 2) {
+        denormalized.push(visitForDenorm(item[itemKey], undefined));
+      } else {
+        denormalized.push(visitForDenorm(itemKey, itemSchema, bag));
+      }
+    }
+  });
+
+  return denormalized;
+}
 
 function mergeIntoEntity(entityA, entityB, entityKey) {
   for (let key in entityB) {
@@ -68,6 +101,19 @@ function visitEntity(entity, entitySchema, bag, options) {
   return id;
 }
 
+function visitEntityForDenorm(entity, entitySchema, bag) {
+  var entityKey = entitySchema.getKey();
+  var denormalized = bag[entityKey][entity];
+  Object.keys(entitySchema).forEach(function(schemaKey) {
+    if (schemaKey.indexOf('_') !== 0) {  // TODO: better way to access the relevant schema keys?
+      if (typeof denormalized === 'object' && denormalized.hasOwnProperty(schemaKey)) {
+        denormalized[schemaKey] = visitForDenorm(denormalized[schemaKey], entitySchema[schemaKey], bag);
+      }
+    }
+  });
+  return denormalized;
+}
+
 function visit(obj, schema, bag, options) {
   if (!isObject(obj) || !isObject(schema)) {
     return obj;
@@ -79,6 +125,20 @@ function visit(obj, schema, bag, options) {
     return visitArray(obj, schema, bag, options);
   } else {
     return visitObject(obj, schema, bag, options);
+  }
+}
+
+function visitForDenorm(obj, schema, bag) {
+  if (!isObject(schema)) {
+    return obj;
+  }
+
+  if (schema instanceof EntitySchema) {
+    return visitEntityForDenorm(obj, schema, bag);
+  } else if (schema instanceof ArraySchema) {
+    return visitArrayForDenorm(obj, schema, bag);
+  } else {
+    return visitObjectForDenorm(obj, schema, bag);
   }
 }
 
@@ -105,3 +165,20 @@ export function normalize(obj, schema, options = {}) {
     result
   };
 }
+
+export function denormalize(obj, schema) {
+  if (!isObject(obj) && !Array.isArray(obj)) {
+    throw new Error('Denormalize accepts an object or an array as its input.');
+  }
+
+  if (!isObject(schema) || Array.isArray(schema)) {
+    throw new Error('Normalize accepts an object for schema.');
+  }
+
+  var bag = obj.entities;
+  var result = obj.result;
+  var denormalized = visitForDenorm(result, schema, bag);
+
+  return denormalized;
+}
+

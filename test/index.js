@@ -3,6 +3,7 @@
 var should = require('chai').should(),
     normalizr = require('../src'),
     normalize = normalizr.normalize,
+    denormalize = normalizr.denormalize,
     Schema = normalizr.Schema,
     arrayOf = normalizr.arrayOf;
 
@@ -37,6 +38,24 @@ describe('normalizr', function () {
     }).should.throw();
   });
 
+  it('fails denormalizing something other than array or object', function () {
+    (function () {
+      denormalize(42, {});
+    }).should.throw();
+
+    (function () {
+      denormalize(null, {});
+    }).should.throw();
+
+    (function () {
+      denormalize(undefined, {});
+    }).should.throw();
+
+    (function () {
+      denormalize('42', {});
+    }).should.throw();
+  });
+
   it('fails normalizing without an object schema', function () {
     (function () {
       normalize({});
@@ -48,6 +67,20 @@ describe('normalizr', function () {
 
     (function () {
       normalize({}, []);
+    }).should.throw();
+  });
+
+  it('fails denormalizing without an object schema', function () {
+    (function () {
+      denormalize({});
+    }).should.throw();
+
+    (function () {
+      denormalize({}, '42');
+    }).should.throw();
+
+    (function () {
+      denormalize({}, []);
     }).should.throw();
   });
 
@@ -125,6 +158,32 @@ describe('normalizr', function () {
     });
   });
 
+  it('can denormalize single entity', function () {
+    var article = new Schema('articles'),
+      input;
+
+    input = {
+      result: 1,
+      entities: {
+        articles: {
+          1: {
+            id: 1,
+            title: 'Some Article',
+            isFavorite: false
+          }
+        }
+      }
+    };
+
+    Object.freeze(input);
+
+    denormalize(input, article).should.eql({
+      id: 1,
+      title: 'Some Article',
+      isFavorite: false
+    });
+  });
+
   it('can normalize single entity with custom id attribute', function () {
     var article = new Schema('articles', { idAttribute: 'slug' }),
         input;
@@ -150,6 +209,34 @@ describe('normalizr', function () {
           }
         }
       }
+    });
+  });
+
+  it('can denormalize single entity with custom id attribute', function () {
+    var article = new Schema('articles', { idAttribute: 'slug' }),
+      input;
+
+    input = {
+      result: 'some-article',
+      entities: {
+        articles: {
+          'some-article': {
+            id: 1,
+            slug: 'some-article',
+            title: 'Some Article',
+            isFavorite: false
+          }
+        }
+      }
+    };
+
+    Object.freeze(input);
+
+    denormalize(input, article).should.eql({
+      id: 1,
+      slug: 'some-article',
+      title: 'Some Article',
+      isFavorite: false
     });
   });
 
@@ -182,6 +269,37 @@ describe('normalizr', function () {
         }
       }
     });
+  });
+
+  it('can denormalize an array', function () {
+    var article = new Schema('articles'),
+      input;
+
+    input = {
+      result: [1, 2],
+      entities: {
+        articles: {
+          1: {
+            id: 1,
+            title: 'Some Article'
+          },
+          2: {
+            id: 2,
+            title: 'Other Article'
+          }
+        }
+      }
+    };
+
+    Object.freeze(input);
+
+    denormalize(input, arrayOf(article)).should.eql([{
+      id: 1,
+      title: 'Some Article'
+    }, {
+      id: 2,
+      title: 'Other Article'
+    }]);
   });
 
   it('can normalize nested entities', function () {
@@ -220,6 +338,46 @@ describe('normalizr', function () {
             name: 'Mike Persson'
           }
         }
+      }
+    });
+  });
+
+  it('can denormalize nested entities', function () {
+    var article = new Schema('articles'),
+      user = new Schema('users'),
+      input;
+
+    article.define({
+      author: user
+    });
+
+    input = {
+      result: 1,
+      entities: {
+        articles: {
+          1: {
+            id: 1,
+            title: 'Some Article',
+            author: 3
+          }
+        },
+        users: {
+          3: {
+            id: 3,
+            name: 'Mike Persson'
+          }
+        }
+      }
+    };
+
+    Object.freeze(input);
+
+    denormalize(input, article).should.eql({
+      id: 1,
+      title: 'Some Article',
+      author: {
+        id: 3,
+        name: 'Mike Persson'
       }
     });
   });
@@ -349,6 +507,131 @@ describe('normalizr', function () {
     });
   });
 
+  it('can denormalize deeply nested entities with arrays', function () {
+    var article = new Schema('articles'),
+      user = new Schema('users'),
+      collection = new Schema('collections'),
+      feedSchema,
+      input;
+
+    article.define({
+      author: user,
+      collections: arrayOf(collection)
+    });
+
+    collection.define({
+      curator: user
+    });
+
+    feedSchema = {
+      feed: arrayOf(article)
+    };
+
+    input = {
+      result: {
+        feed: [1, 2]
+      },
+      entities: {
+        articles: {
+          1: {
+            id: 1,
+            title: 'Some Article',
+            author: 3,
+            collections: [1, 7]
+          },
+          2: {
+            id: 2,
+            title: 'Other Article',
+            author: 2,
+            collections: [2]
+          }
+        },
+        collections: {
+          1: {
+            id: 1,
+            title: 'Awesome Writing',
+            curator: 4
+          },
+          2: {
+            id: 2,
+            title: 'Neverhood',
+            curator: 120
+          },
+          7: {
+            id: 7,
+            title: 'Even Awesomer',
+            curator: 100
+          }
+        },
+        users: {
+          2: {
+            id: 2,
+            name: 'Pete Hunt'
+          },
+          3: {
+            id: 3,
+            name: 'Mike Persson'
+          },
+          4: {
+            id: 4,
+            name: 'Andy Warhol'
+          },
+          100: {
+            id: 100,
+            name: 'T.S. Eliot'
+          },
+          120: {
+            id: 120,
+            name: 'Ada Lovelace'
+          }
+        }
+      }
+    };
+
+    Object.freeze(input);
+
+    denormalize(input, feedSchema).should.eql({
+      feed: [{
+        id: 1,
+        title: 'Some Article',
+        author: {
+          id: 3,
+          name: 'Mike Persson'
+        },
+        collections: [{
+          id: 1,
+          title: 'Awesome Writing',
+          curator: {
+            id: 4,
+            name: 'Andy Warhol'
+          }
+        }, {
+          id: 7,
+          title: 'Even Awesomer',
+          curator: {
+            id: 100,
+            name: 'T.S. Eliot'
+          }
+        }]
+      }, {
+        id: 2,
+        title: 'Other Article',
+        collections: [{
+          id: 2,
+          title: 'Neverhood',
+          curator: {
+            id: 120,
+            name: 'Ada Lovelace'
+          }
+        }],
+        author: {
+          id: 2,
+          name: 'Pete Hunt'
+        }
+      }]
+    });
+  });
+
   it('can normalize mutually recursive entities', function () {
     var article = new Schema('articles'),
         user = new Schema('users'),
@@ -451,6 +734,108 @@ describe('normalizr', function () {
     });
   });
 
+  xit('can denormalize mutually recursive entities', function () {
+    var article = new Schema('articles'),
+      user = new Schema('users'),
+      collection = new Schema('collections'),
+      feedSchema,
+      input;
+
+    user.define({
+      articles: arrayOf(article)
+    });
+
+    article.define({
+      collections: arrayOf(collection)
+    });
+
+    collection.define({
+      subscribers: arrayOf(user)
+    });
+
+    feedSchema = {
+      feed: arrayOf(article)
+    };
+
+    input = {
+      result: {
+        feed: [1]
+      },
+      entities: {
+        articles: {
+          1: {
+            id: 1,
+            title: 'Some Article',
+            collections: [1, 7]
+          }
+        },
+        collections: {
+          1: {
+            id: 1,
+            title: 'Awesome Writing',
+            subscribers: [4, 100]
+          },
+          7: {
+            id: 7,
+            title: 'Even Awesomer',
+            subscribers: [100]
+          }
+        },
+        users: {
+          4: {
+            id: 4,
+            name: 'Andy Warhol',
+            articles: [1]
+          },
+          100: {
+            id: 100,
+            name: 'T.S. Eliot',
+            articles: [1]
+          }
+        }
+      }
+    };
+
+    Object.freeze(input);
+
+    denormalize(input, feedSchema).should.eql({
+      feed: [{
+        id: 1,
+        title: 'Some Article',
+        collections: [{
+          id: 1,
+          title: 'Awesome Writing',
+          subscribers: [{
+            id: 4,
+            name: 'Andy Warhol',
+            articles: [{
+              id: 1,
+              title: 'Some Article'
+            }]
+          }, {
+            id: 100,
+            name: 'T.S. Eliot',
+            articles: [{
+              id: 1,
+              title: 'Some Article'
+            }]
+          }]
+        }, {
+          id: 7,
+          title: 'Even Awesomer',
+          subscribers: [{
+            id: 100,
+            name: 'T.S. Eliot',
+            articles: [{
+              id: 1,
+              title: 'Some Article'
+            }]
+          }]
+        }]
+      }]
+    });
+  });
+
   it('can normalize self-recursive entities', function () {
     var user = new Schema('users'),
         input;
@@ -492,6 +877,52 @@ describe('normalizr', function () {
             id: 4,
             name: 'Pete Hunt'
           }
+        }
+      }
+    });
+  });
+
+  it('can denormalize self-recursive entities', function () {
+    var user = new Schema('users'),
+      input;
+
+    user.define({
+      parent: user
+    });
+
+    input = {
+      result: 1,
+      entities: {
+        users: {
+          1: {
+            id: 1,
+            name: 'Andy Warhol',
+            parent: 7
+          },
+          7: {
+            id: 7,
+            name: 'Tom Dale',
+            parent: 4
+          },
+          4: {
+            id: 4,
+            name: 'Pete Hunt'
+          }
+        }
+      }
+    };
+
+    Object.freeze(input);
+
+    denormalize(input, user).should.eql({
+      id: 1,
+      name: 'Andy Warhol',
+      parent: {
+        id: 7,
+        name: 'Tom Dale',
+        parent: {
+          id: 4,
+          name: 'Pete Hunt'
         }
       }
     });
