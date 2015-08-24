@@ -20,9 +20,10 @@
   },
   "homepage": "https://github.com/gaearon/normalizr",
   "scripts": {
-    "test": "mocha -R spec ./test/index.js",
-    "prebuild": "./node_modules/.bin/rimraf dist lib",
-    "build": "./node_modules/.bin/webpack && ./node_modules/.bin/babel src --out-dir lib",
+    "test": "mocha --compilers js:babel/register --recursive",
+    "test:watch": "npm run test -- --watch",
+    "prebuild": "rimraf dist lib",
+    "build": "webpack && babel src --out-dir lib",
     "prepublish": "npm run build"
   },
   "devDependencies": {

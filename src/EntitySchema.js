@@ -20,9 +20,9 @@ EntitySchema.prototype.getIdAttribute = function () {
 };
 
 EntitySchema.prototype.define = function (nestedSchema) {
-  for (var prop in nestedSchema) {
-    if (nestedSchema.hasOwnProperty(prop)) {
-      this[prop] = nestedSchema[prop];
+  for (var key in nestedSchema) {
+    if (nestedSchema.hasOwnProperty(key)) {
+      this[key] = nestedSchema[key];
     }
   }
 };

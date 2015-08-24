@@ -5,16 +5,18 @@ var EntitySchema = require('./EntitySchema'),
     isObject = require('lodash/lang/isObject'),
     isEqual = require('lodash/lang/isEqual');
 
+function defaultAssignEntity(normalized, key, entity) {
+  normalized[key] = entity;
+}
+
 function visitObject(obj, schema, bag, options) {
+  var { assignEntity = defaultAssignEntity } = options;
   var normalized = {};
 
-  for (var prop in obj) {
-    if (obj.hasOwnProperty(prop)) {
-      var entity = visit(obj[prop], schema[prop], bag, options);
-      if (options && options.hasOwnProperty('assignEntity'))
-        options.assignEntity(normalized, prop, entity);
-      else
-        normalized[prop] = entity;
+  for (var key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      var entity = visit(obj[key], schema[key], bag, options);
+      assignEntity.call(null, normalized, key, entity);
     }
   }
 
@@ -34,19 +36,19 @@ function visitArray(obj, arraySchema, bag, options) {
 
 
 function mergeIntoEntity(entityA, entityB, entityKey) {
-  for (var prop in entityB) {
-    if (!entityB.hasOwnProperty(prop)) {
+  for (var key in entityB) {
+    if (!entityB.hasOwnProperty(key)) {
       continue;
     }
 
-    if (!entityA.hasOwnProperty(prop) || isEqual(entityA[prop], entityB[prop])) {
-      entityA[prop] = entityB[prop];
+    if (!entityA.hasOwnProperty(key) || isEqual(entityA[key], entityB[key])) {
+      entityA[key] = entityB[key];
       continue;
     }
 
     console.warn(
-      'When merging two ' + entityKey + ', found unequal data in their "' + prop + '" values. Using the earlier value.',
-      entityA[prop], entityB[prop]
+      'When merging two ' + entityKey + ', found unequal data in their "' + key + '" values. Using the earlier value.',
+      entityA[key], entityB[key]
     );
   }
 }
@@ -88,7 +90,7 @@ function visit(obj, schema, bag, options) {
   }
 }
 
-function normalize(obj, schema, options) {
+function normalize(obj, schema, options = {}) {
   if (!isObject(obj) && !Array.isArray(obj)) {
     throw new Error('Normalize accepts an object or an array as its input.');
   }
