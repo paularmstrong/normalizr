@@ -1,5 +1,4 @@
-normalizr
-=========
+# normalizr [![build status](https://img.shields.io/travis/gaearon/normalizr/master.svg?style=flat-square)](https://travis-ci.org/gaearon/normalizr) [![npm version](https://img.shields.io/npm/v/normalizr.svg?style=flat-square)](https://www.npmjs.com/package/normalizr) [![npm downloads](https://img.shields.io/npm/dm/normalizr.svg?style=flat-square)](https://www.npmjs.com/package/normalizr)
 
 Normalizes deeply nested JSON API responses according to a schema for Flux application.  
 Kudos to Jing Chen for suggesting this approach.
