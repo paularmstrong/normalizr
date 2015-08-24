@@ -1,6 +1,6 @@
 {
   "name": "normalizr",
-  "version": "0.1.3",
+  "version": "1.0.0",
   "description": "Normalizes JSON according to schema for Flux application",
   "main": "lib/index.js",
   "repository": {
