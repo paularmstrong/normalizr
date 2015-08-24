@@ -3,21 +3,27 @@
 Normalizes deeply nested JSON API responses according to a schema for Flux application.  
 Kudos to Jing Chen for suggesting this approach.
 
-### Sample App
+## Installation
 
-#### Flux
+```
+npm install --save normalizr
+```
+
+## Sample App
+
+### Flux
 
 See **[flux-react-router-example](https://github.com/gaearon/flux-react-router-example)**.
 
-#### Redux
+### Redux
 
 See **[redux/examples/real-world](https://github.com/rackt/redux/tree/master/examples/real-world)**.
 
-### The Problem
+###The Problem
 
 * You have a JSON API that returns deeply nested objects;  
-* You want to port your app to [Flux](https://github.com/facebook/flux);
-* You noticed [it's hard](https://groups.google.com/forum/#!topic/reactjs/jbh50-GJxpg) for Stores to consume data from nested API responses.  
+* You want to port your app to [Flux](https://github.com/facebook/flux) or [Redux](http://rackt.github.io/redux);
+* You noticed [it's hard](https://groups.google.com/forum/#!topic/reactjs/jbh50-GJxpg) for Stores (or Reducers) to consume data from nested API responses.  
 
 Normalizr takes JSON and a schema and **replaces nested entities with their IDs, gathering all entities in dictionaries**.
 
@@ -71,14 +77,14 @@ can be normalized to
 
 Note the flat structure (all nesting is gone).
 
-### Features
+## Features
 
 * Entities can be nested inside other entities, objects and arrays;
 * Combine entity schemas to express any kind of API response;
 * Entities with same IDs are automatically merged (with a warning if they differ);
 * Allows using a custom ID attribute (e.g. slug).
 
-### Usage
+## Usage
 
 ```javascript
 import { normalize, Schema, arrayOf } from 'normalizr';
@@ -199,7 +205,6 @@ const ServerActionCreators = {
 }
 ```
 
-
 Finally, different Stores can tune in to listen to all API responses and grab entity lists from `action.normalized.entities`:
 
 ```javascript
@@ -216,10 +221,9 @@ AppDispatcher.register((payload) => {
 });
 ```
 
+## API Reference
 
-### API
-
-####`new Schema(key, [options])`
+#### `new Schema(key, [options])`
 
 Schema lets you define a type of entity returned by your API.  
 This should correspond to model in your server code.  
@@ -233,7 +237,7 @@ const article = new Schema('articles');
 const article = new Schema('articles', { idAttribute: 'slug' });
 ```
 
-####`Schema.prototype.define(nestedSchema)`
+#### `Schema.prototype.define(nestedSchema)`
 
 Lets you specify relationships between different entities.  
 
@@ -246,7 +250,7 @@ article.define({
 });
 ```
 
-####`arrayOf(schema)`
+#### `arrayOf(schema)`
 
 Describes an array of the schema passed as argument.
 
@@ -260,13 +264,12 @@ article.define({
 });
 ```
 
-####`normalize(obj, schema, [options])`
+#### `normalize(obj, schema, [options])`
 
 Normalizes object according to schema.  
 Passed `schema` should be a nested object reflecting the structure of API response.
 
 You may optionally specify a custom `assignEntity` function in `options`. This is useful if your backend emits additional fields, such as separate ID fields, you'd like to delete in the normalized entity. See [the test](https://github.com/babsonmatt/normalizr/blob/de08c29bc03120bf9fc2964041f46ad3950d01af/test/index.js#L80-L126) and the [discussion](https://github.com/gaearon/normalizr/issues/10) for a usage example.
-
 
 ```javascript
 const article = new Schema('articles');
@@ -389,19 +392,16 @@ AppDispatcher.register((payload) => {
 });
 ```
 
-### Dependencies
+## Dependencies
 
-* lodash for `isObject` and `isEqual`
+* `lodash` for `isObject` and `isEqual`
 
-### Installing
-
-```
-npm install normalizr
-```
-
-### Running Tests
+## Running Tests
 
 ```
-npm install -g mocha
-npm test
+git clone https://github.com/gaearon/normalizr.git
+cd normalizr
+npm install
+npm test # run tests once
+npm run test:watch # run test watcher
 ```
