@@ -19,7 +19,7 @@ See **[flux-react-router-example](https://github.com/gaearon/flux-react-router-e
 
 See **[redux/examples/real-world](https://github.com/rackt/redux/tree/master/examples/real-world)**.
 
-###The Problem
+## The Problem
 
 * You have a JSON API that returns deeply nested objects;  
 * You want to port your app to [Flux](https://github.com/facebook/flux) or [Redux](http://rackt.github.io/redux);
@@ -153,13 +153,13 @@ const ServerActionCreators = {
     //     }
     //   }
     
-    const normalized = normalize(response, {
+    response = normalize(response, {
       articles: arrayOf(article)
     });
 
     AppDispatcher.handleServerAction({
       type: ActionTypes.RECEIVE_ARTICLES,
-      normalized: normalized
+      response: 
     });
   },
   
@@ -193,28 +193,26 @@ const ServerActionCreators = {
     //   }
     
 
-    const normalized = normalize(response, {
+    response = normalize(response, {
       users: arrayOf(user)
     });
 
     AppDispatcher.handleServerAction({
       type: ActionTypes.RECEIVE_USERS,
-      normalized: normalized
+      response
     });
   }
 }
 ```
 
-Finally, different Stores can tune in to listen to all API responses and grab entity lists from `action.normalized.entities`:
+Finally, different Stores can tune in to listen to all API responses and grab entity lists from `action.response.entities`:
 
 ```javascript
 AppDispatcher.register((payload) => {
   const { action } = payload;
 
-  switch (action.type) {
-  case ActionTypes.RECEIVE_ARTICLES:
-  case ActionTypes.RECEIVE_USERS:
-    mergeUsers(action.normalized.entities.users);
+  if (action.response && action.response.entities && action.response.entities.users) {
+    mergeUsers(action.response.entities.users);
     UserStore.emitChange();
     break;
   }
@@ -223,7 +221,7 @@ AppDispatcher.register((payload) => {
 
 ## API Reference
 
-#### `new Schema(key, [options])`
+### `new Schema(key, [options])`
 
 Schema lets you define a type of entity returned by your API.  
 This should correspond to model in your server code.  
@@ -237,7 +235,7 @@ const article = new Schema('articles');
 const article = new Schema('articles', { idAttribute: 'slug' });
 ```
 
-#### `Schema.prototype.define(nestedSchema)`
+### `Schema.prototype.define(nestedSchema)`
 
 Lets you specify relationships between different entities.  
 
@@ -250,7 +248,7 @@ article.define({
 });
 ```
 
-#### `arrayOf(schema)`
+### `arrayOf(schema)`
 
 Describes an array of the schema passed as argument.
 
@@ -264,7 +262,7 @@ article.define({
 });
 ```
 
-#### `normalize(obj, schema, [options])`
+### `normalize(obj, schema, [options])`
 
 Normalizes object according to schema.  
 Passed `schema` should be a nested object reflecting the structure of API response.
@@ -291,7 +289,7 @@ const json = getArticleArray();
 const normalized = normalize(json, arrayOf(article));
 ```
 
-### Explanation by Example
+## Explanation by Example
 
 Say, you have `/articles` API with the following schema:
 
@@ -382,10 +380,8 @@ Then `UserStore` code can be rewritten as:
 AppDispatcher.register((payload) => {
   const { action } = payload;
 
-  switch (action.type) {
-  case ActionTypes.RECEIVE_ARTICLES:
-  case ActionTypes.RECEIVE_USERS:
-    mergeUsers(action.normalized.entities.users);
+  if (action.response && action.response.entities && action.response.entities.users) {
+    mergeUsers(action.response.entities.users);
     UserStore.emitChange();
     break;
   }
