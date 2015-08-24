@@ -41,7 +41,7 @@ function mergeIntoEntity(entityA, entityB, entityKey) {
     }
 
     console.warn(
-      'When merging two ' + entityKey + ', found shallowly unequal data in their "' + prop + '" values. Using the earlier value.',
+      'When merging two ' + entityKey + ', found unequal data in their "' + prop + '" values. Using the earlier value.',
       entityA[prop], entityB[prop]
     );
   }
