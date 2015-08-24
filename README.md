@@ -6,7 +6,13 @@ Kudos to Jing Chen for suggesting this approach.
 
 ### Sample App
 
+#### Flux
+
 See **[flux-react-router-example](https://github.com/gaearon/flux-react-router-example)**.
+
+#### Redux
+
+See **[redux/examples/real-world](https://github.com/rackt/redux/tree/master/examples/real-world)**.
 
 ### The Problem
 
@@ -255,10 +261,12 @@ article.define({
 });
 ```
 
-####`normalize(obj, schema)`
+####`normalize(obj, schema, [options])`
 
 Normalizes object according to schema.  
 Passed `schema` should be a nested object reflecting the structure of API response.
+
+You may optionally specify a custom `assignEntity` function in `options`. This is useful if your backend emits additional fields, such as separate ID fields, you'd like to delete in the normalized entity. See [the test](https://github.com/babsonmatt/normalizr/blob/de08c29bc03120bf9fc2964041f46ad3950d01af/test/index.js#L80-L126) and the [discussion](https://github.com/gaearon/normalizr/issues/10) for a usage example.
 
 
 ```javascript
