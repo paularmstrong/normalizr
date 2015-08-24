@@ -5,24 +5,28 @@ var EntitySchema = require('./EntitySchema'),
     isObject = require('lodash/lang/isObject'),
     isEqual = require('lodash/lang/isEqual');
 
-function visitObject(obj, schema, bag) {
+function visitObject(obj, schema, bag, options) {
   var normalized = {};
 
   for (var prop in obj) {
     if (obj.hasOwnProperty(prop)) {
-      normalized[prop] = visit(obj[prop], schema[prop], bag);
+      var entity = visit(obj[prop], schema[prop], bag, options);
+      if (options && options.hasOwnProperty('assignEntity'))
+        options.assignEntity(normalized, prop, entity);
+      else
+        normalized[prop] = entity;
     }
   }
 
   return normalized;
 }
 
-function visitArray(obj, arraySchema, bag) {
+function visitArray(obj, arraySchema, bag, options) {
   var itemSchema = arraySchema.getItemSchema(),
       normalized;
 
   normalized = obj.map(function (childObj) {
-    return visit(childObj, itemSchema, bag);
+    return visit(childObj, itemSchema, bag, options);
   });
 
   return normalized;
@@ -47,7 +51,7 @@ function mergeIntoEntity(entityA, entityB, entityKey) {
   }
 }
 
-function visitEntity(entity, entitySchema, bag) {
+function visitEntity(entity, entitySchema, bag, options) {
   var entityKey = entitySchema.getKey(),
       idAttribute = entitySchema.getIdAttribute(),
       id = entity[idAttribute],
@@ -63,28 +67,28 @@ function visitEntity(entity, entitySchema, bag) {
   }
 
   stored = bag[entityKey][id];
-  normalized = visitObject(entity, entitySchema, bag);
+  normalized = visitObject(entity, entitySchema, bag, options);
 
   mergeIntoEntity(stored, normalized, entityKey);
 
   return id;
 }
 
-function visit(obj, schema, bag) {
+function visit(obj, schema, bag, options) {
   if (!isObject(obj) || !isObject(schema)) {
     return obj;
   }
 
   if (schema instanceof EntitySchema) {
-    return visitEntity(obj, schema, bag);
+    return visitEntity(obj, schema, bag, options);
   } else if (schema instanceof ArraySchema) {
-    return visitArray(obj, schema, bag);
+    return visitArray(obj, schema, bag, options);
   } else {
-    return visitObject(obj, schema, bag);
+    return visitObject(obj, schema, bag, options);
   }
 }
 
-function normalize(obj, schema) {
+function normalize(obj, schema, options) {
   if (!isObject(obj) && !Array.isArray(obj)) {
     throw new Error('Normalize accepts an object or an array as its input.');
   }
@@ -94,7 +98,7 @@ function normalize(obj, schema) {
   }
 
   var bag = {},
-      result = visit(obj, schema, bag);
+      result = visit(obj, schema, bag, options);
 
   return {
     entities: bag,

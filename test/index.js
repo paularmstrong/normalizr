@@ -77,6 +77,54 @@ describe('normalizr', function () {
     });
   });
 
+  it('can normalize nested entity and delete an existing key using custom function', function () {
+    var article = new Schema('articles'),
+        type = new Schema('types'),
+        input;
+
+    article.define({
+      type: type
+    });
+
+    input = {
+      id: 1,
+      title: 'Some Article',
+      isFavorite: false,
+      typeId: 1,
+      type: {
+        id: 1,
+      }
+    };
+
+    Object.freeze(input);
+
+    var options = {
+      assignEntity: function(obj, key, val) {
+        obj[key] = val;
+        delete obj[key + 'Id'];
+      }
+    };
+
+    normalize(input, article, options).should.eql({
+      result: 1,
+      entities: {
+        articles: {
+          1: {
+            id: 1,
+            title: 'Some Article',
+            isFavorite: false,
+            type: 1
+          }
+        },
+        types: {
+          1: {
+            id: 1
+          }
+        }
+      }
+    });
+  });
+
   it('can normalize single entity with custom id attribute', function () {
     var article = new Schema('articles', { idAttribute: 'slug' }),
         input;
