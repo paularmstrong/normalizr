@@ -1,42 +1,37 @@
-'use strict';
-
-var EntitySchema = require('./EntitySchema'),
-    ArraySchema = require('./ArraySchema'),
-    isObject = require('lodash/lang/isObject'),
-    isEqual = require('lodash/lang/isEqual');
+import EntitySchema from './EntitySchema';
+import ArraySchema from './ArraySchema';
+import isObject from 'lodash/lang/isObject';
+import isEqual from 'lodash/lang/isEqual';
 
 function defaultAssignEntity(normalized, key, entity) {
   normalized[key] = entity;
 }
 
 function visitObject(obj, schema, bag, options) {
-  var { assignEntity = defaultAssignEntity } = options;
-  var normalized = {};
+  const { assignEntity = defaultAssignEntity } = options;
 
-  for (var key in obj) {
+  let normalized = {};
+  for (let key in obj) {
     if (obj.hasOwnProperty(key)) {
-      var entity = visit(obj[key], schema[key], bag, options);
+      const entity = visit(obj[key], schema[key], bag, options);
       assignEntity.call(null, normalized, key, entity);
     }
   }
-
   return normalized;
 }
 
 function visitArray(obj, arraySchema, bag, options) {
-  var itemSchema = arraySchema.getItemSchema(),
-      normalized;
+  const itemSchema = arraySchema.getItemSchema();
 
-  normalized = obj.map(function (childObj) {
-    return visit(childObj, itemSchema, bag, options);
-  });
-
+  const normalized = obj.map(childObj =>
+    visit(childObj, itemSchema, bag, options)
+  );
   return normalized;
 }
 
 
 function mergeIntoEntity(entityA, entityB, entityKey) {
-  for (var key in entityB) {
+  for (let key in entityB) {
     if (!entityB.hasOwnProperty(key)) {
       continue;
     }
@@ -54,11 +49,9 @@ function mergeIntoEntity(entityA, entityB, entityKey) {
 }
 
 function visitEntity(entity, entitySchema, bag, options) {
-  var entityKey = entitySchema.getKey(),
-      idAttribute = entitySchema.getIdAttribute(),
-      id = entity[idAttribute],
-      stored,
-      normalized;
+  const entityKey = entitySchema.getKey();
+  const idAttribute = entitySchema.getIdAttribute();
+  const id = entity[idAttribute];
 
   if (!bag[entityKey]) {
     bag[entityKey] = {};
@@ -68,9 +61,8 @@ function visitEntity(entity, entitySchema, bag, options) {
     bag[entityKey][id] = {};
   }
 
-  stored = bag[entityKey][id];
-  normalized = visitObject(entity, entitySchema, bag, options);
-
+  let stored = bag[entityKey][id];
+  let normalized = visitObject(entity, entitySchema, bag, options);
   mergeIntoEntity(stored, normalized, entityKey);
 
   return id;
@@ -90,7 +82,13 @@ function visit(obj, schema, bag, options) {
   }
 }
 
-function normalize(obj, schema, options = {}) {
+export function arrayOf(schema) {
+  return new ArraySchema(schema);
+}
+
+export { EntitySchema as Schema };
+
+export function normalize(obj, schema, options = {}) {
   if (!isObject(obj) && !Array.isArray(obj)) {
     throw new Error('Normalize accepts an object or an array as its input.');
   }
@@ -99,21 +97,11 @@ function normalize(obj, schema, options = {}) {
     throw new Error('Normalize accepts an object for schema.');
   }
 
-  var bag = {},
-      result = visit(obj, schema, bag, options);
+  let bag = {};
+  let result = visit(obj, schema, bag, options);
 
   return {
     entities: bag,
-    result: result
+    result
   };
 }
-
-function arrayOf(schema) {
-  return new ArraySchema(schema);
-}
-
-module.exports = {
-  Schema: EntitySchema,
-  arrayOf: arrayOf,
-  normalize: normalize
-};

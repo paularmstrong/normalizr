@@ -1,17 +1,15 @@
-'use strict';
+import isObject from 'lodash/lang/isObject';
 
-var isObject = require('lodash/lang/isObject');
+export default class ArraySchema {
+  constructor(itemSchema) {
+    if (!isObject(itemSchema)) {
+      throw new Error('ArraySchema requires item schema to be an object.');
+    }
 
-function ArraySchema(itemSchema) {
-  if (!isObject(itemSchema)) {
-    throw new Error('ArraySchema requires item schema to be an object.');
+    this._itemSchema = itemSchema;
   }
 
-  this._itemSchema = itemSchema;
+  getItemSchema() {
+    return this._itemSchema;
+  }
 }
-
-ArraySchema.prototype.getItemSchema = function () {
-  return this._itemSchema;
-};
-
-module.exports = ArraySchema;
