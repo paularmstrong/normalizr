@@ -163,7 +163,7 @@ describe('isEqual', function() {
               'nested13_0': 130
             }
           ]
-        },
+        }
       }, other = {
         'nested1': {
           'nested13': [
@@ -172,10 +172,47 @@ describe('isEqual', function() {
               'nested13_0': 130
             }
           ]
-        },
+        }
       };
       value.nested1.nested14 = value;
       other.nested1.nested14 = value;
+      isEqual(value, other).should.equal(true);
+
+      let somethingNested = { nestedKey: 'isNested' };
+      somethingNested.self = somethingNested;
+      value = {
+        'nested1': {
+          'nested11': somethingNested,
+          'nested12': somethingNested,
+          'nested13': {
+            'nested131': somethingNested,
+            'nested132': somethingNested,
+            'nested133': [
+              somethingNested,
+              somethingNested,
+              {
+                'deep': somethingNested
+              }
+            ]
+          }
+        }
+      }, other = {
+        'nested1': {
+          'nested11': somethingNested,
+          'nested12': somethingNested,
+          'nested13': {
+            'nested131': somethingNested,
+            'nested132': somethingNested,
+            'nested133': [
+              somethingNested,
+              somethingNested,
+              {
+                'deep': somethingNested
+              }
+            ]
+          }
+        }
+      };
       isEqual(value, other).should.equal(true);
     });
 
@@ -201,6 +238,31 @@ describe('isEqual', function() {
       };
       value.nested1.nested14 = value;
       other.nested1.nested14 = other;
+      isEqual(value, other).should.equal(false);
+
+      let somethingNested = { nestedKey: 'isNested' };
+      somethingNested.self = somethingNested;
+      value = {
+        'nested1': {
+          'nested11': somethingNested,
+          'nested12': somethingNested,
+          'nested13': {
+            'nested131': somethingNested,
+            'nested132': somethingNested
+          }
+        }
+      }, other = {
+        'nested1': {
+          'nested11': somethingNested,
+          'nested12': somethingNested,
+          'nested13': {
+            'nested131': somethingNested,
+            'nested132': {
+              'nested1321': somethingNested
+            }
+          }
+        }
+      };
       isEqual(value, other).should.equal(false);
     });
   });

@@ -16,6 +16,7 @@ function baseIsEqual(value, other, references) {
   }
 
   if (isObject(value) && isObject(other)) {
+    let returnValue = false;
 
     if (value.constructor.name === 'Array' && other.constructor.name === 'Array') {
       if (value.length === other.length) {
@@ -23,19 +24,23 @@ function baseIsEqual(value, other, references) {
         for (let i = 0; i < value.length; i++) {
           equalSoFar = equalSoFar && baseIsEqual(value[i], other[i], references);
         }
-        return equalSoFar;
+        returnValue = equalSoFar;
       }
     } else {
       let valueKeys = Object.keys(value),
           otherKeys = Object.keys(other);
 
       if (baseIsEqual(valueKeys, otherKeys, [])) {
-        return valueKeys.reduce(function(memo, prop){
+        returnValue = valueKeys.reduce(function(memo, prop){
 
           return memo && baseIsEqual(value[prop], other[prop], references);
         }, true);
       }
     }
+    references.pop();
+    references.pop();
+
+    return returnValue;
   }
 
   return false;
