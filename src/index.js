@@ -1,7 +1,6 @@
 import EntitySchema from './EntitySchema';
 import ArraySchema from './ArraySchema';
-import isObject from 'lodash/lang/isObject';
-import isEqual from 'lodash/lang/isEqual';
+import { isObject, isEqual } from './utils';
 
 function defaultAssignEntity(normalized, key, entity) {
   normalized[key] = entity;
