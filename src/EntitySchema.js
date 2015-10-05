@@ -4,16 +4,18 @@ export default class EntitySchema {
       throw new Error('A string non-empty key is required');
     }
 
-    this._idAttribute = options.idAttribute || 'id';
     this._key = key;
+
+    const idAttribute = options.idAttribute || 'id';
+    this._getId = typeof idAttribute === 'function' ? idAttribute : x => x[idAttribute];
   }
 
   getKey() {
     return this._key;
   }
 
-  getIdAttribute() {
-    return this._idAttribute;
+  getId(entity) {
+    return this._getId(entity);
   }
 
   define(nestedSchema) {

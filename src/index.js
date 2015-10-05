@@ -50,8 +50,7 @@ function mergeIntoEntity(entityA, entityB, entityKey) {
 
 function visitEntity(entity, entitySchema, bag, options) {
   const entityKey = entitySchema.getKey();
-  const idAttribute = entitySchema.getIdAttribute();
-  const id = entity[idAttribute];
+  const id = entitySchema.getId(entity);
 
   if (!bag[entityKey]) {
     bag[entityKey] = {};
