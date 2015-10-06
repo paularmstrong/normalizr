@@ -153,6 +153,49 @@ describe('normalizr', function () {
     });
   });
 
+  it('can normalize single entity with custom id attribute function', function () {
+    function makeSlug(article) {
+      var posted = article.posted,
+          title = article.title.toLowerCase().replace(' ', '-');
+
+      return [title, posted.year, posted.month, posted.day].join('-');
+    }
+
+    var article = new Schema('articles', { idAttribute: makeSlug }),
+        input;
+
+    input = {
+      id: 1,
+      title: 'Some Article',
+      isFavorite: false,
+      posted: {
+        day: 12,
+        month: 3,
+        year: 1983
+      }
+    };
+
+    Object.freeze(input);
+
+    normalize(input, article).should.eql({
+      result: 'some-article-1983-3-12',
+      entities: {
+        articles: {
+          'some-article-1983-3-12': {
+            id: 1,
+            title: 'Some Article',
+            isFavorite: false,
+            posted: {
+              day: 12,
+              month: 3,
+              year: 1983
+            }
+          }
+        }
+      }
+    });
+  });
+
   it('can normalize an array', function () {
     var article = new Schema('articles'),
         input;
