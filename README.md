@@ -233,6 +233,10 @@ const article = new Schema('articles');
 
 // You can use a custom id attribute
 const article = new Schema('articles', { idAttribute: 'slug' });
+
+// Or you can specify a function to infer it
+function generateSlug(entity) { /* ... */ }
+const article = new Schema('articles', { idAttribute: generateSlug });
 ```
 
 ### `Schema.prototype.define(nestedSchema)`
