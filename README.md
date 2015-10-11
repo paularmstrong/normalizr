@@ -93,7 +93,7 @@ import { normalize, Schema, arrayOf } from 'normalizr';
 First, define a schema for our entities:
 
 ```javascript
-const article = new Schema('articles')
+const article = new Schema('articles');
 const user = new Schema('users');
 const collection = new Schema('collections');
 ```
@@ -131,7 +131,7 @@ const ServerActionCreators = {
     //     title: 'Some Article',
     //     author: {
     //       id: 7,
-    //       name: 'Dan',
+    //       name: 'Dan'
     //     }
     //   }, ...]
     // }
@@ -159,7 +159,7 @@ const ServerActionCreators = {
 
     AppDispatcher.handleServerAction({
       type: ActionTypes.RECEIVE_ARTICLES,
-      response: 
+      response
     });
   },
   
