@@ -34,8 +34,5 @@
     "mocha": "^2.2.5",
     "rimraf": "^2.4.2",
     "webpack": "^1.10.5"
-  },
-  "dependencies": {
-    "lodash": "^3.10.0"
   }
 }

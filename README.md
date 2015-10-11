@@ -392,10 +392,6 @@ AppDispatcher.register((payload) => {
 });
 ```
 
-## Dependencies
-
-* `lodash` for `isObject` and `isEqual`
-
 ## Running Tests
 
 ```
