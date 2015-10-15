@@ -227,6 +227,94 @@ describe('normalizr', function () {
     });
   });
 
+  it('can normalize a polymorphic array with schema attribute', function () {
+    var article = new Schema('articles'),
+        tutorial = new Schema('tutorials'),
+        articleOrTutorial = { articles: article, tutorials: tutorial },
+        input;
+
+    input = [{
+      id: 1,
+      type: 'articles',
+      title: 'Some Article'
+    }, {
+      id: 1,
+      type: 'tutorials',
+      title: 'Some Tutorial'
+    }];
+
+    Object.freeze(input);
+
+    normalize(input, arrayOf(articleOrTutorial, { schemaAttribute: 'type' })).should.eql({
+      result: [
+        {id: 1, schema: 'articles'},
+        {id: 1, schema: 'tutorials'}
+      ],
+      entities: {
+        articles: {
+          1: {
+            id: 1,
+            type: 'articles',
+            title: 'Some Article'
+          }
+        },
+        tutorials: {
+          1: {
+            id: 1,
+            type: 'tutorials',
+            title: 'Some Tutorial'
+          }
+        }
+      }
+    });
+  });
+
+  it('can normalize a polymorphic array with schema attribute function', function () {
+    function guessSchema(item) {
+      return item.type + 's';
+    }
+
+    var article = new Schema('articles'),
+        tutorial = new Schema('tutorials'),
+        articleOrTutorial = { articles: article, tutorials: tutorial },
+        input;
+
+    input = [{
+      id: 1,
+      type: 'article',
+      title: 'Some Article'
+    }, {
+      id: 1,
+      type: 'tutorial',
+      title: 'Some Tutorial'
+    }];
+
+    Object.freeze(input);
+
+    normalize(input, arrayOf(articleOrTutorial, { schemaAttribute: guessSchema })).should.eql({
+      result: [
+        { id: 1, schema: 'articles' },
+        { id: 1, schema: 'tutorials' }
+      ],
+      entities: {
+        articles: {
+          1: {
+            id: 1,
+            type: 'article',
+            title: 'Some Article'
+          }
+        },
+        tutorials: {
+          1: {
+            id: 1,
+            type: 'tutorial',
+            title: 'Some Tutorial'
+          }
+        }
+      }
+    });
+  });
+
   it('can normalize nested entities', function () {
     var article = new Schema('articles'),
         user = new Schema('users'),
@@ -345,6 +433,147 @@ describe('normalizr', function () {
           2: {
             id: 2,
             title: 'Other Article',
+            author: 2,
+            collections: [2]
+          }
+        },
+        collections: {
+          1: {
+            id: 1,
+            title: 'Awesome Writing',
+            curator: 4
+          },
+          2: {
+            id: 2,
+            title: 'Neverhood',
+            curator: 120
+          },
+          7: {
+            id: 7,
+            title: 'Even Awesomer',
+            curator: 100
+          }
+        },
+        users: {
+          2: {
+            id: 2,
+            name: 'Pete Hunt'
+          },
+          3: {
+            id: 3,
+            name: 'Mike Persson'
+          },
+          4: {
+            id: 4,
+            name: 'Andy Warhol'
+          },
+          100: {
+            id: 100,
+            name: 'T.S. Eliot'
+          },
+          120: {
+            id: 120,
+            name: 'Ada Lovelace'
+          }
+        }
+      }
+    });
+  });
+
+  it('can normalize deeply nested entities with polymorphic arrays', function () {
+    var article = new Schema('articles'),
+        tutorial = new Schema('tutorials'),
+        articleOrTutorial = { articles: article, tutorials: tutorial },
+        user = new Schema('users'),
+        collection = new Schema('collections'),
+        feedSchema,
+        input;
+
+    article.define({
+      author: user,
+      collections: arrayOf(collection)
+    });
+
+    tutorial.define({
+      author: user,
+      collections: arrayOf(collection)
+    });
+
+    collection.define({
+      curator: user
+    });
+
+    feedSchema = {
+      feed: arrayOf(articleOrTutorial, { schemaAttribute: 'type' })
+    };
+
+    input = {
+      feed: [{
+        id: 1,
+        type: 'articles',
+        title: 'Some Article',
+        author: {
+          id: 3,
+          name: 'Mike Persson'
+        },
+        collections: [{
+          id: 1,
+          title: 'Awesome Writing',
+          curator: {
+            id: 4,
+            name: 'Andy Warhol'
+          }
+        }, {
+          id: 7,
+          title: 'Even Awesomer',
+          curator: {
+            id: 100,
+            name: 'T.S. Eliot'
+          }
+        }]
+      }, {
+        id: 1,
+        type: 'tutorials',
+        title: 'Some Tutorial',
+        collections: [{
+          id: 2,
+          title: 'Neverhood',
+          curator: {
+            id: 120,
+            name: 'Ada Lovelace'
+          }
+        }],
+        author: {
+          id: 2,
+          name: 'Pete Hunt'
+        }
+      }]
+    };
+
+    Object.freeze(input);
+
+    normalize(input, feedSchema).should.eql({
+      result: {
+        feed: [
+          { id: 1, schema: 'articles' },
+          { id: 1, schema: 'tutorials' }
+        ]
+      },
+      entities: {
+        articles: {
+          1: {
+            id: 1,
+            type: 'articles',
+            title: 'Some Article',
+            author: 3,
+            collections: [1, 7]
+          }
+        },
+        tutorials: {
+          1: {
+            id: 1,
+            type: 'tutorials',
+            title: 'Some Tutorial',
             author: 2,
             collections: [2]
           }

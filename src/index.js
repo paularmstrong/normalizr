@@ -20,13 +20,24 @@ function visitObject(obj, schema, bag, options) {
   return normalized;
 }
 
+function defaultMapper(arraySchema, itemSchema, bag, options) {
+  return (obj) => visit(obj, itemSchema, bag, options);
+}
+
+function polymorphicMapper(arraySchema, itemSchema, bag, options) {
+  return (obj) => {
+    const schemaKey = arraySchema.getSchemaKey(obj);
+    const result = visit(obj, itemSchema[schemaKey], bag, options);
+    return {id: result, schema: schemaKey};
+  };
+}
+
 function visitArray(obj, arraySchema, bag, options) {
   const itemSchema = arraySchema.getItemSchema();
+  const isPolymorphicSchema = arraySchema.isPolymorphicSchema();
+  const itemMapper = isPolymorphicSchema ? polymorphicMapper : defaultMapper;
 
-  const normalized = obj.map(childObj =>
-    visit(childObj, itemSchema, bag, options)
-  );
-  return normalized;
+  return obj.map(itemMapper(arraySchema, itemSchema, bag, options));
 }
 
 
@@ -81,8 +92,8 @@ function visit(obj, schema, bag, options) {
   }
 }
 
-export function arrayOf(schema) {
-  return new ArraySchema(schema);
+export function arrayOf(schema, options) {
+  return new ArraySchema(schema, options);
 }
 
 export { EntitySchema as Schema };

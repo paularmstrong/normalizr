@@ -252,7 +252,7 @@ article.define({
 });
 ```
 
-### `arrayOf(schema)`
+### `arrayOf(schema, [options])`
 
 Describes an array of the schema passed as argument.
 
@@ -263,6 +263,29 @@ const user = new Schema('users');
 article.define({
   author: user,
   contributors: arrayOf(user)
+});
+```
+
+If the array contains entities with different schemas, you can use the `schemaAttribute` option to specify which schema to use for each entity:
+
+```javascript
+const article = new Schema('articles');
+const image = new Schema('images');
+const video = new Schema('videos');
+const asset = {
+  images: image,
+  videos: video
+};
+
+// You can specify the name of the attribute that determines the schema
+article.define({
+  assets: arrayOf(asset, { schemaAttribute: 'type' })
+});
+
+// Or you can specify a function to infer it
+function inferSchema(entity) { /* ... */ }
+article.define({
+  assets: arrayOf(asset, { schemaAttribute: inferSchema })
 });
 ```
 
