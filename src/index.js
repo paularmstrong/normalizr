@@ -2,6 +2,7 @@ import EntitySchema from './EntitySchema';
 import IterableSchema from './IterableSchema';
 import isObject from 'lodash/lang/isObject';
 import isEqual from 'lodash/lang/isEqual';
+import mapValues from 'lodash/object/mapValues';
 
 function defaultAssignEntity(normalized, key, entity) {
   normalized[key] = entity;
@@ -38,7 +39,11 @@ function visitIterable(obj, iterableSchema, bag, options) {
   const itemMapper = isPolymorphicSchema ? polymorphicMapper : defaultMapper;
   const curriedItemMapper = itemMapper(iterableSchema, itemSchema, bag, options);
 
-  return obj.map(itemMapper(iterableSchema, itemSchema, bag, options));
+  if (Array.isArray(obj)) {
+    return obj.map(curriedItemMapper);
+  } else {
+    return mapValues(obj, curriedItemMapper);
+  }
 }
 
 
@@ -94,6 +99,10 @@ function visit(obj, schema, bag, options) {
 }
 
 export function arrayOf(schema, options) {
+  return new IterableSchema(schema, options);
+}
+
+export function valuesOf(schema, options) {
   return new IterableSchema(schema, options);
 }
 
