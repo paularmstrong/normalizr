@@ -1,7 +1,8 @@
 import EntitySchema from './EntitySchema';
-import ArraySchema from './ArraySchema';
+import IterableSchema from './IterableSchema';
 import isObject from 'lodash/lang/isObject';
 import isEqual from 'lodash/lang/isEqual';
+import mapValues from 'lodash/object/mapValues';
 
 function defaultAssignEntity(normalized, key, entity) {
   normalized[key] = entity;
@@ -20,24 +21,29 @@ function visitObject(obj, schema, bag, options) {
   return normalized;
 }
 
-function defaultMapper(arraySchema, itemSchema, bag, options) {
+function defaultMapper(iterableSchema, itemSchema, bag, options) {
   return (obj) => visit(obj, itemSchema, bag, options);
 }
 
-function polymorphicMapper(arraySchema, itemSchema, bag, options) {
+function polymorphicMapper(iterableSchema, itemSchema, bag, options) {
   return (obj) => {
-    const schemaKey = arraySchema.getSchemaKey(obj);
+    const schemaKey = iterableSchema.getSchemaKey(obj);
     const result = visit(obj, itemSchema[schemaKey], bag, options);
-    return {id: result, schema: schemaKey};
+    return { id: result, schema: schemaKey };
   };
 }
 
-function visitArray(obj, arraySchema, bag, options) {
-  const itemSchema = arraySchema.getItemSchema();
-  const isPolymorphicSchema = arraySchema.isPolymorphicSchema();
+function visitIterable(obj, iterableSchema, bag, options) {
+  const isPolymorphicSchema = iterableSchema.isPolymorphicSchema();
+  const itemSchema = iterableSchema.getItemSchema();
   const itemMapper = isPolymorphicSchema ? polymorphicMapper : defaultMapper;
+  const curriedItemMapper = itemMapper(iterableSchema, itemSchema, bag, options);
 
-  return obj.map(itemMapper(arraySchema, itemSchema, bag, options));
+  if (Array.isArray(obj)) {
+    return obj.map(curriedItemMapper);
+  } else {
+    return mapValues(obj, curriedItemMapper);
+  }
 }
 
 
@@ -85,15 +91,19 @@ function visit(obj, schema, bag, options) {
 
   if (schema instanceof EntitySchema) {
     return visitEntity(obj, schema, bag, options);
-  } else if (schema instanceof ArraySchema) {
-    return visitArray(obj, schema, bag, options);
+  } else if (schema instanceof IterableSchema) {
+    return visitIterable(obj, schema, bag, options);
   } else {
     return visitObject(obj, schema, bag, options);
   }
 }
 
 export function arrayOf(schema, options) {
-  return new ArraySchema(schema, options);
+  return new IterableSchema(schema, options);
+}
+
+export function valuesOf(schema, options) {
+  return new IterableSchema(schema, options);
 }
 
 export { EntitySchema as Schema };

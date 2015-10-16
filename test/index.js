@@ -4,7 +4,8 @@ var should = require('chai').should(),
     normalizr = require('../src'),
     normalize = normalizr.normalize,
     Schema = normalizr.Schema,
-    arrayOf = normalizr.arrayOf;
+    arrayOf = normalizr.arrayOf,
+    valuesOf = normalizr.valuesOf;
 
 describe('normalizr', function () {
   it('fails creating nameless schema', function () {
@@ -302,6 +303,159 @@ describe('normalizr', function () {
             id: 1,
             type: 'article',
             title: 'Some Article'
+          }
+        },
+        tutorials: {
+          1: {
+            id: 1,
+            type: 'tutorial',
+            title: 'Some Tutorial'
+          }
+        }
+      }
+    });
+  });
+
+  it('can normalize a map', function () {
+    var article = new Schema('articles'),
+        input;
+
+    input = {
+      one: {
+        id: 1,
+        title: 'Some Article'
+      },
+      two: {
+        id: 2,
+        title: 'Other Article'
+      }
+    };
+
+    Object.freeze(input);
+
+    normalize(input, valuesOf(article)).should.eql({
+      result: {
+        one: 1,
+        two: 2
+      },
+      entities: {
+        articles: {
+          1: {
+            id: 1,
+            title: 'Some Article'
+          },
+          2: {
+            id: 2,
+            title: 'Other Article'
+          }
+        }
+      }
+    });
+  });
+
+  it('can normalize a polymorphic map with schema attribute', function () {
+    var article = new Schema('articles'),
+        tutorial = new Schema('tutorials'),
+        articleOrTutorial = { articles: article, tutorials: tutorial },
+        input;
+
+    input = {
+      one: {
+        id: 1,
+        type: 'articles',
+        title: 'Some Article'
+      },
+      two: {
+        id: 2,
+        type: 'articles',
+        title: 'Another Article'
+      },
+      three: {
+        id: 1,
+        type: 'tutorials',
+        title: 'Some Tutorial'
+      }
+    };
+
+    Object.freeze(input);
+
+    normalize(input, valuesOf(articleOrTutorial, { schemaAttribute: 'type' })).should.eql({
+      result: {
+        one: {id: 1, schema: 'articles'},
+        two: {id: 2, schema: 'articles'},
+        three: {id: 1, schema: 'tutorials'}
+      },
+      entities: {
+        articles: {
+          1: {
+            id: 1,
+            type: 'articles',
+            title: 'Some Article'
+          },
+          2: {
+            id: 2,
+            type: 'articles',
+            title: 'Another Article'
+          }
+        },
+        tutorials: {
+          1: {
+            id: 1,
+            type: 'tutorials',
+            title: 'Some Tutorial'
+          }
+        }
+      }
+    });
+  });
+
+  it('can normalize a polymorphic map with schema attribute function', function () {
+    function guessSchema(item) {
+      return item.type + 's';
+    }
+
+    var article = new Schema('articles'),
+        tutorial = new Schema('tutorials'),
+        articleOrTutorial = { articles: article, tutorials: tutorial },
+        input;
+
+    input = {
+      one: {
+        id: 1,
+        type: 'article',
+        title: 'Some Article'
+      },
+      two: {
+        id: 2,
+        type: 'article',
+        title: 'Another Article'
+      },
+      three: {
+        id: 1,
+        type: 'tutorial',
+        title: 'Some Tutorial'
+      }
+    };
+
+    Object.freeze(input);
+
+    normalize(input, valuesOf(articleOrTutorial, { schemaAttribute: guessSchema })).should.eql({
+      result: {
+        one: {id: 1, schema: 'articles'},
+        two: {id: 2, schema: 'articles'},
+        three: {id: 1, schema: 'tutorials'}
+      },
+      entities: {
+        articles: {
+          1: {
+            id: 1,
+            type: 'article',
+            title: 'Some Article'
+          },
+          2: {
+            id: 2,
+            type: 'article',
+            title: 'Another Article'
           }
         },
         tutorials: {
@@ -615,6 +769,222 @@ describe('normalizr', function () {
           120: {
             id: 120,
             name: 'Ada Lovelace'
+          }
+        }
+      }
+    });
+  });
+
+  it('can normalize deeply nested entities with maps', function () {
+    var article = new Schema('articles'),
+        user = new Schema('users'),
+        feedSchema,
+        input;
+
+    article.define({
+      collaborators: valuesOf(arrayOf(user))
+    });
+
+    feedSchema = {
+      feed: arrayOf(article),
+      suggestions: valuesOf(arrayOf(article))
+    };
+
+    input = {
+      feed: [{
+        id: 1,
+        title: 'Some Article',
+        collaborators: {
+          authors: [{
+            id: 3,
+            name: 'Mike Persson'
+          }],
+          reviewers: [{
+            id: 2,
+            name: 'Pete Hunt'
+          }]
+        }
+      }, {
+        id: 2,
+        title: 'Other Article',
+        collaborators: {
+          authors: [{
+            id: 2,
+            name: 'Pete Hunt'
+          }]
+        }
+      }, {
+        id: 3,
+        title: 'Last Article'
+      }],
+      suggestions: {
+        1: [{
+          id: 2,
+          title: 'Other Article',
+          collaborators: {
+            authors: [{
+              id: 2,
+              name: 'Pete Hunt'
+            }]
+          }
+        }, {
+          id: 3,
+          title: 'Last Article'
+        }]
+      }
+    };
+
+    Object.freeze(input);
+
+    normalize(input, feedSchema).should.eql({
+      result: {
+        feed: [1, 2, 3],
+        suggestions: {
+          1: [2, 3]
+        }
+      },
+      entities: {
+        articles: {
+          1: {
+            id: 1,
+            title: 'Some Article',
+            collaborators: {
+              authors: [3],
+              reviewers: [2]
+            }
+          },
+          2: {
+            id: 2,
+            title: 'Other Article',
+            collaborators: {
+              authors: [2]
+            }
+          },
+          3: {
+            id: 3,
+            title: 'Last Article'
+          }
+        },
+        users: {
+          2: {
+            id: 2,
+            name: 'Pete Hunt'
+          },
+          3: {
+            id: 3,
+            name: 'Mike Persson'
+          }
+        }
+      }
+    });
+  });
+
+  it('can normalize deeply nested entities with polymorphic maps', function () {
+    var article = new Schema('articles'),
+        user = new Schema('users'),
+        group = new Schema('groups'),
+        userOrGroup = { users: user, groups: group },
+        feedSchema,
+        input;
+
+    article.define({
+      collaborators: valuesOf(userOrGroup, { schemaAttribute: 'type' })
+    });
+
+    feedSchema = {
+      feed: arrayOf(article),
+      suggestions: valuesOf(arrayOf(article))
+    };
+
+    input = {
+      feed: [{
+        id: 1,
+        title: 'Some Article',
+        collaborators: {
+          author: {
+            id: 3,
+            type: 'users',
+            name: 'Mike Persson'
+          },
+          reviewer: {
+            id: 2,
+            type: 'groups',
+            name: 'Reviewer Group'
+          }
+        }
+      }, {
+        id: 2,
+        title: 'Other Article',
+        collaborators: {
+          author: {
+            id: 2,
+            type: 'users',
+            name: 'Pete Hunt'
+          }
+        }
+      }, {
+        id: 3,
+        title: 'Last Article'
+      }],
+      suggestions: {
+        1: [{
+          id: 2,
+          title: 'Other Article'
+        }, {
+          id: 3,
+          title: 'Last Article'
+        }]
+      }
+    };
+
+    Object.freeze(input);
+
+    normalize(input, feedSchema).should.eql({
+      result: {
+        feed: [1, 2, 3],
+        suggestions: {
+          1: [2, 3]
+        }
+      },
+      entities: {
+        articles: {
+          1: {
+            id: 1,
+            title: 'Some Article',
+            collaborators: {
+              author: { id: 3, schema: 'users' },
+              reviewer: { id: 2, schema: 'groups' }
+            }
+          },
+          2: {
+            id: 2,
+            title: 'Other Article',
+            collaborators: {
+              author: { id: 2, schema: 'users' }
+            }
+          },
+          3: {
+            id: 3,
+            title: 'Last Article'
+          }
+        },
+        users: {
+          2: {
+            id: 2,
+            type: 'users',
+            name: 'Pete Hunt'
+          },
+          3: {
+            id: 3,
+            type: 'users',
+            name: 'Mike Persson'
+          }
+        },
+        groups: {
+          2: {
+            id: 2,
+            type: 'groups',
+            name: 'Reviewer Group'
           }
         }
       }

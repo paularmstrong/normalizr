@@ -289,6 +289,42 @@ article.define({
 });
 ```
 
+### `valuesOf(schema, [options])`
+
+Describes a map whose values follow the schema passed as argument.
+
+```javascript
+const article = new Schema('articles');
+const user = new Schema('users');
+
+article.define({
+  collaboratorsByRole: valuesOf(user)
+});
+```
+
+If the map contains entities with different schemas, you can use the `schemaAttribute` option to specify which schema to use for each entity:
+
+```javascript
+const article = new Schema('articles');
+const user = new Schema('images');
+const group = new Schema('videos');
+const collaborator = {
+  users: user,
+  groups: group
+};
+
+// You can specify the name of the attribute that determines the schema
+article.define({
+  collaboratorsByRole: valuesOf(collaborator, { schemaAttribute: 'type' })
+});
+
+// Or you can specify a function to infer it
+function inferSchema(entity) { /* ... */ }
+article.define({
+  collaboratorsByRole: valuesOf(collaborator, { schemaAttribute: inferSchema })
+});
+```
+
 ### `normalize(obj, schema, [options])`
 
 Normalizes object according to schema.  
@@ -417,7 +453,7 @@ AppDispatcher.register((payload) => {
 
 ## Dependencies
 
-* `lodash` for `isObject` and `isEqual`
+* `lodash` for `isObject`, `isEqual` and `mapValues`
 
 ## Running Tests
 
