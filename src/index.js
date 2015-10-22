@@ -69,11 +69,11 @@ function visitEntity(entity, entitySchema, bag, options) {
   const entityKey = entitySchema.getKey();
   const id = entitySchema.getId(entity);
 
-  if (!bag[entityKey]) {
+  if (!bag.hasOwnProperty(entityKey)) {
     bag[entityKey] = {};
   }
 
-  if (!bag[entityKey][id]) {
+  if (!bag[entityKey].hasOwnProperty(id)) {
     bag[entityKey][id] = {};
   }
 

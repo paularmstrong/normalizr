@@ -1276,4 +1276,28 @@ describe('normalizr', function () {
     console.warn = realConsoleWarn;
   });
 
+  it('ignores prototype objects and creates new object', function () {
+    var writer = new Schema('writers'),
+        schema = writer,
+        input;
+    input = {
+      id: 'constructor',
+      name: 'Constructor',
+      isAwesome: true
+    };
+
+    normalize(input, schema).should.eql({
+      result: 'constructor',
+      entities: {
+        writers: {
+          constructor: {
+            id: 'constructor',
+            name: 'Constructor',
+            isAwesome: true
+          }
+        }
+      }
+    });
+
+  });
 });
