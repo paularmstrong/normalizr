@@ -47,7 +47,7 @@ function visitIterable(obj, iterableSchema, bag, options) {
 }
 
 
-function mergeIntoEntity(entityA, entityB, entityKey) {
+function defaultMergeIntoEntity(entityA, entityB, entityKey) {
   for (let key in entityB) {
     if (!entityB.hasOwnProperty(key)) {
       continue;
@@ -66,6 +66,8 @@ function mergeIntoEntity(entityA, entityB, entityKey) {
 }
 
 function visitEntity(entity, entitySchema, bag, options) {
+  const { mergeIntoEntity = defaultMergeIntoEntity } = options;
+
   const entityKey = entitySchema.getKey();
   const id = entitySchema.getId(entity);
 
