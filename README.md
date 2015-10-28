@@ -330,7 +330,11 @@ article.define({
 Normalizes object according to schema.  
 Passed `schema` should be a nested object reflecting the structure of API response.
 
-You may optionally specify a custom `assignEntity` function in `options`. This is useful if your backend emits additional fields, such as separate ID fields, you'd like to delete in the normalized entity. See [the test](https://github.com/babsonmatt/normalizr/blob/de08c29bc03120bf9fc2964041f46ad3950d01af/test/index.js#L80-L126) and the [discussion](https://github.com/gaearon/normalizr/issues/10) for a usage example.
+You may optionally specify any of the following options:
+
+* `assignEntity` (function): This is useful if your backend emits additional fields, such as separate ID fields, you'd like to delete in the normalized entity. See [the test](https://github.com/gaearon/normalizr/blob/47ed0ecd973da6fa7c8b2de461e35b293ae52047/test/index.js#L84-L130) and the [discussion](https://github.com/gaearon/normalizr/issues/10) for a usage example.
+
+* `mergeIntoEntity` (function): You can use this to resolve conflicts when merging entities with the same key. See [the test](https://github.com/gaearon/normalizr/blob/47ed0ecd973da6fa7c8b2de461e35b293ae52047/test/index.js#L132-L197) and the [discussion](https://github.com/gaearon/normalizr/issues/34) for a usage example.
 
 ```javascript
 const article = new Schema('articles');

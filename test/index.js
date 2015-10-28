@@ -1,6 +1,9 @@
 'use strict';
 
 var should = require('chai').should(),
+    isEqual = require('lodash/lang/isEqual'),
+    isObject = require('lodash/lang/isObject'),
+    merge = require('lodash/object/merge'),
     normalizr = require('../src'),
     normalize = normalizr.normalize,
     Schema = normalizr.Schema,
@@ -120,6 +123,73 @@ describe('normalizr', function () {
         types: {
           1: {
             id: 1
+          }
+        }
+      }
+    });
+  });
+
+  it('can merge into entity using custom function', function () {
+    var author = new Schema('authors'),
+        input;
+
+    input = {
+      author: {
+        id: 1,
+        name: 'Ada Lovelace',
+        contact: {
+          phone: '555-0100'
+        }
+      },
+      reviewer: {
+        id: 1,
+        name: 'Ada Lovelace',
+        contact: {
+          email: 'ada@lovelace.com'
+        }
+      }
+    }
+
+    Object.freeze(input);
+
+    var options = {
+      mergeIntoEntity: function(entityA, entityB, entityKey) {
+        var key;
+
+        for (key in entityB) {
+          if (!entityB.hasOwnProperty(key)) {
+            continue;
+          }
+
+          if (!entityA.hasOwnProperty(key) || isEqual(entityA[key], entityB[key])) {
+            entityA[key] = entityB[key];
+            continue;
+          }
+
+          if (isObject(entityA[key]) && isObject(entityB[key])) {
+            merge(entityA[key], entityB[key])
+            continue;
+          }
+
+          console.warn('Unequal data!');
+        }
+      }
+    };
+
+    normalize(input, valuesOf(author), options).should.eql({
+      result: {
+        author: 1,
+        reviewer: 1
+      },
+      entities: {
+        authors: {
+          1: {
+            id: 1,
+            name: 'Ada Lovelace',
+            contact: {
+              phone: '555-0100',
+              email: 'ada@lovelace.com'
+            }
           }
         }
       }
