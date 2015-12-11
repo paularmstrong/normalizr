@@ -35,10 +35,8 @@ function polymorphicMapper(iterableSchema, itemSchema, bag, options) {
 }
 
 function visitIterable(obj, iterableSchema, bag, options) {
-  const isPolymorphicSchema = iterableSchema.isPolymorphicSchema();
   const itemSchema = iterableSchema.getItemSchema();
-  const itemMapper = isPolymorphicSchema ? polymorphicMapper : defaultMapper;
-  const curriedItemMapper = itemMapper(iterableSchema, itemSchema, bag, options);
+  const curriedItemMapper = defaultMapper(iterableSchema, itemSchema, bag, options);
 
   if (Array.isArray(obj)) {
     return obj.map(curriedItemMapper);
