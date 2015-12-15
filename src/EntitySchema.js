@@ -26,4 +26,18 @@ export default class EntitySchema {
     }
     return this;
   }
+  
+  hasOne(association, key = association.getKey()) {
+    let o = {};
+    o[key] = association;
+    this.define(o);
+    return this;
+  }
+  
+  hasMany(association, key = association.getKey()) {
+    let o = {};
+    o[key] = arrayOf(association);
+    this.define(o);
+    return this;
+  }
 }
