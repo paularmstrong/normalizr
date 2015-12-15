@@ -87,28 +87,26 @@ Note the flat structure (all nesting is gone).
 ## Usage
 
 ```javascript
-import { normalize, Schema, arrayOf } from 'normalizr';
+import { normalize, Entity, arrayOf } from 'normalizr';
 ```
 
-First, define a schema for our entities:
+First, start building a schema by defining our entities:
 
 ```javascript
-const article = new Schema('articles');
-const user = new Schema('users');
-const collection = new Schema('collections');
+const article = new Entity('articles');
+const user = new Entity('users');
+const collection = new Entity('collections');
 ```
 
-Then we define nesting rules:
+Then we define the associations for the entities in our schema:
 
 ```javascript
-article.define({
-  author: user,
-  collections: arrayOf(collection)
-});
+article
+  .hasOne(user, 'author)
+  .hasMany(collection);
 
-collection.define({
-  curator: user
-});
+collection
+  .hasOne(user, 'curator');
 ```
 
 Now we can use this schema in our API response handlers:
@@ -117,7 +115,7 @@ Now we can use this schema in our API response handlers:
 const ServerActionCreators = {
 
   // These are two different XHR endpoints with different response schemas.
-  // We can use the schema objects defined earlier to express both of them:
+  // We can use the entity objects defined earlier to express both of them:
 
   receiveArticles(response) {
   
@@ -164,7 +162,7 @@ const ServerActionCreators = {
   },
   
   // Though this is a different API endpoint, we can describe it just as well
-  // with our normalizr schema objects:
+  // with our normalizr entity objects:
 
   receiveUsers(response) {
 
@@ -221,25 +219,27 @@ AppDispatcher.register((payload) => {
 
 ## API Reference
 
-### `new Schema(key, [options])`
+### `new Entity(key, [options])`
 
-Schema lets you define a type of entity returned by your API.  
+Entity lets you define a type of entity returned by your API.  
 This should correspond to model in your server code.  
 
 The `key` parameter lets you specify the name of the dictionary for this kind of entity.  
 
 ```javascript
-const article = new Schema('articles');
+const article = new Entity('articles');
 
 // You can use a custom id attribute
-const article = new Schema('articles', { idAttribute: 'slug' });
+const article = new Entity('articles', { idAttribute: 'slug' });
 
 // Or you can specify a function to infer it
 function generateSlug(entity) { /* ... */ }
-const article = new Schema('articles', { idAttribute: generateSlug });
+const article = new Entity('articles', { idAttribute: generateSlug });
 ```
 
-### `Schema.prototype.define(nestedSchema)`
+**Note**: This was previously called `Schema`, but that alias has been deprecated (though it does still function).
+
+### `Entity.prototype.define(nestedSchema)`
 
 Lets you specify relationships between different entities.  
 
