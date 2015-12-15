@@ -109,6 +109,7 @@ export function valuesOf(schema, options) {
 }
 
 export { EntitySchema as Schema };
+export { EntitySchema as Entity };
 
 export function normalize(obj, schema, options = {}) {
   if (!isObject(obj) && !Array.isArray(obj)) {
