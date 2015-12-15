@@ -24,5 +24,6 @@ export default class EntitySchema {
         this[key] = nestedSchema[key];
       }
     }
+    return this;
   }
 }
