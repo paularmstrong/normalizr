@@ -13,6 +13,11 @@
     "api",
     "json"
   ],
+  "files": [
+    "dist",
+    "lib",
+    "src"
+  ],
   "author": "Dan Abramov",
   "license": "MIT",
   "bugs": {
