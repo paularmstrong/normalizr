@@ -28,16 +28,16 @@ export default class EntitySchema {
   }
   
   hasOne(association, key = association.getKey()) {
-    let o = {};
-    o[key] = association;
-    this.define(o);
+    this.define({
+      [key]: association
+    });
     return this;
   }
   
   hasMany(association, key = association.getKey()) {
-    let o = {};
-    o[key] = arrayOf(association);
-    this.define(o);
+    this.define({
+      [key]: arrayOf(association)
+    });
     return this;
   }
 }
