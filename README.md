@@ -101,8 +101,10 @@ const collection = new Entity('collections');
 Then we define the associations for the entities in our schema:
 
 ```javascript
+// The second param to either hasOne or hasMany is the key that the entity will have in the JSON response.
+// Both functions default to using the base entity key (e.g. collection == 'collections').
 article
-  .hasOne(user, 'author)
+  .hasOne(user, 'author')
   .hasMany(collection);
 
 collection
@@ -239,14 +241,40 @@ const article = new Entity('articles', { idAttribute: generateSlug });
 
 **Note**: This was previously called `Schema`, but that alias has been deprecated (though it does still function).
 
-### `Entity.prototype.define(nestedSchema)`
+### `Entity.prototype.hasOne(association, [key])`
 
-Lets you specify relationships between different entities.  
+Lets you specify a one-to-one relationship between different entities.
 
 ```javascript
-const article = new Schema('articles');
-const user = new Schema('users');
+const article = new Entity('articles');
+const user = new Entity('users');
 
+article.hasOne(user, 'author');
+```
+
+The optional `key` param allows you to specify what JSON key the associated entity is nested within.
+
+### `Entity.prototype.hasMany(association, [key])`
+
+Like `hasOne`, but this lets you specify a one-to-many relationship between different entities.
+
+```javascript
+const article = new Entity('articles');
+const user = new Entity('users');
+
+user.hasMany(article);
+```
+
+### `Entity.prototype.define(nestedSchema)`
+
+Lets you specify any kind of relationship between different entities.
+Both `hasOne` and `hasMany` are essentially syntactic sugar around this method.
+
+```javascript
+const article = new Entity('articles');
+const user = new Entity('users');
+
+// this is identical to article.hasOne(user, 'author')
 article.define({
   author: user
 });
@@ -254,11 +282,11 @@ article.define({
 
 ### `arrayOf(schema, [options])`
 
-Describes an array of the schema passed as argument.
+Describes an array of the entity passed as argument.
 
 ```javascript
-const article = new Schema('articles');
-const user = new Schema('users');
+const article = new Entity('articles');
+const user = new Entity('users');
 
 article.define({
   author: user,
@@ -269,9 +297,9 @@ article.define({
 If the array contains entities with different schemas, you can use the `schemaAttribute` option to specify which schema to use for each entity:
 
 ```javascript
-const article = new Schema('articles');
-const image = new Schema('images');
-const video = new Schema('videos');
+const article = new Entity('articles');
+const image = new Entity('images');
+const video = new Entity('videos');
 const asset = {
   images: image,
   videos: video
@@ -294,8 +322,8 @@ article.define({
 Describes a map whose values follow the schema passed as argument.
 
 ```javascript
-const article = new Schema('articles');
-const user = new Schema('users');
+const article = new Entity('articles');
+const user = new Entity('users');
 
 article.define({
   collaboratorsByRole: valuesOf(user)
@@ -305,9 +333,9 @@ article.define({
 If the map contains entities with different schemas, you can use the `schemaAttribute` option to specify which schema to use for each entity:
 
 ```javascript
-const article = new Schema('articles');
-const user = new Schema('images');
-const group = new Schema('videos');
+const article = new Entity('articles');
+const user = new Entity('images');
+const group = new Entity('videos');
 const collaborator = {
   users: user,
   groups: group
@@ -337,8 +365,8 @@ You may optionally specify any of the following options:
 * `mergeIntoEntity` (function): You can use this to resolve conflicts when merging entities with the same key. See [the test](https://github.com/gaearon/normalizr/blob/47ed0ecd973da6fa7c8b2de461e35b293ae52047/test/index.js#L132-L197) and the [discussion](https://github.com/gaearon/normalizr/issues/34) for a usage example.
 
 ```javascript
-const article = new Schema('articles');
-const user = new Schema('users');
+const article = new Entity('articles');
+const user = new Entity('users');
 
 article.define({
   author: user,
