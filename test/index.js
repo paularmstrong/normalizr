@@ -209,6 +209,8 @@ describe('normalizr', function () {
 
     Object.freeze(input);
 
+    article.getIdAttribute().should.eql('slug');
+
     normalize(input, article).should.eql({
       result: 'some-article',
       entities: {
