@@ -325,6 +325,52 @@ article.define({
 });
 ```
 
+### `unionOf(schemaMap, [options])`
+
+Describe a schema which is a union of multiple schemas.  This is useful if you need the polymorphic behavior provided by `arrayOf` or `valuesOf` but for non-collection fields.
+
+Use the required `schemaAttribute` option to specify which schema to use for each entity.
+
+```javascript
+const group = new Schema('groups');
+const user = new Schema('users');
+
+// a member can be either a user or a group
+const member = {
+  users: user,
+  groups: group
+};
+
+// You can specify the name of the attribute that determines the schema
+group.define({
+  owner: unionOf(member, { schemaAttribute: 'type' })
+});
+
+// Or you can specify a function to infer it
+function inferSchema(entity) { /* ... */ }
+group.define({
+  creator: unionOf(member, { schemaAttribute: inferSchema })
+});
+```
+
+A `unionOf` schema can also be combined with `arrayOf` and `valueOf` with the same behavior as each supplied with the `schemaAttribute` option.
+
+```javascript
+const group = new Schema('groups');
+const user = new Schema('users');
+
+const member = unionOf({
+  users: user,
+  groups: group
+}, { schemaAttribute: 'type' });
+
+group.define({
+  owner: member,
+  members: arrayOf(member),
+  relationships: valuesOf(member)
+});
+```
+
 ### `normalize(obj, schema, [options])`
 
 Normalizes object according to schema.  
