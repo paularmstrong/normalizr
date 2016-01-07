@@ -24,5 +24,20 @@ export default class EntitySchema {
         this[key] = nestedSchema[key];
       }
     }
+    return this;
+  }
+  
+  hasOne(association, key = association.getKey()) {
+    this.define({
+      [key]: association
+    });
+    return this;
+  }
+  
+  hasMany(association, key = association.getKey()) {
+    this.define({
+      [key]: arrayOf(association)
+    });
+    return this;
   }
 }
