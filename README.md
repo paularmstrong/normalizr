@@ -252,6 +252,31 @@ article.define({
 });
 ```
 
+### `Schema.prototype.getKey()`
+
+Returns the key of the schema.
+
+```javascript
+const article = new Schema('articles');
+
+article.getKey();
+// articles
+```
+
+### `Schema.prototype.getIdAttribute()`
+
+Returns the idAttribute of the schema.
+
+```javascript
+const article = new Schema('articles');
+const slugArticle = new Schema('articles', { idAttribute: 'slug' });
+
+article.getIdAttribute();
+// id
+slugArticle.getIdAttribute();
+// slug
+```
+
 ### `arrayOf(schema, [options])`
 
 Describes an array of the schema passed as argument.
