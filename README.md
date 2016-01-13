@@ -528,7 +528,12 @@ AppDispatcher.register((payload) => {
 
 ## Dependencies
 
-* `lodash` for `isObject`, `isEqual` and `mapValues`
+* Some methods from `lodash`, such as `isObject`, `isEqual` and `mapValues`
+
+## Browser Support
+
+Modern browsers with ES5 environments are supported.  
+The minimal supported IE version is IE 9.
 
 ## Running Tests
 
