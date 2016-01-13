@@ -47,7 +47,6 @@ function visitIterable(obj, iterableSchema, bag, options) {
 
 function visitUnion(obj, unionSchema, bag, options) {
   const itemSchema = unionSchema.getItemSchema();
-
   return polymorphicMapper(unionSchema, itemSchema, bag, options)(obj);
 }
 
