@@ -8,6 +8,7 @@ export default class EntitySchema {
 
     const idAttribute = options.idAttribute || 'id';
     this._getId = typeof idAttribute === 'function' ? idAttribute : x => x[idAttribute];
+    this._idAttribute = idAttribute;
   }
 
   getKey() {
@@ -16,6 +17,10 @@ export default class EntitySchema {
 
   getId(entity) {
     return this._getId(entity);
+  }
+
+  getIdAttribute() {
+    return this._idAttribute;
   }
 
   define(nestedSchema) {
