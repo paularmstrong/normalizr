@@ -1,9 +1,9 @@
 'use strict';
 
 var should = require('chai').should(),
-    isEqual = require('lodash/lang/isEqual'),
-    isObject = require('lodash/lang/isObject'),
-    merge = require('lodash/object/merge'),
+    isEqual = require('lodash/isEqual'),
+    isObject = require('lodash/isObject'),
+    merge = require('lodash/merge'),
     normalizr = require('../src'),
     normalize = normalizr.normalize,
     Schema = normalizr.Schema,

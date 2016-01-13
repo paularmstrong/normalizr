@@ -1,4 +1,4 @@
-import isObject from 'lodash/lang/isObject';
+import isObject from 'lodash/isObject';
 
 export default class ArraySchema {
   constructor(itemSchema, options = {}) {
