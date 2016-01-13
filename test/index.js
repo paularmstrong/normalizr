@@ -8,7 +8,8 @@ var should = require('chai').should(),
     normalize = normalizr.normalize,
     Schema = normalizr.Schema,
     arrayOf = normalizr.arrayOf,
-    valuesOf = normalizr.valuesOf;
+    valuesOf = normalizr.valuesOf,
+    unionOf = normalizr.unionOf;
 
 describe('normalizr', function () {
   it('fails creating nameless schema', function () {
@@ -1370,4 +1371,115 @@ describe('normalizr', function () {
     });
 
   });
+
+  it('can normalize a polymorphic union field and array and map', function () {
+    var user = new Schema('users'),
+        group = new Schema('groups'),
+        member = unionOf({
+          users: user,
+          groups: group
+        }, { schemaAttribute: 'type' }),
+        input;
+
+    group.define({
+      members: arrayOf(member),
+      owner: member,
+      relations: valuesOf(member)
+    });
+
+    input = {
+      group: {
+        id: 1,
+        name: 'facebook',
+        members: [{
+          id: 2,
+          type: 'groups',
+          name: 'react'
+        }, {
+          id: 3,
+          type: 'users',
+          name: 'Huey'
+        }],
+        owner: {
+          id: 4,
+          type: 'users',
+          name: 'Jason'
+        },
+        relations: {
+          friend: {
+            id: 5,
+            type: 'users',
+            name: 'Nate'
+          }
+        }
+      }
+    };
+
+    Object.freeze(input);
+
+    normalize(input, { group: group }).should.eql({
+      result: {
+        group: 1
+      },
+      entities: {
+        groups: {
+          1: {
+            id: 1,
+            name: 'facebook',
+            members: [{
+              id: 2,
+              schema: 'groups'
+            }, {
+              id: 3,
+              schema: 'users'
+            }],
+            owner: {
+              id: 4,
+              schema: 'users'
+            },
+            relations: {
+              friend: {
+                id: 5,
+                schema: 'users'
+              }
+            }
+          },
+          2: {
+            id: 2,
+            type: 'groups',
+            name: 'react'
+          }
+        },
+        users: {
+          3: {
+            id: 3,
+            type: 'users',
+            name: 'Huey'
+          },
+          4: {
+            id: 4,
+            type: 'users',
+            name: 'Jason'
+          },
+          5: {
+            id: 5,
+            type: 'users',
+            name: 'Nate'
+          }
+        }
+      }
+    });
+  });
+
+  it('fails creating union schema without schemaAttribute', function () {
+    (function () {
+      var user = new Schema('users'),
+          group = new Schema('groups'),
+          member = unionOf({
+            users: user,
+            groups: group
+          });
+    }).should.throw();
+  });
+
 });

@@ -1,4 +1,5 @@
 import isObject from 'lodash/lang/isObject';
+import UnionSchema from './UnionSchema';
 
 export default class ArraySchema {
   constructor(itemSchema, options = {}) {
@@ -6,23 +7,15 @@ export default class ArraySchema {
       throw new Error('ArraySchema requires item schema to be an object.');
     }
 
-    this._itemSchema = itemSchema;
-
     if (options.schemaAttribute) {
       const schemaAttribute = options.schemaAttribute;
-      this._getSchema = typeof schemaAttribute === 'function' ? schemaAttribute : x => x[schemaAttribute];
+      this._itemSchema = new UnionSchema(itemSchema, { schemaAttribute })
+    } else {
+      this._itemSchema = itemSchema;
     }
   }
 
   getItemSchema() {
     return this._itemSchema;
-  }
-
-  isPolymorphicSchema() {
-    return !!this._getSchema;
-  }
-
-  getSchemaKey(item) {
-    return this._getSchema(item);
   }
 }
