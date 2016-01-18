@@ -5,6 +5,14 @@ import isObject from 'lodash/isObject';
 import isEqual from 'lodash/isEqual';
 import mapValues from 'lodash/mapValues';
 
+function getAllOwnPropertyKeys (obj) {
+  return Object.keys(obj).concat(
+    typeof Object.getOwnPropertySymbols === 'function'
+      ? Object.getOwnPropertySymbols(obj)
+      : []
+  )
+}
+
 function defaultAssignEntity(normalized, key, entity) {
   normalized[key] = entity;
 }
@@ -13,11 +21,9 @@ function visitObject(obj, schema, bag, options) {
   const { assignEntity = defaultAssignEntity } = options;
 
   let normalized = {};
-  for (let key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      const entity = visit(obj[key], schema[key], bag, options);
-      assignEntity.call(null, normalized, key, entity);
-    }
+  for (let key of getAllOwnPropertyKeys(obj)) {
+    const entity = visit(obj[key], schema[key], bag, options);
+    assignEntity.call(null, normalized, key, entity);
   }
   return normalized;
 }
@@ -51,7 +57,7 @@ function visitUnion(obj, unionSchema, bag, options) {
 }
 
 function defaultMergeIntoEntity(entityA, entityB, entityKey) {
-  for (let key in entityB) {
+  for (let key of getAllOwnPropertyKeys(entityB)) {
     if (!entityB.hasOwnProperty(key)) {
       continue;
     }
