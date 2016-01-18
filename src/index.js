@@ -10,7 +10,7 @@ function getAllOwnPropertyKeys (obj) {
     typeof Object.getOwnPropertySymbols === 'function'
       ? Object.getOwnPropertySymbols(obj)
       : []
-  )
+  );
 }
 
 function defaultAssignEntity(normalized, key, entity) {

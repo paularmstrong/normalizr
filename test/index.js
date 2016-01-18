@@ -101,13 +101,13 @@ describe('normalizr', function () {
     article.getIdAttribute().should.eql('id');
     article.getKey().should.eql('articles');
 
-    const normalized = normalize(input, article)
+    const normalized = normalize(input, article);
 
     // This is a bit rough, but mocha doesn't know how to check
     // for Symbol keys, and has to be talked through it.
-    const entityType = normalized.entities.articles['1'][TYPE]
-    should.exist(entityType)
-    entityType.should.eql('article')
+    const entityType = normalized.entities.articles['1'][TYPE];
+    should.exist(entityType);
+    entityType.should.eql('article');
   });
 
   it('can normalize nested entity and delete an existing key using custom function', function () {
