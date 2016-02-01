@@ -102,6 +102,7 @@ Then we define nesting rules:
 ```javascript
 article.define({
   author: user,
+  contributors: arrayOf(user)
 });
 ```
 
@@ -113,11 +114,62 @@ const ServerActionCreators = {
   // These are two different XHR endpoints with different response schemas.
   // We can use the schema objects defined earlier to express both of them:
 
-  receiveArticles(response) {
-  
-    // Passing { articles: arrayOf(article) } as second parameter to normalize()
-    // lets it correctly traverse the response tree and gather all entities:
-    
+  receiveOneArticle(response) {
+
+    // Here, the response is an object containing data about one article.
+    // Passing the article schema as second parameter to normalize() lets it
+    // correctly traverse the response tree and gather all entities:
+
+    // BEFORE:
+    // {
+    //   id: 1,
+    //   title: 'Some Article',
+    //   author: {
+    //     id: 7,
+    //     name: 'Dan'
+    //   },
+    //   contributors: [{
+    //     id: 10,
+    //     name: 'Abe'
+    //   }, {
+    //     id: 15,
+    //     name: 'Fred'
+    //   }]
+    // }
+    //
+    // AFTER:
+    // {
+    //   result: 1,                    // <--- Note object is referenced by ID
+    //   entities: {
+    //     articles: {
+    //       1: {
+    //         author: 7,              // <--- Same happens for references to
+    //         contributors: [10, 15]  // <--- other entities in the schema
+    //         ...}
+    //     },
+    //     users: {
+    //       7: { ... },
+    //       10: { ... },
+    //       15: { ... }
+    //     }
+    //   }
+    // }
+
+    response = normalize(response, article);
+
+    AppDispatcher.handleServerAction({
+      type: ActionTypes.RECEIVE_ONE_ARTICLE,
+      response
+    });
+  },
+
+  receiveAllArticles(response) {
+
+    // Here, the response is an object with the key 'articles' referencing
+    // an array of article objects. Passing { articles: arrayOf(article) } as
+    // second parameter to normalize() lets it correctly traverse the response
+    // tree and gather all entities:
+
     // BEFORE:
     // {
     //   articles: [{
@@ -126,14 +178,17 @@ const ServerActionCreators = {
     //     author: {
     //       id: 7,
     //       name: 'Dan'
-    //     }
-    //   }, ...]
+    //     },
+    //     ...
+    //   },
+    //   ...
+    //   ]
     // }
     //
     // AFTER:
     // {
     //   result: {
-    //    articles: [1, 2, ...] // <--- Note how object array turned into ID array
+    //    articles: [1, 2, ...]     // <--- Note how object array turned into ID array
     //   },
     //   entities: {
     //     articles: {
@@ -146,53 +201,14 @@ const ServerActionCreators = {
     //       ..
     //     }
     //   }
-    
+    // }
+
     response = normalize(response, {
       articles: arrayOf(article)
     });
 
     AppDispatcher.handleServerAction({
-      type: ActionTypes.RECEIVE_ARTICLES,
-      response
-    });
-  },
-  
-  // Though this is a different API endpoint, we can describe it just as well
-  // with our normalizr schema objects:
-
-  receiveUsers(response) {
-
-    // Passing { users: arrayOf(user) } as second parameter to normalize()
-    // lets it correctly traverse the response tree and gather all entities:
-    
-    // BEFORE:
-    // {
-    //   users: [{
-    //     id: 7,
-    //     name: 'Dan',
-    //     ...
-    //   }, ...]
-    // }
-    //
-    // AFTER:
-    // {
-    //   result: {
-    //    users: [7, ...] // <--- Note how object array turned into ID array
-    //   },
-    //   entities: {
-    //     users: {
-    //       7: { ... },
-    //       ..
-    //     }
-    //   }
-    // }
-
-    response = normalize(response, {
-      users: arrayOf(user)
-    });
-
-    AppDispatcher.handleServerAction({
-      type: ActionTypes.RECEIVE_USERS,
+      type: ActionTypes.RECEIVE_ALL_ARTICLES,
       response
     });
   }
