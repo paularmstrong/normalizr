@@ -95,7 +95,6 @@ First, define a schema for our entities:
 ```javascript
 const article = new Schema('articles');
 const user = new Schema('users');
-const collection = new Schema('collections');
 ```
 
 Then we define nesting rules:
@@ -103,11 +102,6 @@ Then we define nesting rules:
 ```javascript
 article.define({
   author: user,
-  collections: arrayOf(collection)
-});
-
-collection.define({
-  curator: user
 });
 ```
 
