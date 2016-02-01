@@ -433,8 +433,19 @@ article.define({
 
 // ...
 
-const json = getArticleArray();
-const normalized = normalize(json, arrayOf(article));
+// Normalize one article object
+const json = { id: 1, author: ... };
+const normalized = normalize(json, article);
+
+// Normalize an array of article objects
+const arr = [{ id: 1, author: ... }, ...]
+const normalized = normalize(arr, arrayOf(article));
+
+// Normalize an array of article objects, referenced by an object key:
+const wrappedArr = { articles: [{ id: 1, author: ... }, ...] }
+const normalized = normalize(wrappedArr, {
+  articles: arrayOf(article)
+});
 ```
 
 ## Explanation by Example
