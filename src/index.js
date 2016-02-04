@@ -120,11 +120,11 @@ export function unionOf(schema, options) {
 export { EntitySchema as Schema };
 
 export function normalize(obj, schema, options = {}) {
-  if (!isObject(obj) && !Array.isArray(obj)) {
+  if (!isObject(obj)) {
     throw new Error('Normalize accepts an object or an array as its input.');
   }
 
-  if (!isObject(schema) || Array.isArray(schema)) {
+  if (!isObject(schema)) {
     throw new Error('Normalize accepts an object for schema.');
   }
 
