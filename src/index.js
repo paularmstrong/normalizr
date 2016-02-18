@@ -9,13 +9,13 @@ function defaultAssignEntity(normalized, key, entity) {
   normalized[key] = entity;
 }
 
-function visitObject(obj, schema, bag, options) {
+function visitObject(obj, schema, bag, options, collectionKey) {
   const { assignEntity = defaultAssignEntity } = options;
 
   let normalized = {};
   for (let key in obj) {
     if (obj.hasOwnProperty(key)) {
-      const entity = visit(obj[key], schema[key], bag, options);
+      const entity = visit(obj[key], schema[key], bag, options, collectionKey);
       assignEntity.call(null, normalized, key, entity);
     }
   }
@@ -23,13 +23,13 @@ function visitObject(obj, schema, bag, options) {
 }
 
 function defaultMapper(iterableSchema, itemSchema, bag, options) {
-  return (obj) => visit(obj, itemSchema, bag, options);
+  return (obj, key) => visit(obj, itemSchema, bag, options, key);
 }
 
 function polymorphicMapper(iterableSchema, itemSchema, bag, options) {
-  return (obj) => {
+  return (obj, key) => {
     const schemaKey = iterableSchema.getSchemaKey(obj);
-    const result = visit(obj, itemSchema[schemaKey], bag, options);
+    const result = visit(obj, itemSchema[schemaKey], bag, options, key);
     return { id: result, schema: schemaKey };
   };
 }
@@ -68,11 +68,11 @@ function defaultMergeIntoEntity(entityA, entityB, entityKey) {
   }
 }
 
-function visitEntity(entity, entitySchema, bag, options) {
+function visitEntity(entity, entitySchema, bag, options, collectionKey) {
   const { mergeIntoEntity = defaultMergeIntoEntity } = options;
 
   const entityKey = entitySchema.getKey();
-  const id = entitySchema.getId(entity);
+  const id = entitySchema.getId(entity, collectionKey);
 
   if (!bag.hasOwnProperty(entityKey)) {
     bag[entityKey] = {};
@@ -89,19 +89,19 @@ function visitEntity(entity, entitySchema, bag, options) {
   return id;
 }
 
-function visit(obj, schema, bag, options) {
+function visit(obj, schema, bag, options, collectionKey) {
   if (!isObject(obj) || !isObject(schema)) {
     return obj;
   }
 
   if (schema instanceof EntitySchema) {
-    return visitEntity(obj, schema, bag, options);
+    return visitEntity(...arguments);
   } else if (schema instanceof IterableSchema) {
-    return visitIterable(obj, schema, bag, options);
+    return visitIterable(...arguments);
   } else if (schema instanceof UnionSchema) {
-    return visitUnion(obj, schema, bag, options);
+    return visitUnion(...arguments);
   } else {
-    return visitObject(obj, schema, bag, options);
+    return visitObject(...arguments);
   }
 }
 
