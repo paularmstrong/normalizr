@@ -1477,6 +1477,40 @@ describe('normalizr', function () {
     });
   });
 
+  it('can normalize iterables keyed with their id', function () {
+    var user = new Schema('users', {
+      idAttribute: function(obj, key) {
+        return key;
+      }
+    }),
+        input;
+
+    input = {
+      1: {
+        name: 'Adam'
+      },
+      4: {
+        name: 'Jeremy'
+      }
+    };
+
+    Object.freeze(input);
+
+    normalize(input, arrayOf(user)).should.eql({
+      result: [ '1', '4' ],
+      entities: {
+        users: {
+          1: {
+            name: 'Adam'
+          },
+          4: {
+            name: 'Jeremy'
+          }
+        }
+      }
+    });
+  });
+
   it('fails creating union schema without schemaAttribute', function () {
     (function () {
       var user = new Schema('users'),
