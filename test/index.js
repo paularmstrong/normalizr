@@ -1496,11 +1496,8 @@ describe('normalizr', function () {
 
     Object.freeze(input);
 
-    normalize(input, valuesOf(user)).should.eql({
-      result: {
-        1: '1',
-        4: '4'
-      },
+    normalize(input, arrayOf(user)).should.eql({
+      result: [ '1', '4' ],
       entities: {
         users: {
           1: {
