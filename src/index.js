@@ -16,7 +16,7 @@ function visitObject(obj, schema, bag, options) {
   for (let key in obj) {
     if (obj.hasOwnProperty(key)) {
       const entity = visit(obj[key], schema[key], bag, options);
-      assignEntity.call(null, normalized, key, entity);
+      assignEntity.call(null, normalized, key, entity, obj);
     }
   }
   return normalized;
