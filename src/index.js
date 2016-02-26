@@ -1,6 +1,7 @@
 import EntitySchema from './EntitySchema';
 import IterableSchema from './IterableSchema';
 import UnionSchema from './UnionSchema';
+import clone from 'lodash/clone';
 import isEqual from 'lodash/isEqual';
 import isObject from 'lodash/isObject';
 
@@ -14,7 +15,10 @@ function visitObject(obj, schema, bag, options) {
   let normalized = {};
   for (let key in obj) {
     if (obj.hasOwnProperty(key)) {
-      const entity = visit(obj[key], schema[key], bag, options);
+      const entity = visit(obj[key], schema[key], bag, {
+        ...options,
+        parentId: schema.getId ? schema.getId(obj) : undefined,
+      });
       assignEntity.call(null, normalized, key, entity, obj);
     }
   }
@@ -34,7 +38,10 @@ function polymorphicMapper(iterableSchema, itemSchema, bag, options) {
 }
 
 function visitIterable(obj, iterableSchema, bag, options) {
-  const itemSchema = iterableSchema.getItemSchema();
+  let itemSchema = iterableSchema.getItemSchema();
+  if(iterableSchema._mappedBy) {
+    itemSchema = clone(itemSchema).mappedBy(iterableSchema._mappedBy);
+  }
   const curriedItemMapper = defaultMapper(iterableSchema, itemSchema, bag, options);
 
   if (Array.isArray(obj)) {
@@ -88,11 +95,34 @@ function visitEntity(entity, entitySchema, bag, options) {
   let normalized = visitObject(entity, entitySchema, bag, options);
   mergeIntoEntity(stored, normalized, entityKey);
 
+  if(entitySchema._mappedBy) {
+    const fk = entitySchema._mappedBy;
+    if(entitySchema[fk] instanceof IterableSchema && options.parentId) {
+      if(!stored[fk]) {
+        stored[fk] = [];
+      }
+      stored[fk] = Array.from(new Set([
+        ...stored[fk],
+        options.parentId
+      ]));
+    } else if (options.parentId && !stored[fk]) {
+      stored[fk] = options.parentId;
+    }
+  }
+
   return id;
 }
 
 function visit(obj, schema, bag, options) {
-  if (!isObject(obj) || !isObject(schema)) {
+  if (!isObject(schema)) {
+    return obj;
+  }
+
+  if (!isObject(obj) && schema._mappedBy) {
+    obj = {
+      [schema.getIdAttribute()]: obj,
+    };
+  } else if (!isObject(obj)) {
     return obj;
   }
 

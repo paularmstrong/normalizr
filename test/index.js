@@ -1543,6 +1543,256 @@ describe('normalizr', function () {
     });
   });
 
+  it('can normalize OneToOne relationship', function () {
+    var user = new Schema('users'),
+        project = new Schema('projects'),
+        input;
+
+    user.define({
+      project: project.mappedBy('contributor'),
+    });
+
+    project.define({
+      contributor: user.mappedBy('project'),
+    });
+
+    input = {
+      id: 80,
+      contributor: 1
+    };
+
+    Object.freeze(input);
+
+    normalize(input, project).should.eql({
+      result: 80,
+      entities: {
+        projects: {
+          80: {
+            id: 80,
+            contributor: 1
+          }
+        },
+        users: {
+          1: {
+            id: 1,
+            project: 80
+          }
+        }
+      }
+    });
+  });
+
+  it('can normalize OneToMany relationship', function () {
+    var user = new Schema('users'),
+        project = new Schema('projects'),
+        input;
+
+    user.define({
+      projects: arrayOf(project).mappedBy('contributor'),
+    });
+
+    project.define({
+      contributor: user.mappedBy('projects'),
+    });
+
+    input = {
+      id: 80,
+      contributor: 1
+    };
+
+    Object.freeze(input);
+
+    normalize(input, project).should.eql({
+      result: 80,
+      entities: {
+        projects: {
+          80: {
+            id: 80,
+            contributor: 1
+          }
+        },
+        users: {
+          1: {
+            id: 1,
+            projects: [80]
+          }
+        }
+      }
+    });
+  });
+
+  it('can normalize ManyToOne relationship', function () {
+    var user = new Schema('users'),
+        project = new Schema('projects'),
+        input;
+
+    user.define({
+      projects: arrayOf(project).mappedBy('contributor'),
+    });
+
+    project.define({
+      contributor: user.mappedBy('projects'),
+    });
+
+    input = {
+      id: 1,
+      projects: [80]
+    };
+
+    Object.freeze(input);
+
+    normalize(input, user).should.eql({
+      result: 1,
+      entities: {
+        projects: {
+          80: {
+            id: 80,
+            contributor: 1
+          }
+        },
+        users: {
+          1: {
+            id: 1,
+            projects: [80]
+          }
+        }
+      }
+    });
+  });
+
+  it('can normalize ManyToMany relationship', function () {
+    var user = new Schema('users'),
+        project = new Schema('projects'),
+        input;
+
+    user.define({
+      projects: arrayOf(project).mappedBy('contributors'),
+    });
+
+    project.define({
+      contributors: arrayOf(user).mappedBy('projects'),
+    });
+
+    input = {
+      id: 80,
+      contributors: [1]
+    };
+
+    Object.freeze(input);
+
+    normalize(input, project).should.eql({
+      result: 80,
+      entities: {
+        projects: {
+          80: {
+            id: 80,
+            contributors: [1]
+          }
+        },
+        users: {
+          1: {
+            id: 1,
+            projects: [80]
+          }
+        }
+      }
+    });
+  });
+
+  it('can normalize ManyToMany relationships recursively', function () {
+    var user = new Schema('users'),
+        input;
+
+    user.define({
+      friends: arrayOf(user).mappedBy('friends'),
+    });
+
+    input = {
+      id: 1,
+      friends: [2, 3]
+    };
+
+    Object.freeze(input);
+
+    normalize(input, user).should.eql({
+      result: 1,
+      entities: {
+        users: {
+          1: {
+            id: 1,
+            friends: [2, 3]
+          },
+          2: {
+            id: 2,
+            friends: [1]
+          },
+          3: {
+            id: 3,
+            friends: [1]
+          },
+        }
+      }
+    });
+  });
+
+  it('can normalize ManyToMany relationships with many properties', function () {
+    var user = new Schema('users'),
+        project = new Schema('projects'),
+        input;
+
+    user.define({
+      projects: arrayOf(project).mappedBy('contributors'),
+      friends: arrayOf(user).mappedBy('friends'),
+      likes: arrayOf(project).mappedBy('likedBy'),
+    });
+
+    project.define({
+      contributors: arrayOf(user).mappedBy('projects'),
+      likedBy: arrayOf(user).mappedBy('likes'),
+    });
+
+    input = {
+      id: 80,
+      contributors: [{
+        id: 1,
+        projects: [80],
+        friends: [2]
+      }],
+      likedBy: [2, 3]
+    };
+
+    Object.freeze(input);
+
+    normalize(input, project).should.eql({
+      result: 80,
+      entities: {
+        projects: {
+          80: {
+            id: 80,
+            contributors: [1],
+            likedBy: [2, 3]
+          }
+        },
+        users: {
+          1: {
+            id: 1,
+            projects: [80],
+            friends: [2]
+          },
+          2: {
+            id: 2,
+            likes: [80],
+            friends: [1]
+          },
+          3: {
+            id: 3,
+            likes: [80]
+          }
+        }
+      }
+    });
+  });
+
   it('fails creating union schema without schemaAttribute', function () {
     (function () {
       var user = new Schema('users'),
