@@ -331,8 +331,8 @@ If the map contains entities with different schemas, you can use the `schemaAttr
 
 ```javascript
 const article = new Schema('articles');
-const user = new Schema('images');
-const group = new Schema('videos');
+const user = new Schema('users');
+const group = new Schema('groups');
 const collaborator = {
   users: user,
   groups: group
