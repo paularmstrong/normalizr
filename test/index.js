@@ -85,6 +85,31 @@ describe('normalizr', function () {
     });
   });
 
+  it('can normalize an entity with Symbol keys', function () {
+    var article = new Schema('articles'),
+        input,
+        TYPE = Symbol();
+
+    input = {
+      id: 1,
+      title: 'Some Article',
+      isFavorite: false,
+      [TYPE]: 'article'
+    };
+
+    Object.freeze(input);
+    article.getIdAttribute().should.eql('id');
+    article.getKey().should.eql('articles');
+
+    const normalized = normalize(input, article);
+
+    // This is a bit rough, but mocha doesn't know how to check
+    // for Symbol keys, and has to be talked through it.
+    const entityType = normalized.entities.articles['1'][TYPE];
+    should.exist(entityType);
+    entityType.should.eql('article');
+  });
+
   it('can normalize nested entity and delete an existing key using custom function', function () {
     var article = new Schema('articles'),
         type = new Schema('types'),
