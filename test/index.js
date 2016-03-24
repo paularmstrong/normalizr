@@ -3,6 +3,7 @@
 var should = require('chai').should(),
     isEqual = require('lodash/isEqual'),
     isObject = require('lodash/isObject'),
+    map = require('lodash/map'),
     merge = require('lodash/merge'),
     normalizr = require('../src'),
     normalize = normalizr.normalize,
@@ -130,6 +131,71 @@ describe('normalizr', function () {
           }
         }
       }
+    });
+  });
+
+  it('can update key values based on original input using a custom function', function () {
+    var article = new Schema('articles'),
+        author = new Schema('authors'),
+        input;
+
+    article.define({
+      author: author
+    });
+
+    input = {
+      id: '123',
+      title: 'My article',
+      author: {
+        id: '321',
+        screenName: 'paul'
+      },
+      media: [
+        {
+          id: '1345',
+          url: 'https://bit.ly/...'
+        }
+      ]
+    };
+
+    var options = {
+      assignEntity: function (obj, key, val, originalInput) {
+        if (key === 'media') {
+          var screenName = originalInput.author.screenName;
+          val = map(val, function (media, i) {
+            return merge({}, media, {
+              mediaViewUrl: '/' + screenName + '/articles/' + obj.id + '/photos/' + i
+            });
+          });
+        }
+        obj[key] = val;
+      }
+    };
+
+    normalize(input, article, options).should.eql({
+      entities: {
+        articles: {
+          '123': {
+            id: '123',
+            title: 'My article',
+            author: '321',
+            media: [
+              {
+                id: '1345',
+                url: 'https://bit.ly/...',
+                mediaViewUrl: '/paul/articles/123/photos/0'
+              }
+            ]
+          }
+        },
+        authors: {
+          '321': {
+            id: '321',
+            screenName: 'paul'
+          }
+        }
+      },
+      result: '123'
     });
   });
 
