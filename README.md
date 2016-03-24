@@ -513,7 +513,7 @@ Normalizr solves the problem by converting API responses to a flat form where ne
 Then `UserStore` code can be rewritten as:
 
 ```javascript
-// With normalizr, users are always in action.entities.users
+// With normalizr, users are always in action.response.entities.users
 
 AppDispatcher.register((payload) => {
   const { action } = payload;
