@@ -1,6 +1,6 @@
 # normalizr [![build status](https://img.shields.io/travis/gaearon/normalizr/master.svg?style=flat-square)](https://travis-ci.org/gaearon/normalizr) [![npm version](https://img.shields.io/npm/v/normalizr.svg?style=flat-square)](https://www.npmjs.com/package/normalizr) [![npm downloads](https://img.shields.io/npm/dm/normalizr.svg?style=flat-square)](https://www.npmjs.com/package/normalizr)
 
-Normalizes deeply nested JSON API responses according to a schema for [Flux](https://facebook.github.io/flux) and [Redux](http://rackt.github.io/redux) apps.
+Normalizes deeply nested JSON API responses according to a schema for [Flux](https://facebook.github.io/flux) and [Redux](http://rackt.github.io/redux) apps.  
 Kudos to Jing Chen for suggesting this approach.
 
 ## Installation
@@ -21,9 +21,9 @@ See **[redux/examples/real-world](https://github.com/rackt/redux/tree/master/exa
 
 ## The Problem
 
-* You have a JSON API that returns deeply nested objects;
+* You have a JSON API that returns deeply nested objects;  
 * You want to port your app to [Flux](https://github.com/facebook/flux) or [Redux](http://rackt.github.io/redux);
-* You noticed [it's hard](https://groups.google.com/forum/#!topic/reactjs/jbh50-GJxpg) for Stores (or Reducers) to consume data from nested API responses.
+* You noticed [it's hard](https://groups.google.com/forum/#!topic/reactjs/jbh50-GJxpg) for Stores (or Reducers) to consume data from nested API responses.  
 
 Normalizr takes JSON and a schema and **replaces nested entities with their IDs, gathering all entities in dictionaries**.
 
@@ -233,10 +233,10 @@ AppDispatcher.register((payload) => {
 
 ### `new Schema(key, [options])`
 
-Schema lets you define a type of entity returned by your API.
-This should correspond to model in your server code.
+Schema lets you define a type of entity returned by your API.  
+This should correspond to model in your server code.  
 
-The `key` parameter lets you specify the name of the dictionary for this kind of entity.
+The `key` parameter lets you specify the name of the dictionary for this kind of entity.  
 
 ```javascript
 const article = new Schema('articles');
@@ -251,7 +251,7 @@ const article = new Schema('articles', { idAttribute: generateSlug });
 
 ### `Schema.prototype.define(nestedSchema)`
 
-Lets you specify relationships between different entities.
+Lets you specify relationships between different entities.  
 
 ```javascript
 const article = new Schema('articles');
@@ -408,7 +408,7 @@ group.define({
 
 ### `normalize(obj, schema, [options])`
 
-Normalizes object according to schema.
+Normalizes object according to schema.  
 Passed `schema` should be a nested object reflecting the structure of API response.
 
 You may optionally specify any of the following options:
@@ -467,7 +467,7 @@ collection: {
 }
 ```
 
-Without normalizr, your Stores would need to know too much about API response schema.
+Without normalizr, your Stores would need to know too much about API response schema.  
 For example, `UserStore` would include a lot of boilerplate to extract fresh user info when articles are fetched:
 
 ```javascript
@@ -553,7 +553,7 @@ AppDispatcher.register((payload) => {
 
 ## Browser Support
 
-Modern browsers with ES5 environments are supported.
+Modern browsers with ES5 environments are supported.  
 The minimal supported IE version is IE 9.
 
 ## Running Tests
