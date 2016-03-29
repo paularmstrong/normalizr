@@ -124,7 +124,7 @@ export function normalize(obj, schema, options = {}) {
     throw new Error('Normalize accepts an object or an array as its input.');
   }
 
-  if (!isObject(schema)) {
+  if (!isObject(schema) || Array.isArray(schema)) {
     throw new Error('Normalize accepts an object for schema.');
   }
 
