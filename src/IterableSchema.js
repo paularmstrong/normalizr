@@ -1,4 +1,4 @@
-import { isObject } from './utils';
+import isObject from 'lodash/isObject';
 import UnionSchema from './UnionSchema';
 
 export default class ArraySchema {

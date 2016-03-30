@@ -1,8 +1,8 @@
 import EntitySchema from './EntitySchema';
 import IterableSchema from './IterableSchema';
 import UnionSchema from './UnionSchema';
-import isEqual from 'lodash.isequal';
-import { isObject } from './utils';
+import isEqual from 'lodash/isEqual';
+import isObject from 'lodash/isObject';
 
 function defaultAssignEntity(normalized, key, entity) {
   normalized[key] = entity;
