@@ -1,9 +1,8 @@
 import EntitySchema from './EntitySchema';
 import IterableSchema from './IterableSchema';
 import UnionSchema from './UnionSchema';
-import isObject from 'lodash/isObject';
 import isEqual from 'lodash/isEqual';
-import mapValues from 'lodash/mapValues';
+import isObject from 'lodash/isObject';
 
 function defaultAssignEntity(normalized, key, entity) {
   normalized[key] = entity;
@@ -41,7 +40,10 @@ function visitIterable(obj, iterableSchema, bag, options) {
   if (Array.isArray(obj)) {
     return obj.map(curriedItemMapper);
   } else {
-    return mapValues(obj, curriedItemMapper);
+    return Object.keys(obj).reduce(function (objMap, key) {
+      objMap[key] = curriedItemMapper(obj[key]);
+      return objMap;
+    }, {});
   }
 }
 
