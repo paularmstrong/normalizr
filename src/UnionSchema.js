@@ -1,4 +1,4 @@
-import isObject from 'lodash/isObject';
+import { isObject } from './utils';
 
 export default class UnionSchema {
   constructor(itemSchema, options) {
