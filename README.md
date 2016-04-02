@@ -330,7 +330,7 @@ Normalizr will give you this :
 }
 ```
 
-Using this property is completely optional and you can even chose to use it only on one side of the relationship. // à vérifier
+Using this property is completely optional and you can even chose to use it only on one side of the relationship.
 
 ### `arrayOf(schema, [options])`
 
