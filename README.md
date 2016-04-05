@@ -287,6 +287,51 @@ slugArticle.getIdAttribute();
 // slug
 ```
 
+### `Schema.prototype.mappedBy(foreignKey)`
+
+This method permits to link a Schema property with a foreign property in another one Schema.
+
+```javascript
+const project = new Schema('projects');
+const user = new Schema('users');
+
+project.define({
+  collaborators: user.mappedBy('projects'),
+});
+
+user.define({
+  projects: user.mappedBy('collaborators'),
+});
+```
+
+This way, the relations will always be consistent. If you get this response for a user :
+
+```
+{
+  id: 1,
+  projects: [1, 2],
+}
+```
+
+Normalizr will give you this :
+
+```javascript
+{
+  result: [1],
+  entities: {
+    users: {
+      1: { id: 1, projects: [1, 2] }
+    },
+    projects: {
+      1: { id: 1, collaborators: [1] },
+      2: { id: 1, collaborators: [1] }
+    }
+  }
+}
+```
+
+Using this property is completely optional and you can even chose to use it only on one side of the relationship.
+
 ### `arrayOf(schema, [options])`
 
 Describes an array of the schema passed as argument.

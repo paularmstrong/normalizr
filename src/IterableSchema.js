@@ -18,4 +18,9 @@ export default class ArraySchema {
   getItemSchema() {
     return this._itemSchema;
   }
+
+  mappedBy(foreignKey) {
+    this._mappedBy = foreignKey;
+    return this;
+  }
 }

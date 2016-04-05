@@ -1,6 +1,7 @@
 import EntitySchema from './EntitySchema';
 import IterableSchema from './IterableSchema';
 import UnionSchema from './UnionSchema';
+import clone from 'lodash/clone';
 import isEqual from 'lodash/isEqual';
 import isObject from 'lodash/isObject';
 
@@ -14,15 +15,15 @@ function visitObject(obj, schema, bag, options) {
   let normalized = {};
   for (let key in obj) {
     if (obj.hasOwnProperty(key)) {
-      const entity = visit(obj[key], schema[key], bag, options);
+      const entity = visit(obj[key], schema[key], bag, options, typeof schema.getId === 'function' && schema.getId(obj));
       assignEntity.call(null, normalized, key, entity, obj);
     }
   }
   return normalized;
 }
 
-function defaultMapper(iterableSchema, itemSchema, bag, options) {
-  return (obj) => visit(obj, itemSchema, bag, options);
+function defaultMapper(iterableSchema, itemSchema, parentId, bag, options) {
+  return (obj) => visit(obj, itemSchema, bag, options, parentId);
 }
 
 function polymorphicMapper(iterableSchema, itemSchema, bag, options) {
@@ -33,9 +34,12 @@ function polymorphicMapper(iterableSchema, itemSchema, bag, options) {
   };
 }
 
-function visitIterable(obj, iterableSchema, bag, options) {
-  const itemSchema = iterableSchema.getItemSchema();
-  const curriedItemMapper = defaultMapper(iterableSchema, itemSchema, bag, options);
+function visitIterable(obj, iterableSchema, parentId, bag, options) {
+  let itemSchema = iterableSchema.getItemSchema();
+  if(iterableSchema._mappedBy) {
+    itemSchema = clone(itemSchema).mappedBy(iterableSchema._mappedBy);
+  }
+  const curriedItemMapper = defaultMapper(iterableSchema, itemSchema, parentId, bag, options);
 
   if (Array.isArray(obj)) {
     return obj.map(curriedItemMapper);
@@ -70,7 +74,7 @@ function defaultMergeIntoEntity(entityA, entityB, entityKey) {
   }
 }
 
-function visitEntity(entity, entitySchema, bag, options) {
+function visitEntity(entity, entitySchema, parentId, bag, options) {
   const { mergeIntoEntity = defaultMergeIntoEntity } = options;
 
   const entityKey = entitySchema.getKey();
@@ -88,18 +92,41 @@ function visitEntity(entity, entitySchema, bag, options) {
   let normalized = visitObject(entity, entitySchema, bag, options);
   mergeIntoEntity(stored, normalized, entityKey);
 
+  if(entitySchema._mappedBy) {
+    const fk = entitySchema._mappedBy;
+    if(entitySchema[fk] instanceof IterableSchema && parentId) {
+      if(!stored[fk]) {
+        stored[fk] = [];
+      }
+      stored[fk] = Array.from(new Set([
+        ...stored[fk],
+        parentId
+      ]));
+    } else if (parentId && !stored[fk]) {
+      stored[fk] = parentId;
+    }
+  }
+
   return id;
 }
 
-function visit(obj, schema, bag, options) {
-  if (!isObject(obj) || !isObject(schema)) {
+function visit(obj, schema, bag, options, parentId) {
+  if (!isObject(schema)) {
+    return obj;
+  }
+
+  if (!isObject(obj) && schema._mappedBy) {
+    obj = {
+      [schema.getIdAttribute()]: obj,
+    };
+  } else if (!isObject(obj)) {
     return obj;
   }
 
   if (schema instanceof EntitySchema) {
-    return visitEntity(obj, schema, bag, options);
+    return visitEntity(obj, schema, parentId, bag, options);
   } else if (schema instanceof IterableSchema) {
-    return visitIterable(obj, schema, bag, options);
+    return visitIterable(obj, schema, parentId, bag, options);
   } else if (schema instanceof UnionSchema) {
     return visitUnion(obj, schema, bag, options);
   } else {
