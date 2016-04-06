@@ -231,7 +231,7 @@ AppDispatcher.register((payload) => {
 
 ### Dealing with combined endpoints
 
-Sometimes, especially when dealing with low-bandwidth scenario's, you want to combine what would normally be multiple endpoints into one logical endpoint so that you save a several server roundtrips. This works out of the box with normalizr. Let's say you want to get `articles` and `categories` to assemble the homepage of a blog.
+Sometimes, especially when dealing with low-bandwidth scenario's, you want to combine what would normally be multiple endpoints into one logical endpoint so that you save several server roundtrips. This works out of the box with normalizr. Let's say you want to get `articles` and `categories` to assemble the homepage of a blog.
 
 For this example's sake the relationship between articles and categories is left out.
 
