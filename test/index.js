@@ -57,15 +57,6 @@ describe('normalizr', function () {
     }).should.throw();
   });
 
-  it('returns the schema when defining', function () {
-    var article = new Schema('articles'),
-        type = new Schema('types');
-
-    article.define({
-      type: type
-    }).should.eq(article);
-  });
-
   it('can normalize single entity', function () {
     var article = new Schema('articles'),
         input;
