@@ -31,9 +31,4 @@ export default class EntitySchema {
     }
     return this;
   }
-
-  mappedBy(foreignKey) {
-    this._mappedBy = foreignKey;
-    return this;
-  }
 }
