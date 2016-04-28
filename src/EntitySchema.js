@@ -24,8 +24,11 @@ export default class EntitySchema {
     return this._idAttribute;
   }
 
-  getMeta() {
-    return this._meta;
+  getMeta(prop) {
+    if (!prop || typeof prop !== 'string') {
+      throw new Error('A string non-empty property name is required');
+    }
+    return this._meta && this._meta[prop];
   }
 
   define(nestedSchema) {

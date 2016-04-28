@@ -208,7 +208,7 @@ describe('normalizr', function () {
     });
   });
 
-  it('can specify meta properties on a schema which are then accessible in assignEntities', function () {
+  it('can specify meta properties on a schema which are then accessible in assignEntity', function () {
     var article = new Schema('articles', { meta: { removeProps: ['year', 'publisher'] }}),
         author = new Schema('authors', { meta: { removeProps: ['born'] }}),
         input;
@@ -236,9 +236,9 @@ describe('normalizr', function () {
     var options = {
       assignEntity: function (obj, key, val, originalInput, schema) {
         var itemSchema = schema && schema.getItemSchema ? schema.getItemSchema() : schema;         
-        var meta = itemSchema && itemSchema.getMeta();
-        if (meta && meta.removeProps && meta.removeProps.indexOf(key) >= 0) return;
-        obj[key] = val;
+        var removeProps = itemSchema && itemSchema.getMeta && itemSchema.getMeta("removeProps");
+        if (!removeProps || removeProps.indexOf(key) < 0)        
+          obj[key] = val;
       }
     };
 
@@ -266,6 +266,26 @@ describe('normalizr', function () {
     });
   });
 
+  it('throws if getMeta is called with invalid params', function () {
+    var article = new Schema('articles', { meta: { removeProps: ['year', 'publisher'] }});
+
+    (function() {
+      article.getMeta();
+    }).should.throw();
+
+    (function() {
+      article.getMeta('');
+    }).should.throw();
+
+    (function() {
+      article.getMeta('missingProp');
+    }).should.not.throw();
+
+    (function() {
+      article.getMeta('removeProps');
+    }).should.not.throw();
+  });
+  
   it('can merge into entity using custom function', function () {
     var author = new Schema('authors'),
         input;
