@@ -8,7 +8,7 @@ function defaultAssignEntity(normalized, key, entity) {
   normalized[key] = entity;
 }
 
-function visitObject(obj, schema, bag, options) {
+function visitObject(obj, schema, bag, options, collectionKey) {
   const { assignEntity = defaultAssignEntity } = options;
 
   let normalized = {};
@@ -22,11 +22,11 @@ function visitObject(obj, schema, bag, options) {
 }
 
 function defaultMapper(iterableSchema, itemSchema, bag, options) {
-  return (obj) => visit(obj, itemSchema, bag, options);
+  return (obj, key) => visit(obj, itemSchema, bag, options, key);
 }
 
 function polymorphicMapper(iterableSchema, itemSchema, bag, options) {
-  return (obj) => {
+  return (obj, key) => {
     const schemaKey = iterableSchema.getSchemaKey(obj);
     const result = visit(obj, itemSchema[schemaKey], bag, options);
     return { id: result, schema: schemaKey };
@@ -41,7 +41,7 @@ function visitIterable(obj, iterableSchema, bag, options) {
     return obj.map(curriedItemMapper);
   } else {
     return Object.keys(obj).reduce(function (objMap, key) {
-      objMap[key] = curriedItemMapper(obj[key]);
+      objMap[key] = curriedItemMapper(obj[key], key);
       return objMap;
     }, {});
   }
@@ -70,11 +70,11 @@ function defaultMergeIntoEntity(entityA, entityB, entityKey) {
   }
 }
 
-function visitEntity(entity, entitySchema, bag, options) {
+function visitEntity(entity, entitySchema, bag, options, collectionKey) {
   const { mergeIntoEntity = defaultMergeIntoEntity } = options;
 
   const entityKey = entitySchema.getKey();
-  const id = entitySchema.getId(entity);
+  const id = entitySchema.getId(entity, collectionKey);
 
   if (!bag.hasOwnProperty(entityKey)) {
     bag[entityKey] = {};
@@ -85,26 +85,33 @@ function visitEntity(entity, entitySchema, bag, options) {
   }
 
   let stored = bag[entityKey][id];
-  let normalized = visitObject(entity, entitySchema, bag, options);
+  let normalized = visitObject(entity, entitySchema, bag, options, collectionKey);
   mergeIntoEntity(stored, normalized, entityKey);
 
   return id;
 }
 
-function visit(obj, schema, bag, options) {
+function visit(obj, schema, bag, options, collectionKey) {
   if (!isObject(obj) || !isObject(schema)) {
     return obj;
   }
 
   if (schema instanceof EntitySchema) {
-    return visitEntity(obj, schema, bag, options);
+    return visitEntity(obj, schema, bag, options, collectionKey);
   } else if (schema instanceof IterableSchema) {
     return visitIterable(obj, schema, bag, options);
   } else if (schema instanceof UnionSchema) {
     return visitUnion(obj, schema, bag, options);
   } else {
-    return visitObject(obj, schema, bag, options);
+    return visitObject(obj, schema, bag, options, collectionKey);
   }
+}
+
+function normalizeResult(result) {
+  if (isObject(result) && isEqual(Object.keys(result), Object.values(result))) {
+    return Object.keys(result);
+  }
+  return result;
 }
 
 export function arrayOf(schema, options) {
@@ -133,8 +140,9 @@ export function normalize(obj, schema, options = {}) {
   let bag = {};
   let result = visit(obj, schema, bag, options);
 
+
   return {
     entities: bag,
-    result
+    result: normalizeResult(result)
   };
 }
