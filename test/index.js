@@ -777,6 +777,53 @@ describe('normalizr', function () {
     });
   });
 
+  it('can normalize deeply nested entities with arrays and custom assign entity', function () {
+    var article = new Schema('articles'),
+        collection = new Schema('collections'),
+        input;
+
+    article.define({
+      collections: arrayOf(collection, { assignEntity: function(obj, key, val) { obj['collection_ids'] = val } })
+    });
+
+    input = {
+      id: 1,
+      title: 'Some Article',
+      collections: [{
+        id: 1,
+        title: 'Awesome Writing',
+      }, {
+        id: 7,
+        title: 'Even Awesomer',
+      }]
+    };
+
+    Object.freeze(input);
+
+    normalize(input, article).should.eql({
+      result: 1,
+      entities: {
+        articles: {
+          1: {
+            id: 1,
+            title: 'Some Article',
+            collection_ids: [1, 7]
+          },
+        },
+        collections: {
+          1: {
+            id: 1,
+            title: 'Awesome Writing',
+          },
+          7: {
+            id: 7,
+            title: 'Even Awesomer',
+          }
+        },
+      }
+    });
+  });
+
   it('can normalize deeply nested entities with polymorphic arrays', function () {
     var article = new Schema('articles'),
         tutorial = new Schema('tutorials'),

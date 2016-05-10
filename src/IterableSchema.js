@@ -7,12 +7,18 @@ export default class ArraySchema {
       throw new Error('ArraySchema requires item schema to be an object.');
     }
 
+    this._assignEntity= options.assignEntity;
+
     if (options.schemaAttribute) {
       const schemaAttribute = options.schemaAttribute;
       this._itemSchema = new UnionSchema(itemSchema, { schemaAttribute })
     } else {
       this._itemSchema = itemSchema;
     }
+  }
+
+  getAssignEntity() {
+    return this._assignEntity;
   }
 
   getItemSchema() {

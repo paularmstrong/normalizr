@@ -14,8 +14,9 @@ function visitObject(obj, schema, bag, options) {
   let normalized = {};
   for (let key in obj) {
     if (obj.hasOwnProperty(key)) {
+      const actualAssignEntity = (schema[key] && schema[key].getAssignEntity && schema[key].getAssignEntity()  ) || assignEntity;
       const entity = visit(obj[key], schema[key], bag, options);
-      assignEntity.call(null, normalized, key, entity, obj);
+      actualAssignEntity.call(null, normalized, key, entity, obj);
     }
   }
   return normalized;
