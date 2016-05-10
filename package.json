@@ -1,6 +1,6 @@
 {
   "name": "normalizr",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Normalizes JSON according to schema for Redux and Flux applications",
   "main": "lib/index.js",
   "repository": {
