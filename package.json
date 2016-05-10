@@ -1,11 +1,11 @@
 {
   "name": "normalizr",
   "version": "2.0.1",
-  "description": "Normalizes JSON according to schema for Flux application",
+  "description": "Normalizes JSON according to schema for Redux and Flux applications",
   "main": "lib/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/gaearon/normalizr.git"
+    "url": "https://github.com/paularmstrong/normalizr.git"
   },
   "keywords": [
     "flux",
@@ -19,11 +19,14 @@
     "src"
   ],
   "author": "Dan Abramov",
+  "contributors": [
+    "Paul Armstrong"
+  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gaearon/normalizr/issues"
+    "url": "https://github.com/paularmstrong/normalizr/issues"
   },
-  "homepage": "https://github.com/gaearon/normalizr",
+  "homepage": "https://github.com/paularmstrong/normalizr",
   "scripts": {
     "test": "mocha --compilers js:babel/register --recursive",
     "test:watch": "npm run test -- --watch",
