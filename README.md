@@ -568,5 +568,5 @@ npm run test:watch # run test watcher
 
 ## Credits
 
-Normalizr was originally created by [Dan Abramov](http://github.com/gaearon) inspired by a conversation with [Jing Chen](https://twitter.com/jingc).  
+Normalizr was originally created by [Dan Abramov](http://github.com/gaearon) and inspired by a conversation with [Jing Chen](https://twitter.com/jingc).  
 It has since received contributions from different [community members](https://github.com/gaearon/normalizr/graphs/contributors).
