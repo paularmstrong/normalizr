@@ -108,7 +108,7 @@ describe('normalizr', function () {
     Object.freeze(input);
 
     var options = {
-      assignEntity: function(obj, key, val) {
+      assignEntity: function(obj, key, val, originalInput, schema) {
         obj[key] = val;
         delete obj[key + 'Id'];
       }
@@ -159,7 +159,7 @@ describe('normalizr', function () {
     };
 
     var options = {
-      assignEntity: function (obj, key, val, originalInput) {
+      assignEntity: function (obj, key, val, originalInput, schema) {
         if (key === 'media') {
           var screenName = originalInput.author.screenName;
           val = map(val, function (media, i) {
@@ -199,6 +199,84 @@ describe('normalizr', function () {
     });
   });
 
+  it('can specify meta properties on a schema which are then accessible in assignEntity', function () {
+    var article = new Schema('articles', { meta: { removeProps: ['year', 'publisher'] }}),
+        author = new Schema('authors', { meta: { removeProps: ['born'] }}),
+        input;
+
+    article.define({
+      authors: arrayOf(author)
+    });
+    
+    input = {
+      id: '123',
+      title: 'My article',
+      publisher: 'Random',
+      year: 2012,
+      authors: [{
+        id: '321',
+        screenName: 'paul',
+        born: 1973
+      }, {
+        id: '678',
+        screenName: 'jim',
+        born: 1977
+      }]
+    };
+
+    var options = {
+      assignEntity: function (obj, key, val, originalInput, schema) {
+        var itemSchema = schema && schema.getItemSchema ? schema.getItemSchema() : schema;         
+        var removeProps = itemSchema && itemSchema.getMeta && itemSchema.getMeta("removeProps");
+        if (!removeProps || removeProps.indexOf(key) < 0)        
+          obj[key] = val;
+      }
+    };
+
+    normalize(input, article, options).should.eql({
+      entities: {
+        articles: {
+          '123': {
+            id: '123',
+            title: 'My article',
+            authors: ['321', '678']
+          }
+        },
+        authors: {
+          '321': {
+            id: '321',
+            screenName: 'paul'
+          },
+          '678': {
+            id: '678',
+            screenName: 'jim'
+          }
+        }
+      },
+      result: '123'
+    });
+  });
+
+  it('throws if getMeta is called with invalid params', function () {
+    var article = new Schema('articles', { meta: { removeProps: ['year', 'publisher'] }});
+
+    (function() {
+      article.getMeta();
+    }).should.throw();
+
+    (function() {
+      article.getMeta('');
+    }).should.throw();
+
+    (function() {
+      article.getMeta('missingProp');
+    }).should.not.throw();
+
+    (function() {
+      article.getMeta('removeProps');
+    }).should.not.throw();
+  });
+  
   it('can merge into entity using custom function', function () {
     var author = new Schema('authors'),
         input;

@@ -9,6 +9,7 @@ export default class EntitySchema {
     const idAttribute = options.idAttribute || 'id';
     this._getId = typeof idAttribute === 'function' ? idAttribute : x => x[idAttribute];
     this._idAttribute = idAttribute;
+    this._meta = options.meta;
   }
 
   getKey() {
@@ -21,6 +22,13 @@ export default class EntitySchema {
 
   getIdAttribute() {
     return this._idAttribute;
+  }
+
+  getMeta(prop) {
+    if (!prop || typeof prop !== 'string') {
+      throw new Error('A string non-empty property name is required');
+    }
+    return this._meta && this._meta[prop];
   }
 
   define(nestedSchema) {
