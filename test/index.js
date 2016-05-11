@@ -1632,4 +1632,37 @@ describe('normalizr', function () {
     }).should.throw();
   });
 
+  it('can normalize iterables keyed with their id', function () {
+    var user = new Schema('users', {
+      idAttribute: function(obj, key) {
+        return key;
+      }
+    })
+
+    var input = {
+      1: {
+        name: 'Adam'
+      },
+      4: {
+        name: 'Jeremy'
+      }
+    };
+
+    Object.freeze(input);
+
+    normalize(input, arrayOf(user)).should.eql({
+      result: ['1', '4'],
+      entities: {
+        users: {
+          '1': {
+            name: 'Adam'
+          },
+          '4': {
+            name: 'Jeremy'
+          }
+        }
+      }
+    });
+  });
+
 });

@@ -244,12 +244,23 @@ const article = new Schema('articles');
 // You can use a custom id attribute
 const article = new Schema('articles', { idAttribute: 'slug' });
 
-// Or you can specify a function to infer it
-function generateSlug(entity) { /* ... */ }
+// Or you can specify a function to infer it.
+function generateSlug(value, key) { /* ... */ }
 const article = new Schema('articles', { idAttribute: generateSlug });
 
 // You can also specify meta properties to be used for customizing the output in assignEntity (see below)
 const article = new Schema('articles', { idAttribute: 'slug', meta: { removeProps: ['publisher'] }});
+```
+
+If using an function to infer the `idAttribute`, the function is passed both the current value and it's key.
+This is helpful in occasions where your data is keyed by id, but doesn't contain id inside the value. For example:
+
+```javascript
+{
+  2: {
+    name: 'Adam'
+  } 
+}
 ```
 
 ### `Schema.prototype.define(nestedSchema)`
