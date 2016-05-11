@@ -5,11 +5,16 @@ export default class EntitySchema {
     }
 
     this._key = key;
+    this._assignEntity = options.assignEntity;
 
     const idAttribute = options.idAttribute || 'id';
     this._getId = typeof idAttribute === 'function' ? idAttribute : x => x[idAttribute];
     this._idAttribute = idAttribute;
     this._meta = options.meta;
+  }
+
+  getAssignEntity() {
+    return this._assignEntity;
   }
 
   getKey() {
