@@ -391,6 +391,9 @@ describe('normalizr', function () {
         assignEntity: function(obj, key, val) {
           if (key === 'collections') {
             obj['collection_ids'] = val;
+            if ('collections' in obj) {
+              delete obj['collections'];
+            }
           } else {
             obj[key] = val;
           }

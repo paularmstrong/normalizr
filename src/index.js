@@ -16,7 +16,10 @@ function visitObject(obj, schema, bag, options) {
     if (obj.hasOwnProperty(key)) {
       const schemaAssignEntity = schema && schema.getAssignEntity && schema.getAssignEntity();
       const entity = visit(obj[key], schema[key], bag, options);
-      (schemaAssignEntity || assignEntity).call(null, normalized, key, entity, obj, schema);
+      assignEntity.call(null, normalized, key, entity, obj, schema);
+      if (schemaAssignEntity) {
+        schemaAssignEntity.call(null, normalized, key, entity, obj, schema);
+      }
     }
   }
   return normalized;
