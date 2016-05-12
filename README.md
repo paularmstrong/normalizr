@@ -250,6 +250,18 @@ const article = new Schema('articles', { idAttribute: generateSlug });
 
 // You can also specify meta properties to be used for customizing the output in assignEntity (see below)
 const article = new Schema('articles', { idAttribute: 'slug', meta: { removeProps: ['publisher'] }});
+
+// You can specify custom `assignEntity` function to be run after the `assignEntity` function passed to `normalize`
+const article = new Schema('articles', { assignEntity: function (output, key, value, input) {
+  if (key === 'id_str') {
+    obj.id = value;
+    if ('id_str' in obj) {
+      delete obj.id_str;
+    }
+  } else {
+    obj[key] = value;
+  }
+}})
 ```
 
 ### `Schema.prototype.define(nestedSchema)`
