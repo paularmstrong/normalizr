@@ -20,6 +20,7 @@ export default class UnionSchema {
     return this._itemSchema;
   }
 
+
   getSchemaKey(item) {
     return this._getSchema(item);
   }

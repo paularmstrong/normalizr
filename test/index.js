@@ -207,7 +207,7 @@ describe('normalizr', function () {
     article.define({
       authors: arrayOf(author)
     });
-    
+
     input = {
       id: '123',
       title: 'My article',
@@ -226,9 +226,9 @@ describe('normalizr', function () {
 
     var options = {
       assignEntity: function (obj, key, val, originalInput, schema) {
-        var itemSchema = schema && schema.getItemSchema ? schema.getItemSchema() : schema;         
+        var itemSchema = schema && schema.getItemSchema ? schema.getItemSchema() : schema;
         var removeProps = itemSchema && itemSchema.getMeta && itemSchema.getMeta("removeProps");
-        if (!removeProps || removeProps.indexOf(key) < 0)        
+        if (!removeProps || removeProps.indexOf(key) < 0)
           obj[key] = val;
       }
     };
@@ -257,6 +257,193 @@ describe('normalizr', function () {
     });
   });
 
+  it('can use EntitySchema-specific assignEntity function', function () {
+    var taco = new Schema('tacos', { assignEntity: function (output, key, value, input) {
+      if (key === 'filling') {
+        output[key] = 'veggie';
+        return;
+      }
+      output[key] = value;
+    }});
+
+    var input = Object.freeze({
+      id: '123',
+      type: 'hardshell',
+      filling: 'beef'
+    });
+
+    normalize(input, taco).should.eql({
+      entities: {
+        tacos: {
+          '123': { id: '123', type: 'hardshell', filling: 'veggie' }
+        }
+      },
+      result: '123'
+    });
+  });
+
+  it('can use UnionSchema-specific assignEntity function', function () {
+    var user = new Schema('users'),
+        group = new Schema('groups', { assignEntity: function (output, key, value, input) {
+            if (key === 'name') {
+              output.url = '/groups/' + value;
+            }
+            output[key] = value;
+          }
+        }),
+        member = unionOf({ users: user, groups: group }, { schemaAttribute: 'type' }),
+        input;
+
+    group.define({
+      members: arrayOf(member),
+      owner: member,
+      relations: valuesOf(member)
+    });
+
+    input = {
+      group: {
+        id: 1,
+        name: 'facebook',
+        members: [{
+          id: 2,
+          type: 'groups',
+          name: 'react'
+        }, {
+          id: 3,
+          type: 'users',
+          name: 'Huey'
+        }],
+        owner: {
+          id: 4,
+          type: 'users',
+          name: 'Jason'
+        },
+        relations: {
+          friend: {
+            id: 5,
+            type: 'users',
+            name: 'Nate'
+          }
+        }
+      }
+    };
+
+    Object.freeze(input);
+
+    normalize(input, { group: group }).should.eql({
+      result: {
+        group: 1
+      },
+      entities: {
+        groups: {
+          1: {
+            id: 1,
+            name: 'facebook',
+            members: [{
+              id: 2,
+              schema: 'groups'
+            }, {
+              id: 3,
+              schema: 'users'
+            }],
+            owner: {
+              id: 4,
+              schema: 'users'
+            },
+            relations: {
+              friend: {
+                id: 5,
+                schema: 'users'
+              }
+            },
+            url: '/groups/facebook'
+          },
+          2: {
+            id: 2,
+            type: 'groups',
+            name: 'react',
+            url: '/groups/react'
+          }
+        },
+        users: {
+          3: {
+            id: 3,
+            type: 'users',
+            name: 'Huey'
+          },
+          4: {
+            id: 4,
+            type: 'users',
+            name: 'Jason'
+          },
+          5: {
+            id: 5,
+            type: 'users',
+            name: 'Nate'
+          }
+        }
+      }
+    });
+  });
+
+  it('can use Schema-specific assignEntity function in iterables', function () {
+    var article = new Schema('articles', {
+        assignEntity: function(obj, key, val) {
+          if (key === 'collections') {
+            obj['collection_ids'] = val;
+            if ('collections' in obj) {
+              delete obj['collections'];
+            }
+          } else {
+            obj[key] = val;
+          }
+        }
+      }),
+      collection = new Schema('collections'),
+      input;
+
+    article.define({
+      collections: arrayOf(collection)
+    });
+
+    input = {
+      id: 1,
+      title: 'Some Article',
+      collections: [{
+        id: 1,
+        title: 'Awesome Writing',
+      }, {
+        id: 7,
+        title: 'Even Awesomer',
+      }]
+    };
+
+    Object.freeze(input);
+
+    normalize(input, article).should.eql({
+      result: 1,
+      entities: {
+        articles: {
+          1: {
+            id: 1,
+            title: 'Some Article',
+            collection_ids: [1, 7]
+          },
+        },
+        collections: {
+          1: {
+            id: 1,
+            title: 'Awesome Writing',
+          },
+          7: {
+            id: 7,
+            title: 'Even Awesomer',
+          }
+        },
+      }
+    });
+  });
+
   it('throws if getMeta is called with invalid params', function () {
     var article = new Schema('articles', { meta: { removeProps: ['year', 'publisher'] }});
 
@@ -276,7 +463,7 @@ describe('normalizr', function () {
       article.getMeta('removeProps');
     }).should.not.throw();
   });
-  
+
   it('can merge into entity using custom function', function () {
     var author = new Schema('authors'),
         input;
