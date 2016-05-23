@@ -51,22 +51,22 @@ can be normalized to
 
 ```javascript
 {
-  result: [1, 2],
+  result: ["1", "2"],
   entities: {
     articles: {
-      1: {
+      "1": {
         id: 1,
         title: 'Some Article',
         author: 1
       },
-      2: {
+      "2": {
         id: 2,
         title: 'Other Article',
         author: 1
       }
     },
     users: {
-      1: {
+      "1": {
         id: 1,
         name: 'Dan'
       }
@@ -139,18 +139,18 @@ const ServerActionCreators = {
     //
     // AFTER:
     // {
-    //   result: 1,                    // <--- Note object is referenced by ID
+    //   result: "1",                    // <--- Note object is referenced by ID
     //   entities: {
     //     articles: {
-    //       1: {
-    //         author: 7,              // <--- Same happens for references to
-    //         contributors: [10, 15]  // <--- other entities in the schema
+    //       "1": {
+    //         author: "7",              // <--- Same happens for references to
+    //         contributors: ["10", "15"]  // <--- other entities in the schema
     //         ...}
     //     },
     //     users: {
-    //       7: { ... },
-    //       10: { ... },
-    //       15: { ... }
+    //       "7": { ... },
+    //       "10": { ... },
+    //       "15": { ... }
     //     }
     //   }
     // }
@@ -188,16 +188,16 @@ const ServerActionCreators = {
     // AFTER:
     // {
     //   result: {
-    //    articles: [1, 2, ...]     // <--- Note how object array turned into ID array
+    //    articles: ["1", "2", ...]     // <--- Note how object array turned into ID array
     //   },
     //   entities: {
     //     articles: {
-    //       1: { author: 7, ... }, // <--- Same happens for references to other entities in the schema
-    //       2: { ... },
+    //       "1": { author: "7", ... }, // <--- Same happens for references to other entities in the schema
+    //       "2": { ... },
     //       ...
     //     },
     //     users: {
-    //       7: { ... },
+    //       "7": { ... },
     //       ..
     //     }
     //   }
@@ -222,6 +222,7 @@ AppDispatcher.register((payload) => {
   const { action } = payload;
 
   if (action.response && action.response.entities && action.response.entities.users) {
+    // Additional deduplication logic for users reside in the `mergeUser` function
     mergeUsers(action.response.entities.users);
     UserStore.emitChange();
     break;
@@ -302,7 +303,7 @@ slugArticle.getIdAttribute();
 // slug
 ```
 
-### `arrayOf(schema, [options])`
+### `arrayOf(schema, [options])`, same as `valuesOf`
 
 Describes an array of the schema passed as argument.
 
@@ -339,45 +340,9 @@ article.define({
 });
 ```
 
-### `valuesOf(schema, [options])`
-
-Describes a map whose values follow the schema passed as argument.
-
-```javascript
-const article = new Schema('articles');
-const user = new Schema('users');
-
-article.define({
-  collaboratorsByRole: valuesOf(user)
-});
-```
-
-If the map contains entities with different schemas, you can use the `schemaAttribute` option to specify which schema to use for each entity:
-
-```javascript
-const article = new Schema('articles');
-const user = new Schema('users');
-const group = new Schema('groups');
-const collaborator = {
-  users: user,
-  groups: group
-};
-
-// You can specify the name of the attribute that determines the schema
-article.define({
-  collaboratorsByRole: valuesOf(collaborator, { schemaAttribute: 'type' })
-});
-
-// Or you can specify a function to infer it
-function inferSchema(entity) { /* ... */ }
-article.define({
-  collaboratorsByRole: valuesOf(collaborator, { schemaAttribute: inferSchema })
-});
-```
-
 ### `unionOf(schemaMap, [options])`
 
-Describe a schema which is a union of multiple schemas.  This is useful if you need the polymorphic behavior provided by `arrayOf` or `valuesOf` but for non-collection fields.
+Describe a schema which is a union of multiple schemas.  This is useful if you need the polymorphic behavior provided by `arrayOf` but for non-collection fields.
 
 Use the required `schemaAttribute` option to specify which schema to use for each entity.
 
@@ -417,7 +382,7 @@ const member = unionOf({
 group.define({
   owner: member,
   members: arrayOf(member),
-  relationships: valuesOf(member)
+  relationships: arrayOf(member)
 });
 ```
 
@@ -430,7 +395,8 @@ You may optionally specify any of the following options:
 
 * `assignEntity` (function): This is useful if your backend emits additional fields, such as separate ID fields, you'd like to delete in the normalized entity. See [the tests](https://github.com/gaearon/normalizr/blob/a0931d7c953b24f8f680b537b5f23a20e8483be1/test/index.js#L89-L200) and the [discussion](https://github.com/gaearon/normalizr/issues/10) for a usage example.
 
-* `mergeIntoEntity` (function): You can use this to resolve conflicts when merging entities with the same key. See [the test](https://github.com/gaearon/normalizr/blob/47ed0ecd973da6fa7c8b2de461e35b293ae52047/test/index.js#L132-L197) and the [discussion](https://github.com/gaearon/normalizr/issues/34) for a usage example.
+* `mergeIntoEntity` (function): You can use this to resolve conflicts when merging entities with the same key.
+See [the test](https://github.com/gaearon/normalizr/blob/47ed0ecd973da6fa7c8b2de461e35b293ae52047/test/index.js#L132-L197) and the [discussion](https://github.com/gaearon/normalizr/issues/34) for more examples.
 
 ```javascript
 const article = new Schema('articles');
@@ -453,11 +419,43 @@ const json = { id: 1, author: ... };
 const normalized = normalize(json, article);
 
 // Normalize an array of article objects
-const arr = [{ id: 1, author: ... }, ...]
+const arr = [{ id: 1, author: ... }, ...];
 const normalized = normalize(arr, arrayOf(article));
 
+// User `mergeIntoEntity` to deduplicate data
+const arr = [{ id: 1, author: ... }, { id: 2, author: ... }, ...];
+const normalized = normalize(arr, arrayOf(article), {
+  // `mergeIntoEntity` is only invoked for every entity that has a schema.
+  // The traversal order is depth-first. In pathological cases like the
+  // following, charlie will be merged with alice first.
+  // [
+  //   {
+  //     id: 1,
+  //     name: 'article 1',
+  //     author: { id: 10, name: 'alice' },
+  //     meta: {
+  //       likes: [{
+  //         user: { id: 10, name:'charlie' }
+  //       }]
+  //     }
+  //   },
+  //   {
+  //     id: 2,
+  //     name: 'article 2',
+  //     author: { id: 10, name: 'bob' }
+  //   }
+  // ]
+  mergeIntoEntity: (dest, src, key) => {
+    // The `key` is how you distinguist which scheme you are currently
+    // processing.
+    // Most of the time, overwriting the `dest` with `src` will
+    // deduplicate in exactly how you want.
+    merge(dest, src);
+  }
+});
+
 // Normalize an array of article objects, referenced by an object key:
-const wrappedArr = { articles: [{ id: 1, author: ... }, ...] }
+const wrappedArr = { articles: [{ id: 1, author: ... }, ...] };
 const normalized = normalize(wrappedArr, {
   articles: arrayOf(article)
 });
@@ -517,27 +515,27 @@ Normalizr solves the problem by converting API responses to a flat form where ne
 
 ```javascript
 {
-  result: [12, 10, 3, ...],
+  result: ["12", "10", "3", ...],
   entities: {
     articles: {
-      12: {
-        authorId: 3,
-        likers: [2, 1, 4],
-        primaryCollection: 12,
-        collections: [12, 11]
+      "12": {
+        authorId: "3",
+        likers: ["2", "1", "4"],
+        primaryCollection: "12",
+        collections: ["12", "11"]
       },
       ...
     },
     users: {
-      3: {
+      "3": {
         name: 'Dan'
       },
-      2: ...,
-      4: ....
+      "2": ...,
+      "4": ....
     },
     collections: {
-      12: {
-        curator: 2,
+      "12": {
+        curator: "2",
         name: 'Stuff'
       },
       ...
@@ -555,6 +553,7 @@ AppDispatcher.register((payload) => {
   const { action } = payload;
 
   if (action.response && action.response.entities && action.response.entities.users) {
+    // Remember to dedupe users in `mergeUsers`!
     mergeUsers(action.response.entities.users);
     UserStore.emitChange();
     break;
