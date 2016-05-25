@@ -403,7 +403,7 @@ group.define({
 });
 ```
 
-A `unionOf` schema can also be combined with `arrayOf` and `valueOf` with the same behavior as each supplied with the `schemaAttribute` option.
+A `unionOf` schema can also be combined with `arrayOf` and `valuesOf` with the same behavior as each supplied with the `schemaAttribute` option.
 
 ```javascript
 const group = new Schema('groups');
