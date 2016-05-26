@@ -15,11 +15,7 @@ export default class UnionSchema {
     const schemaAttribute = options.schemaAttribute;
     this._getSchema = typeof schemaAttribute === 'function' ? schemaAttribute : x => x[schemaAttribute];
 
-    function defaultPolymorphicItem(item) {
-      return { schema: this._getSchema(item) };
-    }
-
-    this._getSchemaKeys = options.polymorphicItem || defaultPolymorphicItem;
+    this._getPolimorphicItem = options.polymorphicItem || ( () => ({}) );
   }
 
   getItemSchema() {
@@ -30,7 +26,7 @@ export default class UnionSchema {
     return this._getSchema(item);
   }
 
-  getSchemaKeys(item) {
-    return this._getSchemaKeys(item);
+  getPolimorphicItem(item) {
+    return this._getPolimorphicItem(item);
   }
 }

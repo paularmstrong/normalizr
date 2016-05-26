@@ -732,7 +732,7 @@ describe('normalizr', function () {
         input;
 
     function polymorphicItem(item) {
-      return { schema: item.type, releaseDate: item.releaseDate };
+      return { releaseDate: item.releaseDate };
     }
 
     magazine.define({
