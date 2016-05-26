@@ -262,6 +262,9 @@ const article = new Schema('articles', { assignEntity: function (output, key, va
     obj[key] = value;
   }
 }})
+
+// You can specify default values for the entity
+const article = new Schema('articles', { defaults: { likes: 0 } });
 ```
 
 ### `Schema.prototype.define(nestedSchema)`
@@ -300,6 +303,17 @@ article.getIdAttribute();
 // id
 slugArticle.getIdAttribute();
 // slug
+```
+
+### `Schema.prototype.getDefaults()`
+
+Returns the default values of the schema.
+
+```javascript
+const article = new Schema('articles', { defaults: { likes: 0 } });
+
+article.getDefaults();
+// { likes: 0 }
 ```
 
 ### `arrayOf(schema, [options])`

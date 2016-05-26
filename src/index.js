@@ -11,10 +11,11 @@ function defaultAssignEntity(normalized, key, entity) {
 function visitObject(obj, schema, bag, options) {
   const { assignEntity = defaultAssignEntity } = options;
 
-  let normalized = {};
+  const defaults = schema && schema.getDefaults && schema.getDefaults();
+  const schemaAssignEntity = schema && schema.getAssignEntity && schema.getAssignEntity();
+  let normalized = isObject(defaults) ? { ...defaults } : {};
   for (let key in obj) {
     if (obj.hasOwnProperty(key)) {
-      const schemaAssignEntity = schema && schema.getAssignEntity && schema.getAssignEntity();
       const entity = visit(obj[key], schema[key], bag, options);
       assignEntity.call(null, normalized, key, entity, obj, schema);
       if (schemaAssignEntity) {
