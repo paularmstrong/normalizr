@@ -9,7 +9,8 @@ export default class ArraySchema {
 
     if (options.schemaAttribute) {
       const schemaAttribute = options.schemaAttribute;
-      this._itemSchema = new UnionSchema(itemSchema, { schemaAttribute })
+      const polymorphicItem = options.polymorphicItem;
+      this._itemSchema = new UnionSchema(itemSchema, { schemaAttribute, polymorphicItem })
     } else {
       this._itemSchema = itemSchema;
     }
