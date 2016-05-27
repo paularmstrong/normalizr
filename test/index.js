@@ -724,19 +724,19 @@ describe('normalizr', function () {
     });
   });
 
-  it('can normalize a polymorphic array with schema attribute and polymorphicItemCreator', function () {
+  it('can normalize a polymorphic array with schema attribute and polymorphicCreator', function () {
     var article = new Schema('articles'),
         tutorial = new Schema('tutorials'),
         magazine = new Schema('magazines'),
         articleOrTutorial = { articles: article, tutorials: tutorial },
         input;
 
-    function polymorphicItem(item) {
+    function polymorphic(item) {
       return { releaseDate: item.releaseDate };
     }
 
     magazine.define({
-      contents: arrayOf(articleOrTutorial, { schemaAttribute: 'type', polymorphicItem: polymorphicItem } )
+      contents: arrayOf(articleOrTutorial, { schemaAttribute: 'type', polymorphic: polymorphic } )
     });
 
     input = [

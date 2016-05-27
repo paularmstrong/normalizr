@@ -3,7 +3,6 @@ import IterableSchema from './IterableSchema';
 import UnionSchema from './UnionSchema';
 import isEqual from 'lodash/isEqual';
 import isObject from 'lodash/isObject';
-import merge from 'lodash/merge';
 
 function defaultAssignEntity(normalized, key, entity) {
   normalized[key] = entity;
@@ -32,10 +31,10 @@ function defaultMapper(iterableSchema, itemSchema, bag, options) {
 
 function polymorphicMapper(iterableSchema, itemSchema, bag, options) {
   return (obj) => {
-    const polimorphicItemKeys = iterableSchema.getPolimorphicItem(obj);
+    const polymorphicItemKeys = iterableSchema.getPolymorphic(obj);
     const schemaKey = iterableSchema.getSchemaKey(obj);
     const result = visit(obj, itemSchema[schemaKey], bag, options);
-    return merge({ id: result, schema: schemaKey }, polimorphicItemKeys);
+    return { ...polymorphicItemKeys, id: result, schema: schemaKey };
   };
 }
 
