@@ -724,6 +724,159 @@ describe('normalizr', function () {
     });
   });
 
+  it('can normalize a polymorphic array with schema attribute and polymorphicCreator', function () {
+    var article = new Schema('articles'),
+        tutorial = new Schema('tutorials'),
+        magazine = new Schema('magazines'),
+        articleOrTutorial = { articles: article, tutorials: tutorial },
+        input;
+
+    function polymorphic(item) {
+      return { releaseDate: item.releaseDate };
+    }
+
+    magazine.define({
+      contents: arrayOf(articleOrTutorial, { schemaAttribute: 'type', polymorphic: polymorphic } )
+    });
+
+    input = [
+      {
+        id: 1,
+        name: 'my magazine',
+        contents: [
+          {
+            id: 1,
+            type: 'articles',
+            title: 'Some Article',
+            releaseDate: '01/01/2016'
+          }, {
+            id: 2,
+            type: 'articles',
+            title: 'Another Article',
+            releaseDate: '10/01/2016'
+          }, {
+            id: 1,
+            type: 'tutorials',
+            title: 'Some tutorial',
+            releaseDate: '10/01/2016'
+          }
+        ]
+      }, {
+        id: 2,
+        name: 'your magazine',
+        contents: [
+          {
+            id: 1,
+            type: 'articles',
+            title: 'Some Article',
+            releaseDate: '15/01/2016'
+          }, {
+            id: 2,
+            type: 'articles',
+            title: 'Another Article',
+            releaseDate: '25/01/2016'
+          }, {
+            id: 1,
+            type: 'tutorials',
+            title: 'Some tutorial',
+            releaseDate: '25/01/2016'
+          }
+        ]
+      }
+    ];
+
+    var options = {
+      mergeIntoEntity: function(entityA, entityB, entityKey) {
+        var key;
+
+        for (key in entityB) {
+          if (!entityB.hasOwnProperty(key)) {
+            continue;
+          }
+
+          if (!entityA.hasOwnProperty(key) || isEqual(entityA[key], entityB[key])) {
+            entityA[key] = entityB[key];
+            continue;
+          }
+
+          if (key === 'releaseDate') {
+            delete entityA[key]
+            continue;
+          }
+
+          console.warn('Unequal data!');
+        }
+      }
+    };
+
+    Object.freeze(input);
+
+    normalize(input, arrayOf(magazine), options).should.eql({
+      result: [1, 2],
+      entities: {
+        articles: {
+          1: {
+            id: 1,
+            type: 'articles',
+            title: 'Some Article'
+          },
+          2: {
+            id: 2,
+            type: 'articles',
+            title: 'Another Article'
+          }
+        },
+        magazines: {
+          1: {
+            id: 1,
+            name: 'my magazine',
+            contents: [
+              {
+                id: 1,
+                schema: 'articles',
+                releaseDate: '01/01/2016'
+              }, {
+                id: 2,
+                schema: 'articles',
+                releaseDate: '10/01/2016'
+              }, {
+                id: 1,
+                schema: 'tutorials',
+                releaseDate: '10/01/2016'
+              }
+            ]
+          },
+          2: {
+            id: 2,
+            name: 'your magazine',
+            contents: [
+              {
+                id: 1,
+                schema: 'articles',
+                releaseDate: '15/01/2016'
+              }, {
+                id: 2,
+                schema: 'articles',
+                releaseDate: '25/01/2016'
+              }, {
+                id: 1,
+                schema: 'tutorials',
+                releaseDate: '25/01/2016'
+              }
+            ]
+          }
+        },
+        tutorials: {
+          1: {
+            id: 1,
+            type: 'tutorials',
+            title: 'Some tutorial'
+          }
+        }
+      }
+    });
+  });
+
   it('can normalize a map', function () {
     var article = new Schema('articles'),
         input;

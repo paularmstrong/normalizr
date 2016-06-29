@@ -31,9 +31,10 @@ function defaultMapper(iterableSchema, itemSchema, bag, options) {
 
 function polymorphicMapper(iterableSchema, itemSchema, bag, options) {
   return (obj) => {
+    const polymorphicItemKeys = iterableSchema.getPolymorphic(obj);
     const schemaKey = iterableSchema.getSchemaKey(obj);
     const result = visit(obj, itemSchema[schemaKey], bag, options);
-    return { id: result, schema: schemaKey };
+    return { ...polymorphicItemKeys, id: result, schema: schemaKey };
   };
 }
 

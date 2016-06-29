@@ -14,14 +14,19 @@ export default class UnionSchema {
 
     const schemaAttribute = options.schemaAttribute;
     this._getSchema = typeof schemaAttribute === 'function' ? schemaAttribute : x => x[schemaAttribute];
+
+    this._getPolymorphic = options.polymorphic || ( () => ({}) );
   }
 
   getItemSchema() {
     return this._itemSchema;
   }
 
-
   getSchemaKey(item) {
     return this._getSchema(item);
+  }
+
+  getPolymorphic(item) {
+    return this._getPolymorphic(item);
   }
 }
