@@ -254,12 +254,12 @@ const article = new Schema('articles', { idAttribute: 'slug', meta: { removeProp
 // You can specify custom `assignEntity` function to be run after the `assignEntity` function passed to `normalize`
 const article = new Schema('articles', { assignEntity: function (output, key, value, input) {
   if (key === 'id_str') {
-    obj.id = value;
-    if ('id_str' in obj) {
-      delete obj.id_str;
+    output.id = value;
+    if ('id_str' in output) {
+      delete output.id_str;
     }
   } else {
-    obj[key] = value;
+    output[key] = value;
   }
 }})
 ```
