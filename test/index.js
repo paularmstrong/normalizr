@@ -877,40 +877,48 @@ describe('normalizr', function () {
     });
   });
 
-  it('can normalize nested entities', function () {
-    var article = new Schema('articles'),
-        user = new Schema('users'),
+  it('can normalize nested entity using property from parent', function () {
+    var linkablesSchema = new Schema('linkables'),
+        mediaSchema = new Schema('media'),
+        listsSchema = new Schema('lists'),
         input;
 
-    article.define({
-      author: user
+    var schemaMap = {
+      media: mediaSchema,
+      lists: listsSchema
+    };
+
+    linkablesSchema.define({
+      data: (parent) => schemaMap[parent.schema_type]
     });
 
     input = {
       id: 1,
-      title: 'Some Article',
-      author: {
-        id: 3,
-        name: 'Mike Persson'
+      module_type: 'article',
+      schema_type: 'media',
+      data: {
+        id: 2,
+        url: 'catimage.jpg'
       }
     };
 
     Object.freeze(input);
 
-    normalize(input, article).should.eql({
+    normalize(input, linkablesSchema).should.eql({
       result: 1,
       entities: {
-        articles: {
+        linkables: {
           1: {
             id: 1,
-            title: 'Some Article',
-            author: 3
+            module_type: 'article',
+            schema_type: 'media',
+            data: 2
           }
         },
-        users: {
-          3: {
-            id: 3,
-            name: 'Mike Persson'
+        media: {
+          2: {
+            id: 2,
+            url: 'catimage.jpg'
           }
         }
       }
