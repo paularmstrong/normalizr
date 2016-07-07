@@ -877,6 +877,46 @@ describe('normalizr', function () {
     });
   });
 
+  it('can normalize nested entities', function () {
+    var article = new Schema('articles'),
+        user = new Schema('users'),
+        input;
+
+    article.define({
+      author: user
+    });
+
+    input = {
+      id: 1,
+      title: 'Some Article',
+      author: {
+        id: 3,
+        name: 'Mike Persson'
+      }
+    };
+
+    Object.freeze(input);
+
+    normalize(input, article).should.eql({
+      result: 1,
+      entities: {
+        articles: {
+          1: {
+            id: 1,
+            title: 'Some Article',
+            author: 3
+          }
+        },
+        users: {
+          3: {
+            id: 3,
+            name: 'Mike Persson'
+          }
+        }
+      }
+    });
+  });
+
   it('can normalize nested entity using property from parent', function () {
     var linkablesSchema = new Schema('linkables'),
         mediaSchema = new Schema('media'),
@@ -924,6 +964,7 @@ describe('normalizr', function () {
       }
     });
   });
+
 
   it('can normalize deeply nested entities with arrays', function () {
     var article = new Schema('articles'),
@@ -1828,3 +1869,5 @@ describe('normalizr', function () {
   });
 
 });
+
+
