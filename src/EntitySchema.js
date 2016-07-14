@@ -11,6 +11,7 @@ export default class EntitySchema {
     this._getId = typeof idAttribute === 'function' ? idAttribute : x => x[idAttribute];
     this._idAttribute = idAttribute;
     this._meta = options.meta;
+    this._defaults = options.defaults;
   }
 
   getAssignEntity() {
@@ -34,6 +35,10 @@ export default class EntitySchema {
       throw new Error('A string non-empty property name is required');
     }
     return this._meta && this._meta[prop];
+  }
+  
+  getDefaults() {
+    return this._defaults;
   }
 
   define(nestedSchema) {

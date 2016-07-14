@@ -86,6 +86,56 @@ describe('normalizr', function () {
     });
   });
 
+  it('can provide default values for a single entity', function () {
+    var article = new Schema('articles', {defaults: {isFavorite: false}}),
+      input;
+
+    input = {
+      id: 1,
+      title: 'Some Article'
+    };
+
+    Object.freeze(input);
+
+    normalize(input, article).should.eql({
+      result: 1,
+      entities: {
+        articles: {
+          1: {
+            id: 1,
+            title: 'Some Article',
+            isFavorite: false
+          }
+        }
+      }
+    });
+  });
+
+  it('does not overwrite the default', function () {
+    var article = new Schema('articles', {defaults: {isFavorite: false}}),
+      input;
+
+    input = {
+      id: 1
+    };
+
+    Object.freeze(input);
+
+    normalize({ id: 2, title: 'foo' }, article);
+
+    normalize(input, article).should.eql({
+      result: 1,
+      entities: {
+        articles: {
+          1: {
+            id: 1,
+            isFavorite: false
+          }
+        }
+      }
+    });
+  });
+
   it('can normalize nested entity and delete an existing key using custom function', function () {
     var article = new Schema('articles'),
         type = new Schema('types'),
@@ -630,6 +680,39 @@ describe('normalizr', function () {
           2: {
             id: 2,
             title: 'Other Article'
+          }
+        }
+      }
+    });
+  });
+
+  it('can provide default values for an array', function () {
+    var article = new Schema('articles', {defaults: {isFavorite: false}}),
+      input;
+
+    input = [{
+      id: 1,
+      title: 'Some Article'
+    }, {
+      id: 2,
+      title: 'Other Article'
+    }];
+
+    Object.freeze(input);
+
+    normalize(input, arrayOf(article)).should.eql({
+      result: [1, 2],
+      entities: {
+        articles: {
+          1: {
+            id: 1,
+            title: 'Some Article',
+            isFavorite: false
+          },
+          2: {
+            id: 2,
+            title: 'Other Article',
+            isFavorite: false
           }
         }
       }

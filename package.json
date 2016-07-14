@@ -3,6 +3,7 @@
   "version": "2.1.0",
   "description": "Normalizes JSON according to schema for Redux and Flux applications",
   "main": "lib/index.js",
+  "typings": "index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/paularmstrong/normalizr.git"
@@ -44,6 +45,8 @@
     "chai": "^3.2.0",
     "mocha": "^2.4.5",
     "rimraf": "^2.4.2",
+    "typescript": "^1.8.10",
+    "typescript-definition-tester": "0.0.4",
     "webpack": "^1.13.0"
   },
   "dependencies": {
