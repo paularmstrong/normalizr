@@ -1,6 +1,6 @@
 {
   "name": "normalizr",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Normalizes JSON according to schema for Redux and Flux applications",
   "main": "lib/index.js",
   "typings": "index.d.ts",
@@ -17,6 +17,7 @@
   ],
   "files": [
     "dist",
+    "index.d.ts",
     "lib",
     "src"
   ],
