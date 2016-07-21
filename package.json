@@ -10,6 +10,7 @@
   },
   "keywords": [
     "flux",
+    "redux",
     "normalize",
     "api",
     "json"
