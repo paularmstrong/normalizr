@@ -9,10 +9,11 @@ function defaultAssignEntity(normalized, key, entity) {
 }
 
 function visitObject(obj, schema, bag, options) {
-  const { assignEntity = defaultAssignEntity } = options;
+  const { assignEntity = defaultAssignEntity, assignEntityCompleted } = options;
 
   const defaults = schema && schema.getDefaults && schema.getDefaults();
   const schemaAssignEntity = schema && schema.getAssignEntity && schema.getAssignEntity();
+  const schemaAssignEntityCompleted = schema && schema.getAssignEntityCompleted && schema.getAssignEntityCompleted();
   let normalized = isObject(defaults) ? { ...defaults } : {};
   for (let key in obj) {
     if (obj.hasOwnProperty(key)) {
@@ -22,6 +23,12 @@ function visitObject(obj, schema, bag, options) {
         schemaAssignEntity.call(null, normalized, key, entity, obj, schema);
       }
     }
+  }
+  if (assignEntityCompleted) {
+    assignEntityCompleted.call(null, normalized);
+  }
+  if (schemaAssignEntityCompleted) {
+    schemaAssignEntityCompleted.call(null, normalized);
   }
   return normalized;
 }
