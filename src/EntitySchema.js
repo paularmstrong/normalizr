@@ -6,6 +6,7 @@ export default class EntitySchema {
 
     this._key = key;
     this._assignEntity = options.assignEntity;
+    this._assignEntityCompleted = options.assignEntityCompleted;
 
     const idAttribute = options.idAttribute || 'id';
     this._getId = typeof idAttribute === 'function' ? idAttribute : x => x[idAttribute];
@@ -16,6 +17,10 @@ export default class EntitySchema {
 
   getAssignEntity() {
     return this._assignEntity;
+  }
+
+  getAssignEntityCompleted() {
+    return this._assignEntityCompleted;
   }
 
   getKey() {
@@ -36,7 +41,7 @@ export default class EntitySchema {
     }
     return this._meta && this._meta[prop];
   }
-  
+
   getDefaults() {
     return this._defaults;
   }

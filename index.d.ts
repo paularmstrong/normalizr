@@ -4,6 +4,9 @@ export type ExtractAttribute =
 export type AssignEntity =
   (output: any, key: string, value: any, input: any, schema: SchemaValue) => void;
 
+export type AssignEntityCompleted =
+  (output: any) => void;
+
 export type MergeIntoEntity =
   (entityA: any, entityB: any, entityKey: string) => void;
 
@@ -11,6 +14,7 @@ export type SchemaOptions = {
   idAttribute?: string | ExtractAttribute;
   meta?: any;
   assignEntity?: AssignEntity;
+  assignEntityCompleted?: AssignEntityCompleted;
 }
 
 export type IterableSchemaOptions = {

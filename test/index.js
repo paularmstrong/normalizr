@@ -249,6 +249,52 @@ describe('normalizr', function () {
     });
   });
 
+  it('can update the entity with custom properties after the being visited', function () {
+    var article = new Schema('articles'),
+        author = new Schema('authors'),
+        input;
+
+    article.define({
+      author: author
+    });
+
+    input = {
+      id: '123',
+      title: 'My article',
+      author: {
+        id: '321',
+        screenName: 'paul'
+      }
+    };
+
+    var options = {
+      assignEntityCompleted: function (obj) {
+        obj.hashcode = `hashed_${obj.id}`;
+      }
+    };
+
+    normalize(input, article, options).should.eql({
+      entities: {
+        articles: {
+          '123': {
+            id: '123',
+            title: 'My article',
+            author: '321',
+            hashcode: 'hashed_123'
+          }
+        },
+        authors: {
+          '321': {
+            id: '321',
+            screenName: 'paul',
+            hashcode: 'hashed_321'
+          }
+        }
+      },
+      result: '123'
+    });
+  });
+
   it('can specify meta properties on a schema which are then accessible in assignEntity', function () {
     var article = new Schema('articles', { meta: { removeProps: ['year', 'publisher'] }}),
         author = new Schema('authors', { meta: { removeProps: ['born'] }}),
@@ -491,6 +537,27 @@ describe('normalizr', function () {
           }
         },
       }
+    });
+  });
+
+  it('can use EntitySchema-specific assignEntityCompleted function', function () {
+    var taco = new Schema('tacos', { assignEntityCompleted: function (output) {
+      output.hashcode = `hashed_${output.id}`;
+    }});
+
+    var input = Object.freeze({
+      id: '123',
+      type: 'hardshell',
+      filling: 'beef'
+    });
+
+    normalize(input, taco).should.eql({
+      entities: {
+        tacos: {
+          '123': { id: '123', type: 'hardshell', filling: 'beef', hashcode: 'hashed_123' }
+        }
+      },
+      result: '123'
     });
   });
 
