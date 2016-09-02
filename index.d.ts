@@ -11,6 +11,7 @@ export type SchemaOptions = {
   idAttribute?: string | ExtractAttribute;
   meta?: any;
   assignEntity?: AssignEntity;
+  defaults?: any;
 }
 
 export type IterableSchemaOptions = {
@@ -40,6 +41,7 @@ export class Schema {
   getKey(): string;
   getIdAttribute(): string;
   getMeta(prop: string): any;
+  getDefaults(): any;
 }
 
 export class IterableSchema {
