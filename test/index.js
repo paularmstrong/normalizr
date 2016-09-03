@@ -10,7 +10,8 @@ var should = require('chai').should(),
     Schema = normalizr.Schema,
     arrayOf = normalizr.arrayOf,
     valuesOf = normalizr.valuesOf,
-    unionOf = normalizr.unionOf;
+    unionOf = normalizr.unionOf,
+    relationOf = normalizr.relationOf;
 
 describe('normalizr', function () {
   it('fails creating nameless schema', function () {
@@ -758,6 +759,172 @@ describe('normalizr', function () {
           }
         }
       }
+    });
+  });
+  
+  it('fails normalizing with a relationship', function () {
+    var user = {
+      id: 1,
+      relations: []
+    };
+      
+    (function () {
+      normalize(user, relationOf('userRelations'))
+    }).should.throw('Normalize does not accept a relation as a schema');
+  });
+
+  it('can normalize nested object with relationship', function() {
+    var job = new Schema("jobs");
+    var user = new Schema('users');
+    user.define({
+      relations: relationOf("userRelations", {
+        job: job
+      })
+    });
+
+    var input = {
+      id: 1,
+      name: 'Some name',
+      relations: [
+        {
+          type: 'open source',
+          job: { id: 1, title: 'maintainer' }
+        },
+        {
+          type: 'personal',
+          job: { id: 2, title: 'owner' }
+        }
+      ]
+    };
+
+    Object.freeze(input);
+
+    normalize(input, user).should.eql({
+      entities: {
+        users: {
+          1: { id: 1, name: 'Some name'}
+        },
+        userRelations: {
+          1: [{ type: 'open source', job: 1}, {type: 'personal', job: 2}]
+        },
+        jobs: {
+          1: {
+            id: 1,
+            title: 'maintainer'
+          },
+          2: {
+            id: 2,
+            title: 'owner'
+          }
+        }
+      },
+      result: 1
+    });
+  });
+
+  it('can normalize nested object with relationship with different id', function() {
+    var job = new Schema("jobs");
+    var user = new Schema('users');
+    user.define({
+      relations: relationOf("userRelations", {
+                    job: job
+                  }, { idAttribute: 'name'})
+    });
+
+    var input = {
+      id: 1,
+      name: 'Some name',
+      relations: [
+        {
+          type: 'open source',
+          job: { id: 1, title: 'maintainer' }
+        },
+        {
+          type: 'personal',
+          job: { id: 2, title: 'owner' }
+        }
+      ]
+    };
+
+    Object.freeze(input);
+
+    normalize(input, user).should.eql({
+      entities: {
+        users: {
+          1: { id: 1, name: 'Some name'}
+        },
+        userRelations: {
+          'Some name': [{ type: 'open source', job: 1}, {type: 'personal', job: 2}]
+        },
+        jobs: {
+          1: {
+            id: 1,
+            title: 'maintainer'
+          },
+          2: {
+            id: 2,
+            title: 'owner'
+          }
+        }
+      },
+      result: 1
+    });
+  });
+  
+  it('can normalize nested object with nested relationships', function() {
+    var job = new Schema("jobs");
+    job.define({
+      data: relationOf("jobDatas")
+    });
+    
+    var user = new Schema('users');
+    user.define({
+      relations: relationOf("userRelations", {
+                    job: job
+                  }, { idAttribute: 'name'})
+    });
+
+    var input = {
+      id: 1,
+      name: 'Some name',
+      relations: [
+        {
+          type: 'open source',
+          job: { id: 1, title: 'maintainer', data: [{ animal: 'monkey'}, { animal: 'cow'}] }
+        },
+        {
+          type: 'personal',
+          job: { id: 2, title: 'owner', data: [{ animal: 'whale'}, { animal: 'donkey'}] }
+        }
+      ]
+    };
+
+    Object.freeze(input);
+
+    normalize(input, user).should.eql({
+      entities: {
+        users: {
+          1: { id: 1, name: 'Some name'}
+        },
+        userRelations: {
+          'Some name': [{ type: 'open source', job: 1}, {type: 'personal', job: 2}]
+        },
+        jobDatas: {
+          "1": [{ animal: 'monkey'}, { animal: 'cow'}],
+          "2": [{ animal: 'whale'}, { animal: 'donkey'}]
+        },
+        jobs: {
+          1: {
+            id: 1,
+            title: 'maintainer'
+          },
+          2: {
+            id: 2,
+            title: 'owner'
+          }
+        }
+      },
+      result: 1
     });
   });
 

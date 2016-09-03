@@ -1,14 +1,17 @@
 import EntitySchema from './EntitySchema';
 import IterableSchema from './IterableSchema';
 import UnionSchema from './UnionSchema';
+import RelationshipSchema from './RelationshipSchema';
 import isEqual from 'lodash/isEqual';
 import isObject from 'lodash/isObject';
 
-function defaultAssignEntity(normalized, key, entity) {
-  normalized[key] = entity;
+function defaultAssignEntity(normalized, key, entity, options, schema) {
+  if (!(schema[key] instanceof RelationshipSchema)){
+    normalized[key] = entity;
+  }
 }
 
-function visitObject(obj, schema, bag, options) {
+function visitObject(obj, schema, bag, options, parentEntity) {
   const { assignEntity = defaultAssignEntity } = options;
 
   const defaults = schema && schema.getDefaults && schema.getDefaults();
@@ -16,11 +19,11 @@ function visitObject(obj, schema, bag, options) {
   let normalized = isObject(defaults) ? { ...defaults } : {};
   for (let key in obj) {
     if (obj.hasOwnProperty(key)) {
-      const entity = visit(obj[key], schema[key], bag, options);
+      const entity = visit(obj[key], schema[key], bag, options, obj);
       assignEntity.call(null, normalized, key, entity, obj, schema);
       if (schemaAssignEntity) {
         schemaAssignEntity.call(null, normalized, key, entity, obj, schema);
-      }
+      }    
     }
   }
   return normalized;
@@ -38,7 +41,7 @@ function polymorphicMapper(iterableSchema, itemSchema, bag, options) {
   };
 }
 
-function visitIterable(obj, iterableSchema, bag, options) {
+function visitIterable(obj, iterableSchema, bag, options, parentEntity) {
   const itemSchema = iterableSchema.getItemSchema();
   const curriedItemMapper = defaultMapper(iterableSchema, itemSchema, bag, options);
 
@@ -52,7 +55,7 @@ function visitIterable(obj, iterableSchema, bag, options) {
   }
 }
 
-function visitUnion(obj, unionSchema, bag, options) {
+function visitUnion(obj, unionSchema, bag, options, parentEntity) {
   const itemSchema = unionSchema.getItemSchema();
   return polymorphicMapper(unionSchema, itemSchema, bag, options)(obj);
 }
@@ -75,12 +78,12 @@ function defaultMergeIntoEntity(entityA, entityB, entityKey) {
   }
 }
 
-function visitEntity(entity, entitySchema, bag, options) {
+function visitEntity(entity, entitySchema, bag, options, parentEntity) {
   const { mergeIntoEntity = defaultMergeIntoEntity } = options;
 
   const entityKey = entitySchema.getKey();
   const id = entitySchema.getId(entity);
-
+  
   if (!bag.hasOwnProperty(entityKey)) {
     bag[entityKey] = {};
   }
@@ -96,17 +99,37 @@ function visitEntity(entity, entitySchema, bag, options) {
   return id;
 }
 
-function visit(obj, schema, bag, options) {
+function visitRelationship(entity, entitySchema, bag, options, parentEntity) {
+  const { mergeIntoEntity = defaultMergeIntoEntity } = options;
+  const key = entitySchema.getKey(); 
+  const id = entitySchema.getId(parentEntity);
+
+  if (!bag.hasOwnProperty(key)) {
+    bag[key] = {};
+  }
+
+  if (!bag[key].hasOwnProperty(id)) {
+    bag[key][id] = {};
+  }
+
+  let stored = bag[key][id];
+  let normalized = visitIterable(entity, entitySchema._schema, bag, options);
+  bag[key][id] = normalized;
+}
+
+function visit(obj, schema, bag, options, parentObj) {
   if (!isObject(obj) || !isObject(schema)) {
     return obj;
   }
 
   if (schema instanceof EntitySchema) {
-    return visitEntity(obj, schema, bag, options);
+    return visitEntity(obj, schema, bag, options, parentObj);
   } else if (schema instanceof IterableSchema) {
-    return visitIterable(obj, schema, bag, options);
+    return visitIterable(obj, schema, bag, options, parentObj);
   } else if (schema instanceof UnionSchema) {
-    return visitUnion(obj, schema, bag, options);
+    return visitUnion(obj, schema, bag, options, parentObj);
+  } else if (schema instanceof RelationshipSchema) {
+    return visitRelationship(obj, schema, bag, options, parentObj);
   } else {
     return visitObject(obj, schema, bag, options);
   }
@@ -124,6 +147,10 @@ export function unionOf(schema, options) {
   return new UnionSchema(schema, options);
 }
 
+export function relationOf(key, schema, options) {
+  return new RelationshipSchema(key, schema, options);
+}
+
 export { EntitySchema as Schema };
 
 export function normalize(obj, schema, options = {}) {
@@ -133,6 +160,10 @@ export function normalize(obj, schema, options = {}) {
 
   if (!isObject(schema) || Array.isArray(schema)) {
     throw new Error('Normalize accepts an object for schema.');
+  }
+
+  if (schema instanceof RelationshipSchema) {
+    throw new Error('Normalize does not accept a relation as a schema');
   }
 
   let bag = {};
