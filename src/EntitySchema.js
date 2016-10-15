@@ -36,7 +36,7 @@ export default class EntitySchema {
     }
     return this._meta && this._meta[prop];
   }
-  
+
   getDefaults() {
     return this._defaults;
   }
@@ -47,5 +47,7 @@ export default class EntitySchema {
         this[key] = nestedSchema[key];
       }
     }
+
+    return this;
   }
 }
