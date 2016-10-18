@@ -8,7 +8,7 @@ function defaultAssignEntity(normalized, key, entity) {
   normalized[key] = entity;
 }
 
-function visitObject(obj, schema, bag, options) {
+function visitObject(obj, schema, parentObj, bag, options) {
   const { assignEntity = defaultAssignEntity } = options;
 
   const defaults = schema && schema.getDefaults && schema.getDefaults();
@@ -16,7 +16,7 @@ function visitObject(obj, schema, bag, options) {
   let normalized = isObject(defaults) ? { ...defaults } : {};
   for (let key in obj) {
     if (obj.hasOwnProperty(key)) {
-      const entity = visit(obj[key], schema[key], bag, options);
+      const entity = visit(obj[key], schema[key], obj, bag, options);
       assignEntity.call(null, normalized, key, entity, obj, schema);
       if (schemaAssignEntity) {
         schemaAssignEntity.call(null, normalized, key, entity, obj, schema);
@@ -26,21 +26,21 @@ function visitObject(obj, schema, bag, options) {
   return normalized;
 }
 
-function defaultMapper(iterableSchema, itemSchema, bag, options) {
-  return (obj) => visit(obj, itemSchema, bag, options);
+function defaultMapper(iterableSchema, itemSchema, parentObj, bag, options) {
+  return (obj) => visit(obj, itemSchema, parentObj, bag, options);
 }
 
-function polymorphicMapper(iterableSchema, itemSchema, bag, options) {
+function polymorphicMapper(iterableSchema, itemSchema, parentObj, bag, options) {
   return (obj) => {
     const schemaKey = iterableSchema.getSchemaKey(obj);
-    const result = visit(obj, itemSchema[schemaKey], bag, options);
+    const result = visit(obj, itemSchema[schemaKey], parentObj, bag, options);
     return { id: result, schema: schemaKey };
   };
 }
 
-function visitIterable(obj, iterableSchema, bag, options) {
+function visitIterable(obj, iterableSchema, parentObj, bag, options) {
   const itemSchema = iterableSchema.getItemSchema();
-  const curriedItemMapper = defaultMapper(iterableSchema, itemSchema, bag, options);
+  const curriedItemMapper = defaultMapper(iterableSchema, itemSchema, parentObj, bag, options);
 
   if (Array.isArray(obj)) {
     return obj.map(curriedItemMapper);
@@ -52,9 +52,9 @@ function visitIterable(obj, iterableSchema, bag, options) {
   }
 }
 
-function visitUnion(obj, unionSchema, bag, options) {
+function visitUnion(obj, unionSchema, parentObj, bag, options) {
   const itemSchema = unionSchema.getItemSchema();
-  return polymorphicMapper(unionSchema, itemSchema, bag, options)(obj);
+  return polymorphicMapper(unionSchema, itemSchema, parentObj, bag, options)(obj);
 }
 
 function defaultMergeIntoEntity(entityA, entityB, entityKey) {
@@ -75,11 +75,11 @@ function defaultMergeIntoEntity(entityA, entityB, entityKey) {
   }
 }
 
-function visitEntity(entity, entitySchema, bag, options) {
+function visitEntity(entity, entitySchema, parentObj, bag, options) {
   const { mergeIntoEntity = defaultMergeIntoEntity } = options;
 
   const entityKey = entitySchema.getKey();
-  const id = entitySchema.getId(entity);
+  const id = entitySchema.getId(entity, parentObj);
 
   if (!bag.hasOwnProperty(entityKey)) {
     bag[entityKey] = {};
@@ -90,25 +90,26 @@ function visitEntity(entity, entitySchema, bag, options) {
   }
 
   let stored = bag[entityKey][id];
-  let normalized = visitObject(entity, entitySchema, bag, options);
+  let normalized = visitObject(entity, entitySchema, parentObj, bag, options);
   mergeIntoEntity(stored, normalized, entityKey);
 
   return id;
 }
 
-function visit(obj, schema, bag, options) {
+// TODO: default value here maybe?
+function visit(obj, schema, parentObj, bag, options) {
   if (!isObject(obj) || !isObject(schema)) {
     return obj;
   }
 
   if (schema instanceof EntitySchema) {
-    return visitEntity(obj, schema, bag, options);
+    return visitEntity(obj, schema, parentObj, bag, options);
   } else if (schema instanceof IterableSchema) {
-    return visitIterable(obj, schema, bag, options);
+    return visitIterable(obj, schema, parentObj, bag, options);
   } else if (schema instanceof UnionSchema) {
-    return visitUnion(obj, schema, bag, options);
+    return visitUnion(obj, schema, parentObj, bag, options);
   } else {
-    return visitObject(obj, schema, bag, options);
+    return visitObject(obj, schema, parentObj, bag, options);
   }
 }
 
@@ -136,7 +137,7 @@ export function normalize(obj, schema, options = {}) {
   }
 
   let bag = {};
-  let result = visit(obj, schema, bag, options);
+  let result = visit(obj, schema, null, bag, options);
 
   return {
     entities: bag,
