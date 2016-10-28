@@ -655,6 +655,38 @@ describe('normalizr', function () {
     });
   });
 
+  it('can normalize single entity with custom id attribute function and parent data', function () {
+    function makeSlug(meta, article) {
+      return article.id + meta.foo;
+    }
+    
+    var meta = new Schema('meta', { idAttribute: makeSlug });
+    var input = [{
+      id: 1,
+      title: 'Some Article',
+      meta: { foo: 'bar' }
+    }, {
+      id: 2,
+      title: 'Other Article',
+      meta: { foo: 'bar' }
+    }];
+
+    Object.freeze(input);
+
+    normalize(input, arrayOf({ meta: meta})).should.eql({
+      entities: { 
+        meta: { 
+          '1bar': { foo: 'bar' }, 
+          '2bar': { foo: 'bar' } 
+        } 
+      },
+      result: [ 
+        { id: 1, title: 'Some Article', meta: '1bar' },
+        { id: 2, title: 'Other Article', meta: '2bar' } 
+      ] 
+    });
+  });
+
   it('can normalize an array', function () {
     var article = new Schema('articles'),
         input;
