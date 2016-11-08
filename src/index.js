@@ -17,7 +17,7 @@ function visitObject(obj, schema, bag, options) {
   for (let key in obj) {
     if (obj.hasOwnProperty(key)) {
       const resolvedSchema = typeof schema[key] === 'function' ? schema[key].call(null, obj) : schema[key];
-      const entity = visit(obj[key], resolvedSchema, bag, options);
+      const entity = visit(obj[key], resolvedSchema, bag, options, obj, schema);
       assignEntity.call(null, normalized, key, entity, obj, schema);
       if (schemaAssignEntity) {
         schemaAssignEntity.call(null, normalized, key, entity, obj, schema);
@@ -27,8 +27,8 @@ function visitObject(obj, schema, bag, options) {
   return normalized;
 }
 
-function defaultMapper(iterableSchema, itemSchema, bag, options) {
-  return (obj) => visit(obj, itemSchema, bag, options);
+function defaultMapper(iterableSchema, itemSchema, bag, options, parentObj, parentSchema) {
+  return (obj) => visit(obj, itemSchema, bag, options, parentObj, parentSchema);
 }
 
 function polymorphicMapper(iterableSchema, itemSchema, bag, options) {
@@ -39,9 +39,9 @@ function polymorphicMapper(iterableSchema, itemSchema, bag, options) {
   };
 }
 
-function visitIterable(obj, iterableSchema, bag, options) {
+function visitIterable(obj, iterableSchema, bag, options, parentObj, parentSchema) {
   const itemSchema = iterableSchema.getItemSchema();
-  const curriedItemMapper = defaultMapper(iterableSchema, itemSchema, bag, options);
+  const curriedItemMapper = defaultMapper(iterableSchema, itemSchema, bag, options, parentObj, parentSchema);
 
   if (Array.isArray(obj)) {
     return obj.map(curriedItemMapper);
@@ -76,7 +76,7 @@ function defaultMergeIntoEntity(entityA, entityB, entityKey) {
   }
 }
 
-function visitEntity(entity, entitySchema, bag, options) {
+function visitEntity(entity, entitySchema, bag, options, parentObj, parentSchema) {
   const { mergeIntoEntity = defaultMergeIntoEntity } = options;
 
   const entityKey = entitySchema.getKey();
@@ -92,20 +92,25 @@ function visitEntity(entity, entitySchema, bag, options) {
 
   let stored = bag[entityKey][id];
   let normalized = visitObject(entity, entitySchema, bag, options);
+  const schemaAssignParentId = entitySchema && entitySchema.getAssignParentId() && parentObj && parentSchema;
+  if (schemaAssignParentId) {
+    normalized[parentSchema.getKey(parentObj)] = parentSchema.getId(parentObj);
+  }
   mergeIntoEntity(stored, normalized, entityKey);
+
 
   return id;
 }
 
-function visit(obj, schema, bag, options) {
+function visit(obj, schema, bag, options, parentObj, parentSchema) {
   if (!isObject(obj) || !isObject(schema)) {
     return obj;
   }
 
   if (schema instanceof EntitySchema) {
-    return visitEntity(obj, schema, bag, options);
+    return visitEntity(obj, schema, bag, options, parentObj, parentSchema);
   } else if (schema instanceof IterableSchema) {
-    return visitIterable(obj, schema, bag, options);
+    return visitIterable(obj, schema, bag, options, parentObj, parentSchema);
   } else if (schema instanceof UnionSchema) {
     return visitUnion(obj, schema, bag, options);
   } else {

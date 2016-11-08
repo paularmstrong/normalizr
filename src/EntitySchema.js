@@ -6,6 +6,7 @@ export default class EntitySchema {
 
     this._key = key;
     this._assignEntity = options.assignEntity;
+    this._assignParentId = options.assignParentId;
 
     const idAttribute = options.idAttribute || 'id';
     this._getId = typeof idAttribute === 'function' ? idAttribute : x => x[idAttribute];
@@ -16,6 +17,10 @@ export default class EntitySchema {
 
   getAssignEntity() {
     return this._assignEntity;
+  }
+
+  getAssignParentId() {
+    return this._assignParentId;
   }
 
   getKey() {
