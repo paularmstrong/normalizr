@@ -960,6 +960,54 @@ describe('normalizr', function () {
     });
   });
 
+  it('can normalize nested entity using property from parent', function () {
+    var linkablesSchema = new Schema('linkables'),
+        mediaSchema = new Schema('media'),
+        listsSchema = new Schema('lists'),
+        input;
+
+    var schemaMap = {
+      media: mediaSchema,
+      lists: listsSchema
+    };
+
+    linkablesSchema.define({
+      data: (parent) => schemaMap[parent.schema_type]
+    });
+
+    input = {
+      id: 1,
+      module_type: 'article',
+      schema_type: 'media',
+      data: {
+        id: 2,
+        url: 'catimage.jpg'
+      }
+    };
+
+    Object.freeze(input);
+
+    normalize(input, linkablesSchema).should.eql({
+      result: 1,
+      entities: {
+        linkables: {
+          1: {
+            id: 1,
+            module_type: 'article',
+            schema_type: 'media',
+            data: 2
+          }
+        },
+        media: {
+          2: {
+            id: 2,
+            url: 'catimage.jpg'
+          }
+        }
+      }
+    });
+  });
+
   it('can normalize nested entities', function () {
     var article = new Schema('articles'),
         user = new Schema('users'),

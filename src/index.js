@@ -16,7 +16,8 @@ function visitObject(obj, schema, bag, options) {
   let normalized = isObject(defaults) ? { ...defaults } : {};
   for (let key in obj) {
     if (obj.hasOwnProperty(key)) {
-      const entity = visit(obj[key], schema[key], bag, options);
+      const resolvedSchema = typeof schema[key] === 'function' ? schema[key].call(null, obj) : schema[key];
+      const entity = visit(obj[key], resolvedSchema, bag, options);
       assignEntity.call(null, normalized, key, entity, obj, schema);
       if (schemaAssignEntity) {
         schemaAssignEntity.call(null, normalized, key, entity, obj, schema);

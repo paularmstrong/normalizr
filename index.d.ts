@@ -56,7 +56,7 @@ export class UnionSchema {
   getItemSchema(): SchemaValue;
 }
 
-export type SchemaValue = Schema | IterableSchema | UnionSchema | SchemaMap;
+export type SchemaValue = Schema | IterableSchema | UnionSchema | SchemaMap | Function;
 
 export type SchemaMap = {
   [key: string]: SchemaValue;
