@@ -1950,4 +1950,88 @@ describe('normalizr', function () {
     }).should.throw();
   });
 
+  it('can assign parent id on child entity', function () {
+    var article = new Schema('articles'),
+      comment = new Schema('comments', { assignParentId: true }),
+      input;
+
+    article.define({
+      comments: arrayOf(comment),
+    });
+
+    input = [{
+      id: 1,
+      title: 'Some Article',
+      comments: [{
+        id: 109,
+        content: 'Hai'
+      }]
+    }, {
+      id: 2,
+      title: 'Other Article',
+      comments: [{
+        id: 110,
+        content: 'Gee'
+      }]
+    }];
+
+    normalize(input, arrayOf(article)).should.eql({
+      result: [1, 2],
+      entities: {
+        articles: {
+          1: {
+            id: 1,
+            title: 'Some Article',
+            comments: [109]
+          },
+          2: {
+            id: 2,
+            title: 'Other Article',
+            comments: [110]
+          }
+        },
+        comments: {
+          109: {
+            id: 109,
+            content: 'Hai',
+            articles: 1,
+          },
+          110: {
+            id: 110,
+            content: 'Gee',
+            articles: 2,
+          }
+        }
+      }
+    });
+  });
+
+  it('can normalize parentless entities even when assignParentId is truthy', function () {
+    var comment = new Schema('comments', { assignParentId: true }),
+      input;
+
+    input = [{
+        id: 109,
+        content: 'Hai',
+      }
+    , { id: 110,
+        content: 'Gee',
+    }];
+
+    normalize(input, arrayOf(comment)).should.eql({
+      result: [109, 110],
+      entities: {
+        comments: {
+          109: {
+            id: 109,
+            content: 'Hai',
+          },
+          110: {
+            id: 110,
+            content: 'Gee',
+          }
+        }
+      }
+    });
+  });
 });
