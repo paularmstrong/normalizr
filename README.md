@@ -596,7 +596,7 @@ The minimal supported IE version is IE 9.
 ```
 git clone https://github.com/gaearon/normalizr.git
 cd normalizr
-npm install
+yarn install
 npm test # run tests once
 npm run test:watch # run test watcher
 ```

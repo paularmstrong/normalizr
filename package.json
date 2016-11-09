@@ -5,8 +5,8 @@
   "main": "lib/index.js",
   "typings": "index.d.ts",
   "repository": {
-    "type": "git",
-    "url": "https://github.com/paularmstrong/normalizr.git"
+    "url": "https://github.com/paularmstrong/normalizr.git",
+    "type": "git"
   },
   "keywords": [
     "flux",
