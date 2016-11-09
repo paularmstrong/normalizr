@@ -22,8 +22,8 @@ export default class EntitySchema {
     return this._key;
   }
 
-  getId(entity) {
-    return this._getId(entity);
+  getId(entity, key) {
+    return this._getId(entity, key);
   }
 
   getIdAttribute() {
