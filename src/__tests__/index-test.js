@@ -6,15 +6,11 @@ import { arrayOf, normalize, Schema, unionOf, valuesOf } from '../';
 
 describe('normalizr', () => {
   it('fails creating nameless schema', () => {
-    expect(function () {
-      new Schema();
-    }).toThrow();
+    expect(() => { new Schema(); }).toThrow();
   });
 
   it('fails creating entity with non-string name', () => {
-    expect(function () {
-      new Schema(42);
-    }).toThrow();
+    expect(() => { new Schema(42); }).toThrow();
   });
 
   it('fails normalizing something other than array or object', () => {
@@ -31,10 +27,9 @@ describe('normalizr', () => {
   });
 
   it('can normalize single entity', () => {
-    var article = new Schema('articles'),
-        input;
+    const article = new Schema('articles');
 
-    input = {
+    const input = {
       id: 1,
       title: 'Some Article',
       isFavorite: false
@@ -48,10 +43,9 @@ describe('normalizr', () => {
   });
 
   it('can provide default values for a single entity', () => {
-    var article = new Schema('articles', {defaults: {isFavorite: false}}),
-      input;
+    const article = new Schema('articles', {defaults: {isFavorite: false}});
 
-    input = {
+    const input = {
       id: 1,
       title: 'Some Article'
     };
@@ -62,10 +56,9 @@ describe('normalizr', () => {
   });
 
   it('does not overwrite the default', () => {
-    var article = new Schema('articles', {defaults: {isFavorite: false}}),
-      input;
+    const article = new Schema('articles', {defaults: {isFavorite: false}});
 
-    input = {
+    const input = {
       id: 1
     };
 
@@ -77,15 +70,14 @@ describe('normalizr', () => {
   });
 
   it('can normalize nested entity and delete an existing key using custom function', () => {
-    var article = new Schema('articles'),
-        type = new Schema('types'),
-        input;
+    const article = new Schema('articles');
+    const type = new Schema('types');
 
     article.define({
       type: type
     });
 
-    input = {
+    const input = {
       id: 1,
       title: 'Some Article',
       isFavorite: false,
@@ -97,8 +89,8 @@ describe('normalizr', () => {
 
     Object.freeze(input);
 
-    var options = {
-      assignEntity: function(obj, key, val, originalInput, schema) {
+    const options = {
+      assignEntity: (obj, key, val, originalInput, schema) => {
         obj[key] = val;
         delete obj[key + 'Id'];
       }
@@ -108,15 +100,14 @@ describe('normalizr', () => {
   });
 
   it('can update key values based on original input using a custom function', () => {
-    var article = new Schema('articles'),
-        author = new Schema('authors'),
-        input;
+    const article = new Schema('articles');
+    const author = new Schema('authors');
 
     article.define({
       author: author
     });
 
-    input = {
+    const input = {
       id: '123',
       title: 'My article',
       author: {
@@ -131,11 +122,11 @@ describe('normalizr', () => {
       ]
     };
 
-    var options = {
-      assignEntity: function (obj, key, val, originalInput, schema) {
+    const options = {
+      assignEntity: (obj, key, val, originalInput, schema) => {
         if (key === 'media') {
-          var screenName = originalInput.author.screenName;
-          val = map(val, function (media, i) {
+          const screenName = originalInput.author.screenName;
+          val = map(val, (media, i) => {
             return merge({}, media, {
               mediaViewUrl: '/' + screenName + '/articles/' + obj.id + '/photos/' + i
             });
@@ -149,15 +140,14 @@ describe('normalizr', () => {
   });
 
   it('can specify meta properties on a schema which are then accessible in assignEntity', () => {
-    var article = new Schema('articles', { meta: { removeProps: ['year', 'publisher'] }}),
-        author = new Schema('authors', { meta: { removeProps: ['born'] }}),
-        input;
+    const article = new Schema('articles', { meta: { removeProps: ['year', 'publisher'] }});
+    const author = new Schema('authors', { meta: { removeProps: ['born'] }});
 
     article.define({
       authors: arrayOf(author)
     });
 
-    input = {
+    const input = {
       id: '123',
       title: 'My article',
       publisher: 'Random',
@@ -173,10 +163,10 @@ describe('normalizr', () => {
       }]
     };
 
-    var options = {
-      assignEntity: function (obj, key, val, originalInput, schema) {
-        var itemSchema = schema && schema.getItemSchema ? schema.getItemSchema() : schema;
-        var removeProps = itemSchema && itemSchema.getMeta && itemSchema.getMeta("removeProps");
+    const options = {
+      assignEntity: (obj, key, val, originalInput, schema) => {
+        const itemSchema = schema && schema.getItemSchema ? schema.getItemSchema() : schema;
+        const removeProps = itemSchema && itemSchema.getMeta && itemSchema.getMeta("removeProps");
         if (!removeProps || removeProps.indexOf(key) < 0)
           obj[key] = val;
       }
@@ -186,7 +176,7 @@ describe('normalizr', () => {
   });
 
   it('can use EntitySchema-specific assignEntity function', () => {
-    var taco = new Schema('tacos', { assignEntity: function (output, key, value, input) {
+    const taco = new Schema('tacos', { assignEntity: (output, key, value, input) => {
       if (key === 'filling') {
         output[key] = 'veggie';
         return;
@@ -194,7 +184,7 @@ describe('normalizr', () => {
       output[key] = value;
     }});
 
-    var input = Object.freeze({
+    const input = Object.freeze({
       id: '123',
       type: 'hardshell',
       filling: 'beef'
@@ -204,16 +194,15 @@ describe('normalizr', () => {
   });
 
   it('can use UnionSchema-specific assignEntity function', () => {
-    var user = new Schema('users'),
-        group = new Schema('groups', { assignEntity: function (output, key, value, input) {
-            if (key === 'name') {
-              output.url = '/groups/' + value;
-            }
-            output[key] = value;
-          }
-        }),
-        member = unionOf({ users: user, groups: group }, { schemaAttribute: 'type' }),
-        input;
+    const user = new Schema('users');
+    const group = new Schema('groups', { assignEntity: (output, key, value, input) => {
+        if (key === 'name') {
+          output.url = '/groups/' + value;
+        }
+        output[key] = value;
+      }
+    });
+    const member = unionOf({ users: user, groups: group }, { schemaAttribute: 'type' });
 
     group.define({
       members: arrayOf(member),
@@ -221,7 +210,7 @@ describe('normalizr', () => {
       relations: valuesOf(member)
     });
 
-    input = {
+    const input = {
       group: {
         id: 1,
         name: 'facebook',
@@ -255,26 +244,25 @@ describe('normalizr', () => {
   });
 
   it('can use Schema-specific assignEntity function in iterables', () => {
-    var article = new Schema('articles', {
-        assignEntity: function(obj, key, val) {
-          if (key === 'collections') {
-            obj['collection_ids'] = val;
-            if ('collections' in obj) {
-              delete obj['collections'];
-            }
-          } else {
-            obj[key] = val;
+    const article = new Schema('articles', {
+      assignEntity: (obj, key, val) => {
+        if (key === 'collections') {
+          obj['collection_ids'] = val;
+          if ('collections' in obj) {
+            delete obj['collections'];
           }
+        } else {
+          obj[key] = val;
         }
-      }),
-      collection = new Schema('collections'),
-      input;
+      }
+    });
+    const collection = new Schema('collections');
 
     article.define({
       collections: arrayOf(collection)
     });
 
-    input = {
+    const input = {
       id: 1,
       title: 'Some Article',
       collections: [{
@@ -292,7 +280,7 @@ describe('normalizr', () => {
   });
 
   it('throws if getMeta is called with invalid params', () => {
-    var article = new Schema('articles', { meta: { removeProps: ['year', 'publisher'] }});
+    const article = new Schema('articles', { meta: { removeProps: ['year', 'publisher'] }});
 
     expect(() => { article.getMeta(); }).toThrow();
     expect(() => { article.getMeta(''); }).toThrow();
@@ -301,10 +289,9 @@ describe('normalizr', () => {
   });
 
   it('can merge into entity using custom function', () => {
-    var author = new Schema('authors'),
-        input;
+    const author = new Schema('authors');
 
-    input = {
+    const input = {
       author: {
         id: 1,
         name: 'Ada Lovelace',
@@ -323,11 +310,9 @@ describe('normalizr', () => {
 
     Object.freeze(input);
 
-    var options = {
-      mergeIntoEntity: function(entityA, entityB, entityKey) {
-        var key;
-
-        for (key in entityB) {
+    const options = {
+      mergeIntoEntity: (entityA, entityB, entityKey) => {
+        for (let key in entityB) {
           if (!entityB.hasOwnProperty(key)) {
             continue;
           }
@@ -351,10 +336,9 @@ describe('normalizr', () => {
   });
 
   it('can normalize single entity with custom id attribute', () => {
-    var article = new Schema('articles', { idAttribute: 'slug' }),
-        input;
+    const article = new Schema('articles', { idAttribute: 'slug' });
 
-    input = {
+    const input = {
       id: 1,
       slug: 'some-article',
       title: 'Some Article',
@@ -370,17 +354,16 @@ describe('normalizr', () => {
   });
 
   it('can normalize single entity with custom id attribute function', () => {
-    function makeSlug(article) {
-      var posted = article.posted,
-          title = article.title.toLowerCase().replace(' ', '-');
+    const makeSlug = (article) => {
+      const posted = article.posted;
+      const title = article.title.toLowerCase().replace(' ', '-');
 
       return [title, posted.year, posted.month, posted.day].join('-');
-    }
+    };
 
-    var article = new Schema('articles', { idAttribute: makeSlug }),
-        input;
+    const article = new Schema('articles', { idAttribute: makeSlug });
 
-    input = {
+    const input = {
       id: 1,
       title: 'Some Article',
       isFavorite: false,
@@ -397,10 +380,9 @@ describe('normalizr', () => {
   });
 
   it('can normalize an array', () => {
-    var article = new Schema('articles'),
-        input;
+    const article = new Schema('articles');
 
-    input = [{
+    const input = [{
       id: 1,
       title: 'Some Article'
     }, {
@@ -414,10 +396,9 @@ describe('normalizr', () => {
   });
 
   it('can provide default values for an array', () => {
-    var article = new Schema('articles', {defaults: {isFavorite: false}}),
-      input;
+    const article = new Schema('articles', {defaults: {isFavorite: false}});
 
-    input = [{
+    const input = [{
       id: 1,
       title: 'Some Article'
     }, {
@@ -431,12 +412,11 @@ describe('normalizr', () => {
   });
 
   it('can normalize a polymorphic array with schema attribute', () => {
-    var article = new Schema('articles'),
-        tutorial = new Schema('tutorials'),
-        articleOrTutorial = { articles: article, tutorials: tutorial },
-        input;
+    const article = new Schema('articles');
+    const tutorial = new Schema('tutorials');
+    const articleOrTutorial = { articles: article, tutorials: tutorial };
 
-    input = [{
+    const input = [{
       id: 1,
       type: 'articles',
       title: 'Some Article'
@@ -452,16 +432,13 @@ describe('normalizr', () => {
   });
 
   it('can normalize a polymorphic array with schema attribute function', () => {
-    function guessSchema(item) {
-      return item.type + 's';
-    }
+    const guessSchema = (item) => `${item.type}s`;
 
-    var article = new Schema('articles'),
-        tutorial = new Schema('tutorials'),
-        articleOrTutorial = { articles: article, tutorials: tutorial },
-        input;
+    const article = new Schema('articles');
+    const tutorial = new Schema('tutorials');
+    const articleOrTutorial = { articles: article, tutorials: tutorial };
 
-    input = [{
+    const input = [{
       id: 1,
       type: 'article',
       title: 'Some Article'
@@ -479,10 +456,9 @@ describe('normalizr', () => {
   });
 
   it('can normalize a map', () => {
-    var article = new Schema('articles'),
-        input;
+    const article = new Schema('articles');
 
-    input = {
+    const input = {
       one: {
         id: 1,
         title: 'Some Article'
@@ -499,12 +475,11 @@ describe('normalizr', () => {
   });
 
   it('can normalize a polymorphic map with schema attribute', () => {
-    var article = new Schema('articles'),
-        tutorial = new Schema('tutorials'),
-        articleOrTutorial = { articles: article, tutorials: tutorial },
-        input;
+    const article = new Schema('articles');
+    const tutorial = new Schema('tutorials');
+    const articleOrTutorial = { articles: article, tutorials: tutorial };
 
-    input = {
+    const input = {
       one: {
         id: 1,
         type: 'articles',
@@ -528,16 +503,13 @@ describe('normalizr', () => {
   });
 
   it('can normalize a polymorphic map with schema attribute function', () => {
-    function guessSchema(item) {
-      return item.type + 's';
-    }
+    const guessSchema = (item) => `${item.type}s`;
 
-    var article = new Schema('articles'),
-        tutorial = new Schema('tutorials'),
-        articleOrTutorial = { articles: article, tutorials: tutorial },
-        input;
+    const article = new Schema('articles');
+    const tutorial = new Schema('tutorials');
+    const articleOrTutorial = { articles: article, tutorials: tutorial };
 
-    input = {
+    const input = {
       one: {
         id: 1,
         type: 'article',
@@ -563,12 +535,11 @@ describe('normalizr', () => {
   });
 
   it('can normalize nested entity using property from parent', () => {
-    var linkablesSchema = new Schema('linkables'),
-        mediaSchema = new Schema('media'),
-        listsSchema = new Schema('lists'),
-        input;
+    const linkablesSchema = new Schema('linkables');
+    const mediaSchema = new Schema('media');
+    const listsSchema = new Schema('lists');
 
-    var schemaMap = {
+    const schemaMap = {
       media: mediaSchema,
       lists: listsSchema
     };
@@ -577,7 +548,7 @@ describe('normalizr', () => {
       data: (parent) => schemaMap[parent.schema_type]
     });
 
-    input = {
+    const input = {
       id: 1,
       module_type: 'article',
       schema_type: 'media',
@@ -593,15 +564,14 @@ describe('normalizr', () => {
   });
 
   it('can normalize nested entities', () => {
-    var article = new Schema('articles'),
-        user = new Schema('users'),
-        input;
+    const article = new Schema('articles');
+    const user = new Schema('users');
 
     article.define({
       author: user
     });
 
-    input = {
+    const input = {
       id: 1,
       title: 'Some Article',
       author: {
@@ -616,11 +586,9 @@ describe('normalizr', () => {
   });
 
   it('can normalize deeply nested entities with arrays', () => {
-    var article = new Schema('articles'),
-        user = new Schema('users'),
-        collection = new Schema('collections'),
-        feedSchema,
-        input;
+    const article = new Schema('articles');
+    const user = new Schema('users');
+    const collection = new Schema('collections');
 
     article.define({
       author: user,
@@ -631,11 +599,11 @@ describe('normalizr', () => {
       curator: user
     });
 
-    feedSchema = {
+    const feedSchema = {
       feed: arrayOf(article)
     };
 
-    input = {
+    const input = {
       feed: [{
         id: 1,
         title: 'Some Article',
@@ -682,13 +650,11 @@ describe('normalizr', () => {
   });
 
   it('can normalize deeply nested entities with polymorphic arrays', () => {
-    var article = new Schema('articles'),
-        tutorial = new Schema('tutorials'),
-        articleOrTutorial = { articles: article, tutorials: tutorial },
-        user = new Schema('users'),
-        collection = new Schema('collections'),
-        feedSchema,
-        input;
+    const article = new Schema('articles');
+    const tutorial = new Schema('tutorials');
+    const articleOrTutorial = { articles: article, tutorials: tutorial };
+    const user = new Schema('users');
+    const collection = new Schema('collections');
 
     article.define({
       author: user,
@@ -704,11 +670,11 @@ describe('normalizr', () => {
       curator: user
     });
 
-    feedSchema = {
+    const feedSchema = {
       feed: arrayOf(articleOrTutorial, { schemaAttribute: 'type' })
     };
 
-    input = {
+    const input = {
       feed: [{
         id: 1,
         type: 'articles',
@@ -757,21 +723,19 @@ describe('normalizr', () => {
   });
 
   it('can normalize deeply nested entities with maps', () => {
-    var article = new Schema('articles'),
-        user = new Schema('users'),
-        feedSchema,
-        input;
+    const article = new Schema('articles');
+    const user = new Schema('users');
 
     article.define({
       collaborators: valuesOf(arrayOf(user))
     });
 
-    feedSchema = {
+    const feedSchema = {
       feed: arrayOf(article),
       suggestions: valuesOf(arrayOf(article))
     };
 
-    input = {
+    const input = {
       feed: [{
         id: 1,
         title: 'Some Article',
@@ -821,23 +785,21 @@ describe('normalizr', () => {
   });
 
   it('can normalize deeply nested entities with polymorphic maps', () => {
-    var article = new Schema('articles'),
-        user = new Schema('users'),
-        group = new Schema('groups'),
-        userOrGroup = { users: user, groups: group },
-        feedSchema,
-        input;
+    const article = new Schema('articles');
+    const user = new Schema('users');
+    const group = new Schema('groups');
+    const userOrGroup = { users: user, groups: group };
 
     article.define({
       collaborators: valuesOf(userOrGroup, { schemaAttribute: 'type' })
     });
 
-    feedSchema = {
+    const feedSchema = {
       feed: arrayOf(article),
       suggestions: valuesOf(arrayOf(article))
     };
 
-    input = {
+    const input = {
       feed: [{
         id: 1,
         title: 'Some Article',
@@ -884,11 +846,9 @@ describe('normalizr', () => {
   });
 
   it('can normalize mutually recursive entities', () => {
-    var article = new Schema('articles'),
-        user = new Schema('users'),
-        collection = new Schema('collections'),
-        feedSchema,
-        input;
+    const article = new Schema('articles');
+    const user = new Schema('users');
+    const collection = new Schema('collections');
 
     user.define({
       articles: arrayOf(article)
@@ -902,11 +862,11 @@ describe('normalizr', () => {
       subscribers: arrayOf(user)
     });
 
-    feedSchema = {
+    const feedSchema = {
       feed: arrayOf(article)
     };
 
-    input = {
+    const input = {
       feed: [{
         id: 1,
         title: 'Some Article',
@@ -949,14 +909,13 @@ describe('normalizr', () => {
   });
 
   it('can normalize self-recursive entities', () => {
-    var user = new Schema('users'),
-        input;
+    const user = new Schema('users');
 
     user.define({
       parent: user
     });
 
-    input = {
+    const input = {
       id: 1,
       name: 'Andy Warhol',
       parent: {
@@ -975,16 +934,15 @@ describe('normalizr', () => {
   });
 
   it('can merge entities', () => {
-    var writer = new Schema('writers'),
-        book = new Schema('books'),
-        schema = arrayOf(writer),
-        input;
+    const writer = new Schema('writers');
+    const book = new Schema('books');
+    const schema = arrayOf(writer);
 
     writer.define({
       books: arrayOf(book)
     });
 
-    input = [{
+    const input = [{
       id: 3,
       name: 'Jo Rowling',
       isBritish: true,
@@ -1022,16 +980,15 @@ describe('normalizr', () => {
   });
 
   it('warns about inconsistencies when merging entities', () => {
-    var writer = new Schema('writers'),
-        book = new Schema('books'),
-        schema = arrayOf(writer),
-        input;
+    const writer = new Schema('writers');
+    const book = new Schema('books');
+    const schema = arrayOf(writer);
 
     writer.define({
       books: arrayOf(book)
     });
 
-    input = [{
+    const input = [{
       id: 3,
       name: 'Jo Rowling',
       books: [{
@@ -1049,27 +1006,16 @@ describe('normalizr', () => {
       }]
     }];
 
-    var warnCalled = false,
-        realConsoleWarn;
-
-    function mockWarn() {
-      warnCalled = true;
-    }
-
-    realConsoleWarn = console.warn;
-    console.warn = mockWarn;
+    console.warn = jest.fn();
 
     expect(normalize(input, schema)).toMatchSnapshot();
 
-    expect(warnCalled).toBe(true);
-    console.warn = realConsoleWarn;
+    expect(console.warn).toHaveBeenCalled();
   });
 
   it('ignores prototype objects and creates new object', () => {
-    var writer = new Schema('writers'),
-        schema = writer,
-        input;
-    input = {
+    const schema = new Schema('writers');
+    const input = {
       id: 'constructor',
       name: 'Constructor',
       isAwesome: true
@@ -1079,13 +1025,12 @@ describe('normalizr', () => {
   });
 
   it('can normalize a polymorphic union field and array and map', () => {
-    var user = new Schema('users'),
-        group = new Schema('groups'),
-        member = unionOf({
-          users: user,
-          groups: group
-        }, { schemaAttribute: 'type' }),
-        input;
+    const user = new Schema('users');
+    const group = new Schema('groups');
+    const member = unionOf({
+      users: user,
+      groups: group
+    }, { schemaAttribute: 'type' });
 
     group.define({
       members: arrayOf(member),
@@ -1093,7 +1038,7 @@ describe('normalizr', () => {
       relations: valuesOf(member)
     });
 
-    input = {
+    const input = {
       group: {
         id: 1,
         name: 'facebook',
@@ -1127,24 +1072,22 @@ describe('normalizr', () => {
   });
 
   it('fails creating union schema without schemaAttribute', () => {
-    expect(function () {
-      var user = new Schema('users'),
-          group = new Schema('groups'),
-          member = unionOf({
-            users: user,
-            groups: group
-          });
+    expect(() => {
+      const user = new Schema('users');
+      const group = new Schema('groups');
+      const member = unionOf({
+        users: user,
+        groups: group
+      });
     }).toThrow();
   });
 
   it('can normalize iterables keyed with their id', () => {
-    var user = new Schema('users', {
-      idAttribute: function(obj, key) {
-        return key;
-      }
-    })
+    const user = new Schema('users', {
+      idAttribute: (obj, key) => key
+    });
 
-    var input = {
+    const input = {
       1: {
         name: 'Adam'
       },
