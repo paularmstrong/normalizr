@@ -1,0 +1,1054 @@
+exports[`normalizr can merge entities 1`] = `
+Object {
+  "entities": Object {
+    "books": Object {
+      "1": Object {
+        "id": 1,
+        "isAwesome": true,
+        "name": "Harry Potter",
+        "soldWell": true,
+      },
+    },
+    "writers": Object {
+      "3": Object {
+        "bio": "writer",
+        "books": Array [
+          1,
+        ],
+        "id": 3,
+        "isBritish": true,
+        "location": Object {
+          "nested": Array [
+            "hello",
+            Object {
+              "world": true,
+            },
+          ],
+          "x": 100,
+          "y": 200,
+        },
+        "name": "Jo Rowling",
+      },
+    },
+  },
+  "result": Array [
+    3,
+    3,
+  ],
+}
+`;
+
+exports[`normalizr can merge into entity using custom function 1`] = `
+Object {
+  "entities": Object {
+    "authors": Object {
+      "1": Object {
+        "contact": Object {
+          "email": "ada@lovelace.com",
+          "phone": "555-0100",
+        },
+        "id": 1,
+        "name": "Ada Lovelace",
+      },
+    },
+  },
+  "result": Object {
+    "author": 1,
+    "reviewer": 1,
+  },
+}
+`;
+
+exports[`normalizr can normalize a map 1`] = `
+Object {
+  "entities": Object {
+    "articles": Object {
+      "1": Object {
+        "id": 1,
+        "title": "Some Article",
+      },
+      "2": Object {
+        "id": 2,
+        "title": "Other Article",
+      },
+    },
+  },
+  "result": Object {
+    "one": 1,
+    "two": 2,
+  },
+}
+`;
+
+exports[`normalizr can normalize a polymorphic array with schema attribute 1`] = `
+Object {
+  "entities": Object {
+    "articles": Object {
+      "1": Object {
+        "id": 1,
+        "title": "Some Article",
+        "type": "articles",
+      },
+    },
+    "tutorials": Object {
+      "1": Object {
+        "id": 1,
+        "title": "Some Tutorial",
+        "type": "tutorials",
+      },
+    },
+  },
+  "result": Array [
+    Object {
+      "id": 1,
+      "schema": "articles",
+    },
+    Object {
+      "id": 1,
+      "schema": "tutorials",
+    },
+  ],
+}
+`;
+
+exports[`normalizr can normalize a polymorphic array with schema attribute function 1`] = `
+Object {
+  "entities": Object {
+    "articles": Object {
+      "1": Object {
+        "id": 1,
+        "title": "Some Article",
+        "type": "article",
+      },
+    },
+    "tutorials": Object {
+      "1": Object {
+        "id": 1,
+        "title": "Some Tutorial",
+        "type": "tutorial",
+      },
+    },
+  },
+  "result": Array [
+    Object {
+      "id": 1,
+      "schema": "articles",
+    },
+    Object {
+      "id": 1,
+      "schema": "tutorials",
+    },
+  ],
+}
+`;
+
+exports[`normalizr can normalize a polymorphic map with schema attribute 1`] = `
+Object {
+  "entities": Object {
+    "articles": Object {
+      "1": Object {
+        "id": 1,
+        "title": "Some Article",
+        "type": "articles",
+      },
+      "2": Object {
+        "id": 2,
+        "title": "Another Article",
+        "type": "articles",
+      },
+    },
+    "tutorials": Object {
+      "1": Object {
+        "id": 1,
+        "title": "Some Tutorial",
+        "type": "tutorials",
+      },
+    },
+  },
+  "result": Object {
+    "one": Object {
+      "id": 1,
+      "schema": "articles",
+    },
+    "three": Object {
+      "id": 1,
+      "schema": "tutorials",
+    },
+    "two": Object {
+      "id": 2,
+      "schema": "articles",
+    },
+  },
+}
+`;
+
+exports[`normalizr can normalize a polymorphic map with schema attribute function 1`] = `
+Object {
+  "entities": Object {
+    "articles": Object {
+      "1": Object {
+        "id": 1,
+        "title": "Some Article",
+        "type": "article",
+      },
+      "2": Object {
+        "id": 2,
+        "title": "Another Article",
+        "type": "article",
+      },
+    },
+    "tutorials": Object {
+      "1": Object {
+        "id": 1,
+        "title": "Some Tutorial",
+        "type": "tutorial",
+      },
+    },
+  },
+  "result": Object {
+    "one": Object {
+      "id": 1,
+      "schema": "articles",
+    },
+    "three": Object {
+      "id": 1,
+      "schema": "tutorials",
+    },
+    "two": Object {
+      "id": 2,
+      "schema": "articles",
+    },
+  },
+}
+`;
+
+exports[`normalizr can normalize a polymorphic union field and array and map 1`] = `
+Object {
+  "entities": Object {
+    "groups": Object {
+      "1": Object {
+        "id": 1,
+        "members": Array [
+          Object {
+            "id": 2,
+            "schema": "groups",
+          },
+          Object {
+            "id": 3,
+            "schema": "users",
+          },
+        ],
+        "name": "facebook",
+        "owner": Object {
+          "id": 4,
+          "schema": "users",
+        },
+        "relations": Object {
+          "friend": Object {
+            "id": 5,
+            "schema": "users",
+          },
+        },
+      },
+      "2": Object {
+        "id": 2,
+        "name": "react",
+        "type": "groups",
+      },
+    },
+    "users": Object {
+      "3": Object {
+        "id": 3,
+        "name": "Huey",
+        "type": "users",
+      },
+      "4": Object {
+        "id": 4,
+        "name": "Jason",
+        "type": "users",
+      },
+      "5": Object {
+        "id": 5,
+        "name": "Nate",
+        "type": "users",
+      },
+    },
+  },
+  "result": Object {
+    "group": 1,
+  },
+}
+`;
+
+exports[`normalizr can normalize an array 1`] = `
+Object {
+  "entities": Object {
+    "articles": Object {
+      "1": Object {
+        "id": 1,
+        "title": "Some Article",
+      },
+      "2": Object {
+        "id": 2,
+        "title": "Other Article",
+      },
+    },
+  },
+  "result": Array [
+    1,
+    2,
+  ],
+}
+`;
+
+exports[`normalizr can normalize deeply nested entities with arrays 1`] = `
+Object {
+  "entities": Object {
+    "articles": Object {
+      "1": Object {
+        "author": 3,
+        "collections": Array [
+          1,
+          7,
+        ],
+        "id": 1,
+        "title": "Some Article",
+      },
+      "2": Object {
+        "author": 2,
+        "collections": Array [
+          2,
+        ],
+        "id": 2,
+        "title": "Other Article",
+      },
+    },
+    "collections": Object {
+      "1": Object {
+        "curator": 4,
+        "id": 1,
+        "title": "Awesome Writing",
+      },
+      "2": Object {
+        "curator": 120,
+        "id": 2,
+        "title": "Neverhood",
+      },
+      "7": Object {
+        "curator": 100,
+        "id": 7,
+        "title": "Even Awesomer",
+      },
+    },
+    "users": Object {
+      "100": Object {
+        "id": 100,
+        "name": "T.S. Eliot",
+      },
+      "120": Object {
+        "id": 120,
+        "name": "Ada Lovelace",
+      },
+      "2": Object {
+        "id": 2,
+        "name": "Pete Hunt",
+      },
+      "3": Object {
+        "id": 3,
+        "name": "Mike Persson",
+      },
+      "4": Object {
+        "id": 4,
+        "name": "Andy Warhol",
+      },
+    },
+  },
+  "result": Object {
+    "feed": Array [
+      1,
+      2,
+    ],
+  },
+}
+`;
+
+exports[`normalizr can normalize deeply nested entities with maps 1`] = `
+Object {
+  "entities": Object {
+    "articles": Object {
+      "1": Object {
+        "collaborators": Object {
+          "authors": Array [
+            3,
+          ],
+          "reviewers": Array [
+            2,
+          ],
+        },
+        "id": 1,
+        "title": "Some Article",
+      },
+      "2": Object {
+        "collaborators": Object {
+          "authors": Array [
+            2,
+          ],
+        },
+        "id": 2,
+        "title": "Other Article",
+      },
+      "3": Object {
+        "id": 3,
+        "title": "Last Article",
+      },
+    },
+    "users": Object {
+      "2": Object {
+        "id": 2,
+        "name": "Pete Hunt",
+      },
+      "3": Object {
+        "id": 3,
+        "name": "Mike Persson",
+      },
+    },
+  },
+  "result": Object {
+    "feed": Array [
+      1,
+      2,
+      3,
+    ],
+    "suggestions": Object {
+      "1": Array [
+        2,
+        3,
+      ],
+    },
+  },
+}
+`;
+
+exports[`normalizr can normalize deeply nested entities with polymorphic arrays 1`] = `
+Object {
+  "entities": Object {
+    "articles": Object {
+      "1": Object {
+        "author": 3,
+        "collections": Array [
+          1,
+          7,
+        ],
+        "id": 1,
+        "title": "Some Article",
+        "type": "articles",
+      },
+    },
+    "collections": Object {
+      "1": Object {
+        "curator": 4,
+        "id": 1,
+        "title": "Awesome Writing",
+      },
+      "2": Object {
+        "curator": 120,
+        "id": 2,
+        "title": "Neverhood",
+      },
+      "7": Object {
+        "curator": 100,
+        "id": 7,
+        "title": "Even Awesomer",
+      },
+    },
+    "tutorials": Object {
+      "1": Object {
+        "author": 2,
+        "collections": Array [
+          2,
+        ],
+        "id": 1,
+        "title": "Some Tutorial",
+        "type": "tutorials",
+      },
+    },
+    "users": Object {
+      "100": Object {
+        "id": 100,
+        "name": "T.S. Eliot",
+      },
+      "120": Object {
+        "id": 120,
+        "name": "Ada Lovelace",
+      },
+      "2": Object {
+        "id": 2,
+        "name": "Pete Hunt",
+      },
+      "3": Object {
+        "id": 3,
+        "name": "Mike Persson",
+      },
+      "4": Object {
+        "id": 4,
+        "name": "Andy Warhol",
+      },
+    },
+  },
+  "result": Object {
+    "feed": Array [
+      Object {
+        "id": 1,
+        "schema": "articles",
+      },
+      Object {
+        "id": 1,
+        "schema": "tutorials",
+      },
+    ],
+  },
+}
+`;
+
+exports[`normalizr can normalize deeply nested entities with polymorphic maps 1`] = `
+Object {
+  "entities": Object {
+    "articles": Object {
+      "1": Object {
+        "collaborators": Object {
+          "author": Object {
+            "id": 3,
+            "schema": "users",
+          },
+          "reviewer": Object {
+            "id": 2,
+            "schema": "groups",
+          },
+        },
+        "id": 1,
+        "title": "Some Article",
+      },
+      "2": Object {
+        "collaborators": Object {
+          "author": Object {
+            "id": 2,
+            "schema": "users",
+          },
+        },
+        "id": 2,
+        "title": "Other Article",
+      },
+      "3": Object {
+        "id": 3,
+        "title": "Last Article",
+      },
+    },
+    "groups": Object {
+      "2": Object {
+        "id": 2,
+        "name": "Reviewer Group",
+        "type": "groups",
+      },
+    },
+    "users": Object {
+      "2": Object {
+        "id": 2,
+        "name": "Pete Hunt",
+        "type": "users",
+      },
+      "3": Object {
+        "id": 3,
+        "name": "Mike Persson",
+        "type": "users",
+      },
+    },
+  },
+  "result": Object {
+    "feed": Array [
+      1,
+      2,
+      3,
+    ],
+    "suggestions": Object {
+      "1": Array [
+        2,
+        3,
+      ],
+    },
+  },
+}
+`;
+
+exports[`normalizr can normalize iterables keyed with their id 1`] = `
+Object {
+  "entities": Object {
+    "users": Object {
+      "1": Object {
+        "name": "Adam",
+      },
+      "4": Object {
+        "name": "Jeremy",
+      },
+    },
+  },
+  "result": Array [
+    "1",
+    "4",
+  ],
+}
+`;
+
+exports[`normalizr can normalize mutually recursive entities 1`] = `
+Object {
+  "entities": Object {
+    "articles": Object {
+      "1": Object {
+        "collections": Array [
+          1,
+          7,
+        ],
+        "id": 1,
+        "title": "Some Article",
+      },
+    },
+    "collections": Object {
+      "1": Object {
+        "id": 1,
+        "subscribers": Array [
+          4,
+          100,
+        ],
+        "title": "Awesome Writing",
+      },
+      "7": Object {
+        "id": 7,
+        "subscribers": Array [
+          100,
+        ],
+        "title": "Even Awesomer",
+      },
+    },
+    "users": Object {
+      "100": Object {
+        "articles": Array [
+          1,
+        ],
+        "id": 100,
+        "name": "T.S. Eliot",
+      },
+      "4": Object {
+        "articles": Array [
+          1,
+        ],
+        "id": 4,
+        "name": "Andy Warhol",
+      },
+    },
+  },
+  "result": Object {
+    "feed": Array [
+      1,
+    ],
+  },
+}
+`;
+
+exports[`normalizr can normalize nested entities 1`] = `
+Object {
+  "entities": Object {
+    "articles": Object {
+      "1": Object {
+        "author": 3,
+        "id": 1,
+        "title": "Some Article",
+      },
+    },
+    "users": Object {
+      "3": Object {
+        "id": 3,
+        "name": "Mike Persson",
+      },
+    },
+  },
+  "result": 1,
+}
+`;
+
+exports[`normalizr can normalize nested entity and delete an existing key using custom function 1`] = `
+Object {
+  "entities": Object {
+    "articles": Object {
+      "1": Object {
+        "id": 1,
+        "isFavorite": false,
+        "title": "Some Article",
+        "type": 1,
+      },
+    },
+    "types": Object {
+      "1": Object {
+        "id": 1,
+      },
+    },
+  },
+  "result": 1,
+}
+`;
+
+exports[`normalizr can normalize nested entity using property from parent 1`] = `
+Object {
+  "entities": Object {
+    "linkables": Object {
+      "1": Object {
+        "data": 2,
+        "id": 1,
+        "module_type": "article",
+        "schema_type": "media",
+      },
+    },
+    "media": Object {
+      "2": Object {
+        "id": 2,
+        "url": "catimage.jpg",
+      },
+    },
+  },
+  "result": 1,
+}
+`;
+
+exports[`normalizr can normalize self-recursive entities 1`] = `
+Object {
+  "entities": Object {
+    "users": Object {
+      "1": Object {
+        "id": 1,
+        "name": "Andy Warhol",
+        "parent": 7,
+      },
+      "4": Object {
+        "id": 4,
+        "name": "Pete Hunt",
+      },
+      "7": Object {
+        "id": 7,
+        "name": "Tom Dale",
+        "parent": 4,
+      },
+    },
+  },
+  "result": 1,
+}
+`;
+
+exports[`normalizr can normalize single entity 1`] = `"id"`;
+
+exports[`normalizr can normalize single entity 2`] = `"articles"`;
+
+exports[`normalizr can normalize single entity 3`] = `
+Object {
+  "entities": Object {
+    "articles": Object {
+      "1": Object {
+        "id": 1,
+        "isFavorite": false,
+        "title": "Some Article",
+      },
+    },
+  },
+  "result": 1,
+}
+`;
+
+exports[`normalizr can normalize single entity with custom id attribute 1`] = `"slug"`;
+
+exports[`normalizr can normalize single entity with custom id attribute 2`] = `"articles"`;
+
+exports[`normalizr can normalize single entity with custom id attribute 3`] = `
+Object {
+  "entities": Object {
+    "articles": Object {
+      "some-article": Object {
+        "id": 1,
+        "isFavorite": false,
+        "slug": "some-article",
+        "title": "Some Article",
+      },
+    },
+  },
+  "result": "some-article",
+}
+`;
+
+exports[`normalizr can normalize single entity with custom id attribute function 1`] = `
+Object {
+  "entities": Object {
+    "articles": Object {
+      "some-article-1983-3-12": Object {
+        "id": 1,
+        "isFavorite": false,
+        "posted": Object {
+          "day": 12,
+          "month": 3,
+          "year": 1983,
+        },
+        "title": "Some Article",
+      },
+    },
+  },
+  "result": "some-article-1983-3-12",
+}
+`;
+
+exports[`normalizr can provide default values for a single entity 1`] = `
+Object {
+  "entities": Object {
+    "articles": Object {
+      "1": Object {
+        "id": 1,
+        "isFavorite": false,
+        "title": "Some Article",
+      },
+    },
+  },
+  "result": 1,
+}
+`;
+
+exports[`normalizr can provide default values for an array 1`] = `
+Object {
+  "entities": Object {
+    "articles": Object {
+      "1": Object {
+        "id": 1,
+        "isFavorite": false,
+        "title": "Some Article",
+      },
+      "2": Object {
+        "id": 2,
+        "isFavorite": false,
+        "title": "Other Article",
+      },
+    },
+  },
+  "result": Array [
+    1,
+    2,
+  ],
+}
+`;
+
+exports[`normalizr can specify meta properties on a schema which are then accessible in assignEntity 1`] = `
+Object {
+  "entities": Object {
+    "articles": Object {
+      "123": Object {
+        "authors": Array [
+          "321",
+          "678",
+        ],
+        "id": "123",
+        "title": "My article",
+      },
+    },
+    "authors": Object {
+      "321": Object {
+        "id": "321",
+        "screenName": "paul",
+      },
+      "678": Object {
+        "id": "678",
+        "screenName": "jim",
+      },
+    },
+  },
+  "result": "123",
+}
+`;
+
+exports[`normalizr can update key values based on original input using a custom function 1`] = `
+Object {
+  "entities": Object {
+    "articles": Object {
+      "123": Object {
+        "author": "321",
+        "id": "123",
+        "media": Array [
+          Object {
+            "id": "1345",
+            "mediaViewUrl": "/paul/articles/123/photos/0",
+            "url": "https://bit.ly/...",
+          },
+        ],
+        "title": "My article",
+      },
+    },
+    "authors": Object {
+      "321": Object {
+        "id": "321",
+        "screenName": "paul",
+      },
+    },
+  },
+  "result": "123",
+}
+`;
+
+exports[`normalizr can use EntitySchema-specific assignEntity function 1`] = `
+Object {
+  "entities": Object {
+    "tacos": Object {
+      "123": Object {
+        "filling": "veggie",
+        "id": "123",
+        "type": "hardshell",
+      },
+    },
+  },
+  "result": "123",
+}
+`;
+
+exports[`normalizr can use Schema-specific assignEntity function in iterables 1`] = `
+Object {
+  "entities": Object {
+    "articles": Object {
+      "1": Object {
+        "collection_ids": Array [
+          1,
+          7,
+        ],
+        "id": 1,
+        "title": "Some Article",
+      },
+    },
+    "collections": Object {
+      "1": Object {
+        "id": 1,
+        "title": "Awesome Writing",
+      },
+      "7": Object {
+        "id": 7,
+        "title": "Even Awesomer",
+      },
+    },
+  },
+  "result": 1,
+}
+`;
+
+exports[`normalizr can use UnionSchema-specific assignEntity function 1`] = `
+Object {
+  "entities": Object {
+    "groups": Object {
+      "1": Object {
+        "id": 1,
+        "members": Array [
+          Object {
+            "id": 2,
+            "schema": "groups",
+          },
+          Object {
+            "id": 3,
+            "schema": "users",
+          },
+        ],
+        "name": "facebook",
+        "owner": Object {
+          "id": 4,
+          "schema": "users",
+        },
+        "relations": Object {
+          "friend": Object {
+            "id": 5,
+            "schema": "users",
+          },
+        },
+        "url": "/groups/facebook",
+      },
+      "2": Object {
+        "id": 2,
+        "name": "react",
+        "type": "groups",
+        "url": "/groups/react",
+      },
+    },
+    "users": Object {
+      "3": Object {
+        "id": 3,
+        "name": "Huey",
+        "type": "users",
+      },
+      "4": Object {
+        "id": 4,
+        "name": "Jason",
+        "type": "users",
+      },
+      "5": Object {
+        "id": 5,
+        "name": "Nate",
+        "type": "users",
+      },
+    },
+  },
+  "result": Object {
+    "group": 1,
+  },
+}
+`;
+
+exports[`normalizr does not overwrite the default 1`] = `
+Object {
+  "entities": Object {
+    "articles": Object {
+      "1": Object {
+        "id": 1,
+        "isFavorite": false,
+      },
+    },
+  },
+  "result": 1,
+}
+`;
+
+exports[`normalizr ignores prototype objects and creates new object 1`] = `
+Object {
+  "entities": Object {
+    "writers": Constructor {
+      "constructor": Object {
+        "id": "constructor",
+        "isAwesome": true,
+        "name": "Constructor",
+      },
+    },
+  },
+  "result": "constructor",
+}
+`;
+
+exports[`normalizr warns about inconsistencies when merging entities 1`] = `
+Object {
+  "entities": Object {
+    "books": Object {
+      "1": Object {
+        "id": 1,
+        "name": "Harry Potter",
+        "soldWell": true,
+      },
+    },
+    "writers": Object {
+      "3": Object {
+        "books": Array [
+          1,
+        ],
+        "id": 3,
+        "name": "Jo Rowling",
+      },
+    },
+  },
+  "result": Array [
+    3,
+    3,
+  ],
+}
+`;

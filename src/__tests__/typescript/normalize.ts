@@ -1,4 +1,4 @@
-import {Schema, normalize, arrayOf, unionOf, valuesOf} from "../../index.d.ts";
+import {Schema, normalize, arrayOf, unionOf, valuesOf} from "../../../index.d.ts";
 
 const isObject = function (obj: any) {
   return typeof obj === 'object';

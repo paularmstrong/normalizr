@@ -1,4 +1,4 @@
-import {Schema, IterableSchema, UnionSchema, SchemaValue} from "../../index.d.ts";
+import {Schema, IterableSchema, UnionSchema, SchemaValue} from "../../../index.d.ts";
 
 const idAttribute = "slug";
 const meta = { removeProps: ["year", "publisher"] };
