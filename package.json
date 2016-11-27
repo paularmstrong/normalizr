@@ -3,7 +3,7 @@
   "version": "2.2.1",
   "description": "Normalizes JSON according to schema for Redux and Flux applications",
   "main": "lib/index.js",
-  "typings": "index.d.ts",
+  "typings": "lib/index.d.ts",
   "repository": {
     "url": "https://github.com/paularmstrong/normalizr.git",
     "type": "git"
