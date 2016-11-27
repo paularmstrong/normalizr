@@ -1,4 +1,5 @@
 var webpack = require('webpack');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: './src/index',
@@ -33,6 +34,9 @@ module.exports = {
       compressor: {
         warnings: false
       }
-    })
+    }),
+    new CopyWebpackPlugin([
+      { from: 'index.d.ts', to: 'lib/index.d.ts' }
+    ])
   ]
 };
