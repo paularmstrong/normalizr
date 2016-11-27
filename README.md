@@ -1,6 +1,6 @@
 # normalizr [![build status](https://img.shields.io/travis/paularmstrong/normalizr/master.svg?style=flat-square)](https://travis-ci.org/paularmstrong/normalizr) [![npm version](https://img.shields.io/npm/v/normalizr.svg?style=flat-square)](https://www.npmjs.com/package/normalizr) [![npm downloads](https://img.shields.io/npm/dm/normalizr.svg?style=flat-square)](https://www.npmjs.com/package/normalizr)
 
-Normalizes deeply nested JSON API responses according to a schema for [Flux](https://facebook.github.io/flux) and [Redux](http://rackt.github.io/redux) apps.  
+Normalizes deeply nested JSON API responses according to a schema for [Flux](https://facebook.github.io/flux) and [Redux](https://github.com/reactjs/redux) apps.  
 Kudos to Jing Chen for suggesting this approach.
 
 ## Installation
@@ -22,7 +22,7 @@ See **[redux/examples/real-world](https://github.com/reactjs/redux/tree/master/e
 ## The Problem
 
 * You have a JSON API that returns deeply nested objects;  
-* You want to port your app to [Flux](https://github.com/facebook/flux) or [Redux](http://rackt.github.io/redux);
+* You want to port your app to [Flux](https://github.com/facebook/flux) or [Redux](https://github.com/reactjs/redux);
 * You noticed [it's hard](https://groups.google.com/forum/#!topic/reactjs/jbh50-GJxpg) for Stores (or Reducers) to consume data from nested API responses.  
 
 Normalizr takes JSON and a schema and **replaces nested entities with their IDs, gathering all entities in dictionaries**.
