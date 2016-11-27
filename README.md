@@ -17,7 +17,7 @@ See **[flux-react-router-example](https://github.com/gaearon/flux-react-router-e
 
 ### Redux
 
-See **[redux/examples/real-world](https://github.com/rackt/redux/tree/master/examples/real-world)**.
+See **[redux/examples/real-world](https://github.com/reactjs/redux/tree/master/examples/real-world)**.
 
 ## The Problem
 
