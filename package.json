@@ -21,6 +21,7 @@
     "babel-preset-es2015-rollup": "^3.0.0",
     "babel-preset-stage-1": "^6.16.0",
     "eslint": "^3.12.2",
+    "flow-bin": "^0.37.1",
     "jest": "^18.0.0",
     "mkdirp": "^0.5.1",
     "npm-run-all": "^3.1.2",
