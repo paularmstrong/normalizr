@@ -1,0 +1,81 @@
+exports[`EntitySchema can build the entity's ID from the parent object 1`] = `
+Object {
+  "entities": Object {
+    "users": Object {
+      "tacos-4": Object {
+        "id": "4",
+        "name": "Jimmy",
+      },
+    },
+  },
+  "result": Object {
+    "name": "tacos",
+    "user": "tacos-4",
+  },
+}
+`;
+
+exports[`EntitySchema can normalize entity IDs based on their object key 1`] = `
+Object {
+  "entities": Object {
+    "users": Object {
+      "4": Object {
+        "name": "taco",
+      },
+      "56": Object {
+        "name": "burrito",
+      },
+    },
+  },
+  "result": Object {
+    "4": "4",
+    "56": "56",
+  },
+}
+`;
+
+exports[`EntitySchema can use a custom merging strategy 1`] = `
+Object {
+  "entities": Object {
+    "tacos": Object {
+      "1": Object {
+        "alias": "bar",
+        "id": 1,
+        "name": "foo",
+      },
+    },
+  },
+  "result": Array [
+    1,
+    1,
+  ],
+}
+`;
+
+exports[`EntitySchema can use a custom processing strategy 1`] = `
+Object {
+  "entities": Object {
+    "tacos": Object {
+      "1": Object {
+        "id": 1,
+        "name": "foo",
+        "slug": "thing-1",
+      },
+    },
+  },
+  "result": 1,
+}
+`;
+
+exports[`EntitySchema normalizes an entity 1`] = `
+Object {
+  "entities": Object {
+    "item": Object {
+      "1": Object {
+        "id": 1,
+      },
+    },
+  },
+  "result": 1,
+}
+`;

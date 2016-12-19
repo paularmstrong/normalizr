@@ -1,0 +1,14 @@
+exports[`ObjectSchema normalizes an object 1`] = `
+Object {
+  "entities": Object {
+    "user": Object {
+      "1": Object {
+        "id": 1,
+      },
+    },
+  },
+  "result": Object {
+    "user": 1,
+  },
+}
+`;

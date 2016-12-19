@@ -1,0 +1,18 @@
+exports[`ValuesSchema normalizes the values of an object with the given schema 1`] = `
+Object {
+  "entities": Object {
+    "item": Object {
+      "1": Object {
+        "id": 1,
+      },
+      "2": Object {
+        "id": 2,
+      },
+    },
+  },
+  "result": Object {
+    "asdf": 1,
+    "fdsa": 2,
+  },
+}
+`;

@@ -1,0 +1,57 @@
+exports[`UnionSchema normalizes an array of multiple entities using a function to infer the schemaAttribute 1`] = `
+Object {
+  "entities": Object {
+    "groups": Object {
+      "2": Object {
+        "groupname": "People",
+        "id": 2,
+      },
+    },
+    "users": Object {
+      "1": Object {
+        "id": 1,
+        "username": "Janey",
+      },
+    },
+  },
+  "result": Array [
+    Object {
+      "id": 1,
+      "schema": "users",
+    },
+    Object {
+      "id": 2,
+      "schema": "groups",
+    },
+  ],
+}
+`;
+
+exports[`UnionSchema normalizes an array of multiple entities using string schemaAttribute 1`] = `
+Object {
+  "entities": Object {
+    "groups": Object {
+      "2": Object {
+        "id": 2,
+        "type": "group",
+      },
+    },
+    "users": Object {
+      "1": Object {
+        "id": 1,
+        "type": "user",
+      },
+    },
+  },
+  "result": Array [
+    Object {
+      "id": 1,
+      "schema": "users",
+    },
+    Object {
+      "id": 2,
+      "schema": "groups",
+    },
+  ],
+}
+`;

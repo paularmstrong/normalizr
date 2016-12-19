@@ -1,0 +1,56 @@
+exports[`normalize normalizes entities 1`] = `
+Object {
+  "entities": Object {
+    "tacos": Object {
+      "1": Object {
+        "id": 1,
+        "type": "foo",
+      },
+      "2": Object {
+        "id": 2,
+        "type": "bar",
+      },
+    },
+  },
+  "result": Array [
+    1,
+    2,
+  ],
+}
+`;
+
+exports[`normalize normalizes nested entities 1`] = `
+Object {
+  "entities": Object {
+    "articles": Object {
+      "123": Object {
+        "author": "8472",
+        "body": "This article is great.",
+        "comments": Array [
+          "comment-123-4738",
+        ],
+        "id": "123",
+        "title": "A Great Article",
+      },
+    },
+    "comments": Object {
+      "comment-123-4738": Object {
+        "comment": "I like it!",
+        "id": "comment-123-4738",
+        "user": "10293",
+      },
+    },
+    "users": Object {
+      "10293": Object {
+        "id": "10293",
+        "name": "Jane",
+      },
+      "8472": Object {
+        "id": "8472",
+        "name": "Paul",
+      },
+    },
+  },
+  "result": "123",
+}
+`;
