@@ -12,7 +12,7 @@ Normalizr is a small, but powerful utility for taking JSON with a schema definit
 
 The following nested object:
 
-```
+```js
 [{
   id: 1,
   title: 'Some Article',
@@ -32,7 +32,7 @@ The following nested object:
 
 Can be normalized to:
 
-```
+```js
 {
   result: [1, 2],
   entities: {
