@@ -24,7 +24,7 @@ Consider a typical blog post. The API response for a single post might look some
   "title": "My awesome blog post",
   "comments": [
     {
-      "id": "324"
+      "id": "324",
       "commenter": {
         "id": "2",
         "name": "Nicole"
