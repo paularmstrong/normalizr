@@ -4,12 +4,20 @@ import ObjectSchema from './schemas/Object';
 import UnionSchema from './schemas/Union';
 import ValuesSchema from './schemas/Values';
 
-const visit = (input, key, value, schema, addEntity) => {
+const visit = (value, parent, key, schema, addEntity) => {
   if (typeof value !== 'object') {
     return value;
   }
 
-  return schema.normalize(value, input, key, visit, addEntity);
+  if (!schema.normalize || typeof schema.normalize !== 'function' && typeof schema === 'object') {
+    if (Array.isArray(schema)) {
+      schema = new ArraySchema(schema);
+    } else {
+      schema = new ObjectSchema(schema);
+    }
+  }
+
+  return schema.normalize(value, parent, key, visit, addEntity);
 };
 
 const addEntities = (entities) => (schema, value, parent, key) => {
@@ -43,6 +51,6 @@ export const normalize = (input, schema, options = {}) => {
   const entities = {};
   const addEntity = addEntities(entities);
 
-  const result = schema.normalize(input, input, null, visit, addEntity);
+  const result = visit(input, input, null, schema, addEntity);
   return { entities, result };
 };

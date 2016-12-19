@@ -34,7 +34,7 @@ export default class UnionSchema {
 
     return input.map((value, index) => {
       const schema = this.inferSchema(value);
-      return { id: visit(input, index, value, schema, addEntity), schema: schema.key };
+      return { id: visit(value, input, index, schema, addEntity), schema: schema.key };
     });
   }
 }

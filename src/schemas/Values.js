@@ -13,7 +13,7 @@ export default class ValuesSchema {
     }
 
     return Object.entries(input).reduce((output, [ key, value ], index) => {
-      return { ...output, [key]: visit(input, key, value, this.schema, addEntity) };
+      return { ...output, [key]: visit(value, input, key, this.schema, addEntity) };
     }, {});
   }
 }

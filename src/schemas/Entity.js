@@ -40,7 +40,7 @@ export default class EntitySchema {
   normalize(input, parent, key, visit, addEntity) {
     const entity = this.process(input);
     Object.entries(this.schema).forEach(([ key, schema ]) => {
-      entity[key] = visit(input, key, input[key], schema, addEntity);
+      entity[key] = visit(input[key], input, key, schema, addEntity);
     });
 
     addEntity(this, entity, parent, key);

@@ -1,3 +1,22 @@
+exports[`ArraySchema auto-converts plain arrays to ArraySchema 1`] = `
+Object {
+  "entities": Object {
+    "user": Object {
+      "1": Object {
+        "id": 1,
+      },
+      "2": Object {
+        "id": 2,
+      },
+    },
+  },
+  "result": Array [
+    1,
+    2,
+  ],
+}
+`;
+
 exports[`ArraySchema normalizes an array of objects 1`] = `
 Object {
   "entities": Object {

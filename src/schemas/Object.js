@@ -12,7 +12,7 @@ export default class ObjectSchema {
   normalize(input, parent, key, visit, addEntity) {
     const object = { ...input };
     Object.entries(this.schema).forEach(([ key, schema ]) => {
-      object[key] = visit(input, key, input[key], schema, addEntity);
+      object[key] = visit(input[key], input, key, schema, addEntity);
     });
     return object;
   }
