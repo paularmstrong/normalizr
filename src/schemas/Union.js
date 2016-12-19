@@ -27,7 +27,7 @@ export default class UnionSchema {
     this.schema = definition;
   }
 
-  normalize(input, parent, key, addEntity, visit) {
+  normalize(input, parent, key, visit, addEntity) {
     if (!Array.isArray(input)) {
       throw new Error(`Expected array of but found ${typeof input}.`);
     }

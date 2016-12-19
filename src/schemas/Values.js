@@ -7,7 +7,7 @@ export default class ValuesSchema {
     this.schema = definition;
   }
 
-  normalize(input, parent, key, addEntity, visit) {
+  normalize(input, parent, key, visit, addEntity) {
     if (typeof input !== 'object') {
       throw new Error(`Expected object of but found ${typeof input}.`);
     }

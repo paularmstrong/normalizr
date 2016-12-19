@@ -9,7 +9,7 @@ const visit = (input, key, value, schema, addEntity) => {
     return value;
   }
 
-  return schema.normalize(value, input, key, addEntity, visit);
+  return schema.normalize(value, input, key, visit, addEntity);
 };
 
 const addEntities = (entities) => (schema, value, parent, key) => {
@@ -43,6 +43,6 @@ export const normalize = (input, schema, options = {}) => {
   const entities = {};
   const addEntity = addEntities(entities);
 
-  const result = schema.normalize(input, input, null, addEntity, visit);
+  const result = schema.normalize(input, input, null, visit, addEntity);
   return { entities, result };
 };
