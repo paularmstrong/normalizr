@@ -1,5 +1,5 @@
 export default class ValuesSchema {
-  constructor(definition, options) {
+  constructor(definition) {
     this.define(definition);
   }
 

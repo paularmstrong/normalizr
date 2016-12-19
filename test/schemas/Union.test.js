@@ -8,7 +8,7 @@ describe(schema.Union.name, () => {
     const union = new schema.Union({
       user: user,
       group: group
-    }, { schemaAttribute: 'type' });
+    }, 'type');
 
     expect(normalize([ { id: 1, type: 'user' }, { id: 2, type: 'group' } ], union)).toMatchSnapshot();
   });
@@ -19,7 +19,7 @@ describe(schema.Union.name, () => {
     const union = new schema.Union({
       user: user,
       group: group
-    }, { schemaAttribute: (input) => { return input.username ? 'user' : 'group'; } });
+    }, (input) => { return input.username ? 'user' : 'group'; });
 
     expect(normalize([ { id: 1, username: 'Janey' }, { id: 2, groupname: 'People' } ], union)).toMatchSnapshot();
   });

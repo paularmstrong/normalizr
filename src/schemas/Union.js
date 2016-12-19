@@ -1,6 +1,5 @@
 export default class UnionSchema {
-  constructor(definition, options) {
-    const { schemaAttribute } = options;
+  constructor(definition, schemaAttribute) {
     if (!schemaAttribute) {
       throw new Error('Expected option "schemaAttribute" not found on UnionSchema.');
     }

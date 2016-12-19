@@ -1,5 +1,5 @@
 export default class ObjectSchema {
-  constructor(definition = {}, options) {
+  constructor(definition) {
     this.define(definition);
   }
 
