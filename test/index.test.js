@@ -50,4 +50,18 @@ describe('normalize', () => {
     };
     expect(normalize(input, article)).toMatchSnapshot();
   });
+
+  it('does not modify the original input', () => {
+    const user = new schema.Entity('users');
+    const article = new schema.Entity('articles', { author: user });
+    const input = Object.freeze({
+      id: '123',
+      title: 'A Great Article',
+      author: Object.freeze({
+        id: '8472',
+        name: 'Paul'
+      })
+    });
+    expect(() => normalize(input, article)).not.toThrow();
+  });
 });

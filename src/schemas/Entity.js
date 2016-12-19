@@ -1,5 +1,5 @@
 export default class EntitySchema {
-  constructor(key, definition = {}, options = { idAttribute: 'id' }) {
+  constructor(key, definition = {}, options = {}) {
     if (!key || typeof key !== 'string') {
       throw new Error('A string non-empty key is required');
     }
@@ -9,7 +9,7 @@ export default class EntitySchema {
       mergeStrategy = (entityA, entityB) => {
         return { ...entityA, ...entityB };
       },
-      processStrategy = (input) => input
+      processStrategy = (input) => ({ ...input })
     } = options;
 
     this._key = key;
@@ -38,7 +38,7 @@ export default class EntitySchema {
   }
 
   normalize(input, parent, key, addEntity, visit) {
-    const entity = this.process({ ...input });
+    const entity = this.process(input);
     Object.entries(this.schema).forEach(([ key, schema ]) => {
       entity[key] = visit(input, key, input[key], schema, addEntity);
     });
