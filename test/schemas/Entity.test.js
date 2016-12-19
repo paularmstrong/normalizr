@@ -2,6 +2,14 @@
 import { normalize, schema } from '../../src';
 
 describe(schema.Entity.name, () => {
+  it('must be created with a key name', () => {
+    expect(() => new schema.Entity()).toThrow();
+  });
+
+  it('key name must be a string', () => {
+    expect(() => new schema.Entity(42)).toThrow();
+  });
+
   it('normalizes an entity', () => {
     const entity = new schema.Entity('item');
     expect(normalize({ id: 1 }, entity)).toMatchSnapshot();

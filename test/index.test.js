@@ -2,6 +2,16 @@
 import { normalize, schema } from '../src';
 
 describe('normalize', () => {
+  [ 42, null, undefined, '42', () => {} ].forEach((input) => {
+    it(`cannot normalize input that == ${input}`, () => {
+      expect(() => normalize(input, new schema.Entity('test'))).toThrow();
+    });
+  });
+
+  it('cannot normalize without a schema', () => {
+    expect(() => normalize({})).toThrow();
+  });
+
   it('normalizes entities', () => {
     const mySchema = new schema.Entity('tacos');
     const inputSchema = new schema.Array(mySchema);
