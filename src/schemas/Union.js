@@ -9,8 +9,12 @@ export default class UnionSchema {
     this.define(definition);
   }
 
-  getSchemaAttribute(input) {
-    return this._schemaAttribute(input);
+  define(definition) {
+    this.schema = definition;
+  }
+
+  getSchemaAttribute(input, key) {
+    return this._schemaAttribute(input, key);
   }
 
   inferSchema(input) {
@@ -22,17 +26,13 @@ export default class UnionSchema {
     return schema;
   }
 
-  define(definition) {
-    this.schema = definition;
-  }
-
   normalize(input, parent, key, visit, addEntity) {
     if (!Array.isArray(input)) {
       throw new Error(`Expected array of but found ${typeof input}.`);
     }
 
     return input.map((value, index) => {
-      const schema = this.inferSchema(value);
+      const schema = this.inferSchema(value, index);
       return { id: visit(value, input, index, schema, addEntity), schema: schema.key };
     });
   }

@@ -70,13 +70,15 @@ const responseSchema = new schema.Object({ users: new schema.Array(user) });
 const normalizedData = normalize(data, responseSchema);
 ```
 
-## `Union(definition, options)`
+## `Union(definition, schemaAttribute)`
 
 Defines an array that may contain more than one type of entity needing to be normalized.
 
 * `definition`: An object mapping the definition of the nested entities found within the input array
 * `schemaAttribute`: The attribute on each entity found that defines what schema, per the definition mapping, to use when normalizing.  
-Can be a string or a function.
+Can be a string or a function. If given a function, accepts the following arguments:  
+    * `value`: The input value of the entity
+    * `index`: the index at which the entity appears on the parent array.
 
 ### Usage
 
@@ -93,11 +95,15 @@ const unionSchema = new schema.Union({
 const normalizedData = normalize(data, unionSchema);
 ```
 
-## `Values(definition)`
+## `Values(definition, schemaAttribute)`
 
-Defines an object whose values are entities of the same type.
+Defines an object whose values are entities.
 
-* `definition`: A singular schema mapping for each value on the input object.
+* `definition`: An object mapping the definition of the nested entities found within the input array
+* `schemaAttribute`: The attribute on each entity found that defines what schema, per the definition mapping, to use when normalizing.  
+Can be a string or a function. If given a function, accepts the following arguments:  
+    * `value`: The input value of the entity
+    * `key`: the key at which the entity appears on the parent object.
 
 ### Usage
 

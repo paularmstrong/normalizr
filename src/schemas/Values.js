@@ -1,19 +1,14 @@
-export default class ValuesSchema {
-  constructor(definition) {
-    this.define(definition);
-  }
+import UnionSchema from './Union';
 
-  define(definition) {
-    this.schema = definition;
-  }
-
+export default class ValuesSchema extends UnionSchema {
   normalize(input, parent, key, visit, addEntity) {
     if (typeof input !== 'object') {
       throw new Error(`Expected object of but found ${typeof input}.`);
     }
 
     return Object.entries(input).reduce((output, [ key, value ], index) => {
-      return { ...output, [key]: visit(value, input, key, this.schema, addEntity) };
+      const schema = this.inferSchema(value, key);
+      return { ...output, [key]: visit(value, input, key, schema, addEntity) };
     }, {});
   }
 }

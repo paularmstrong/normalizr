@@ -36,7 +36,7 @@ describe(schema.Entity.name, () => {
 
   it('can normalize entity IDs based on their object key', () => {
     const user = new schema.Entity('users', {}, { idAttribute: (entity, parent, key) => key });
-    const inputSchema = new schema.Values(user);
+    const inputSchema = new schema.Values({ users: user }, () => 'users');
 
     expect(normalize({ 4: { name: 'taco' }, 56: { name: 'burrito' } }, inputSchema)).toMatchSnapshot();
   });
