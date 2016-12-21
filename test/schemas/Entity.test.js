@@ -46,7 +46,10 @@ describe(schema.Entity.name, () => {
       const mySchema = new schema.Entity('tacos', {}, { mergeStrategy });
       const inputSchema = new schema.Array(mySchema);
 
-      expect(normalize([ { id: 1, name: 'foo' }, { id: 1, name: 'bar', alias: 'bar' } ], inputSchema)).toMatchSnapshot();
+      expect(normalize([
+        { id: 1, name: 'foo' },
+        { id: 1, name: 'bar', alias: 'bar' }
+      ], inputSchema)).toMatchSnapshot();
     });
   });
 
@@ -71,7 +74,7 @@ describe(schema.Entity.name, () => {
 
       expect(normalize({
         id: 1, content: 'parent', childKey: { id: 4, content: 'child' }
-      }, parentEntity)).toMatchSnapshot()
+      }, parentEntity)).toMatchSnapshot();
     });
   });
 });

@@ -31,6 +31,6 @@ describe(schema.Array.name, () => {
 
     expect(normalize({
       id: 1, content: 'parent', children: [ { id: 4, content: 'child' } ]
-    }, parentEntity)).toMatchSnapshot()
+    }, parentEntity)).toMatchSnapshot();
   });
 });
