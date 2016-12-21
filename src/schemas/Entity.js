@@ -27,8 +27,8 @@ export default class EntitySchema {
     return this._mergeStrategy(entityA, entityB);
   }
 
-  process(entity) {
-    return this._processStrategy(entity);
+  process(entity, parent, key) {
+    return this._processStrategy(entity, parent, key);
   }
 
   define(definition) {
@@ -38,7 +38,7 @@ export default class EntitySchema {
   }
 
   normalize(input, parent, key, visit, addEntity) {
-    const entity = this.process(input);
+    const entity = this.process(input, parent, key);
     Object.entries(this.schema).forEach(([ key, schema ]) => {
       entity[key] = visit(input[key], input, key, schema, addEntity);
     });
