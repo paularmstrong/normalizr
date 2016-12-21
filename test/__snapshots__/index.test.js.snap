@@ -1,3 +1,30 @@
+exports[`normalize ignores null values 1`] = `
+Object {
+  "entities": Object {},
+  "result": Array [
+    null,
+  ],
+}
+`;
+
+exports[`normalize ignores null values 2`] = `
+Object {
+  "entities": Object {},
+  "result": Array [
+    undefined,
+  ],
+}
+`;
+
+exports[`normalize ignores null values 3`] = `
+Object {
+  "entities": Object {},
+  "result": Array [
+    false,
+  ],
+}
+`;
+
 exports[`normalize normalizes entities 1`] = `
 Object {
   "entities": Object {

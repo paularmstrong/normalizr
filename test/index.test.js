@@ -64,4 +64,11 @@ describe('normalize', () => {
     });
     expect(() => normalize(input, article)).not.toThrow();
   });
+
+  it('ignores null values', () => {
+    const myEntity = new schema.Entity('myentities');
+    expect(normalize([ null ], [ myEntity ])).toMatchSnapshot();
+    expect(normalize([ undefined ], [ myEntity ])).toMatchSnapshot();
+    expect(normalize([ false ], [ myEntity ])).toMatchSnapshot();
+  });
 });

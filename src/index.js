@@ -5,7 +5,7 @@ import ArraySchema, { normalize as normalizeArray } from './schemas/Array';
 import ObjectSchema, { normalize as normalizeObject } from './schemas/Object';
 
 const visit = (value, parent, key, schema, addEntity) => {
-  if (typeof value !== 'object') {
+  if (typeof value !== 'object' || !value) {
     return value;
   }
 
