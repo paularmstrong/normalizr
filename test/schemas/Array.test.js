@@ -19,4 +19,18 @@ describe(schema.Array.name, () => {
     expect(() => normalize([ { id: 1 } ], [ catSchema, userSchema ])).toThrow();
     expect(() => normalize([ { id: 1 } ], new schema.Array([ catSchema, userSchema ]))).toThrow();
   });
+
+  it('passes it parent to its children when normalizing', () => {
+    const processStrategy = (entity, parent, key) => {
+      return { ...entity, parentId: parent.id, parentKey: key };
+    };
+    const childEntity = new schema.Entity('children', {}, { processStrategy });
+    const parentEntity = new schema.Entity('parents', {
+      children: [ childEntity ]
+    });
+
+    expect(normalize({
+      id: 1, content: 'parent', children: [ { id: 4, content: 'child' } ]
+    }, parentEntity)).toMatchSnapshot()
+  });
 });

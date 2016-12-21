@@ -35,3 +35,28 @@ Object {
   ],
 }
 `;
+
+exports[`ArraySchema passes it parent to its children when normalizing 1`] = `
+Object {
+  "entities": Object {
+    "children": Object {
+      "4": Object {
+        "content": "child",
+        "id": 4,
+        "parentId": 1,
+        "parentKey": 0,
+      },
+    },
+    "parents": Object {
+      "1": Object {
+        "children": Array [
+          4,
+        ],
+        "content": "parent",
+        "id": 1,
+      },
+    },
+  },
+  "result": 1,
+}
+`;

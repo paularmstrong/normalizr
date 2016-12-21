@@ -17,6 +17,8 @@ export default class ArraySchema {
       throw new Error(`Expected array of but found ${typeof input}.`);
     }
 
-    return input.map((value, index) => visit(value, input, index, this.schema, addEntity));
+    // Special case: Arrays pass *their* parent on to their children, since there
+    // is not any special information that can be gathered from themselves directly
+    return input.map((value, index) => visit(value, parent, index, this.schema, addEntity));
   }
 }
