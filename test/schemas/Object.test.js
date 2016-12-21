@@ -10,7 +10,7 @@ describe(schema.Object.name, () => {
     expect(normalize({ user: { id: 1 } }, object)).toMatchSnapshot();
   });
 
-  it(`auto-converts plain objects to ${schema.Object.name}`, () => {
+  it(`normalizes plain objects as shorthand for ${schema.Object.name}`, () => {
     const userSchema = new schema.Entity('user');
     expect(normalize({ user: { id: 1 } }, { user: userSchema })).toMatchSnapshot();
   });

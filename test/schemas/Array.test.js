@@ -8,7 +8,7 @@ describe(schema.Array.name, () => {
     expect(normalize([ { id: 1 }, { id: 2 } ], arraySchema)).toMatchSnapshot();
   });
 
-  it(`auto-converts plain arrays to ${schema.Array.name}`, () => {
+  it(`normalizes plain arrays as shorthand for ${schema.Array.name}`, () => {
     const userSchema = new schema.Entity('user');
     expect(normalize([ { id: 1 }, { id: 2 } ], [ userSchema ])).toMatchSnapshot();
   });

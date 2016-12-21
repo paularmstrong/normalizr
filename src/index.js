@@ -1,8 +1,8 @@
-import ArraySchema from './schemas/Array';
 import EntitySchema from './schemas/Entity';
-import ObjectSchema from './schemas/Object';
 import UnionSchema from './schemas/Union';
 import ValuesSchema from './schemas/Values';
+import ArraySchema, { normalize as normalizeArray } from './schemas/Array';
+import ObjectSchema, { normalize as normalizeObject } from './schemas/Object';
 
 const visit = (value, parent, key, schema, addEntity) => {
   if (typeof value !== 'object') {
@@ -10,11 +10,11 @@ const visit = (value, parent, key, schema, addEntity) => {
   }
 
   if (!schema.normalize || typeof schema.normalize !== 'function' && typeof schema === 'object') {
+    let method = normalizeObject;
     if (Array.isArray(schema)) {
-      schema = new ArraySchema(schema);
-    } else {
-      schema = new ObjectSchema(schema);
+      method = normalizeArray;
     }
+    return method(schema, value, parent, key, visit, addEntity);
   }
 
   return schema.normalize(value, parent, key, visit, addEntity);

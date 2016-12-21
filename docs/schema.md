@@ -15,6 +15,8 @@ const userSchema = new schema.Entity('users');
 const myArray = new schema.Array(userSchema);
 // or
 const myArray = new schema.Array([ userSchema ]);
+// or shorthand
+const myArray = [ userSchema ];
 
 const normalizedData = normalize(data, myArray);
 ```
@@ -66,6 +68,8 @@ const data = { users: [ /*...*/ ] };
 
 const user = new schema.Entity('users')
 const responseSchema = new schema.Object({ users: new schema.Array(user) });
+// or shorthand
+const responseSchema = { users: new schema.Array(user) };
 
 const normalizedData = normalize(data, responseSchema);
 ```

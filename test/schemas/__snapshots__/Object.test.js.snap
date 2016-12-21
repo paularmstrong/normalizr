@@ -1,4 +1,4 @@
-exports[`ObjectSchema auto-converts plain objects to ObjectSchema 1`] = `
+exports[`ObjectSchema normalizes an object 1`] = `
 Object {
   "entities": Object {
     "user": Object {
@@ -13,7 +13,7 @@ Object {
 }
 `;
 
-exports[`ObjectSchema normalizes an object 1`] = `
+exports[`ObjectSchema normalizes plain objects as shorthand for ObjectSchema 1`] = `
 Object {
   "entities": Object {
     "user": Object {
