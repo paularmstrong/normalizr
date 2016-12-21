@@ -1,7 +1,26 @@
 {
   "name": "normalizr",
-  "version": "3.0.0",
-  "description": "",
+  "version": "3.0.0-beta",
+  "description": "Normalizes JSON according to schema for Redux and Flux applications",
+  "bugs": {
+    "url": "https://github.com/paularmstrong/normalizr/issues"
+  },
+  "homepage": "https://github.com/paularmstrong/normalizr",
+  "repository": {
+    "url": "https://github.com/paularmstrong/normalizr.git",
+    "type": "git"
+  },
+  "keywords": [
+    "flux",
+    "redux",
+    "normalize",
+    "api",
+    "json"
+  ],
+  "files": [
+    "dist/",
+    "LICENSE"
+  ],
   "main": "dist/index.js",
   "scripts": {
     "build": "npm run clean && mkdirp dist && npm-run-all --parallel build:development build:production",
@@ -10,6 +29,8 @@
     "clean": "rimraf dist",
     "flow": "flow src; test $? -eq 0 -o $? -eq 2",
     "lint": "eslint ./ --fix",
+    "prebuild": "npm run clean",
+    "prepublish": "npm run build",
     "test": "jest"
   },
   "author": "Paul Armstrong",
