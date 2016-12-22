@@ -229,6 +229,77 @@ AppDispatcher.register((payload) => {
 });
 ```
 
+### Dealing with combined endpoints
+
+Sometimes, especially when dealing with low-bandwidth scenarios, you want to combine what would normally be multiple endpoints into one logical endpoint so that you save several server roundtrips. This works out of the box with normalizr. Let's say you want to get `articles` and `categories` to assemble the homepage of a blog.
+
+For this example's sake the relationship between articles and categories is left out.
+
+You create an endpoint `/homepage.json`, which returns the following JSON:
+
+```json
+{
+  "articles": [
+    {
+      "id": 1,
+      "title": "Some Article"
+    }
+  ],
+  "categories": [
+    {
+      "id": 2,
+      "title": "Some Category"
+    }
+  ]
+}
+```
+
+This is automatically dealt with by `normalizr`:
+
+```js
+import { Schema, arrayOf, normalize } from 'normalizr';
+
+const article = new Schema('article');
+const articles = arrayOf(article);
+
+const category = new Schema('category');
+const categories = arrayOf(category);
+
+/**
+ * Then after receiving your server response:
+ */
+
+const normalizedResponse = normalize(serverResponse, {
+  articles: articles,
+  categories: categories
+});
+```
+
+Rather than storing the array of id's directly in the `result` key, `normalizr` will return them under their respective entity names under the `result` key:
+
+```js
+{
+  result: {
+    articles: [1],
+    categories: [2]
+  },
+  entities: {
+    articles: {
+      1: {
+        id: 1,
+        title: 'Some Article'
+      }
+    },
+    categories: {
+      2: {
+        id: 1,
+        title: 'Some Category'
+      }
+    }
+  }
+}
+```
+
 ## API Reference
 
 ### `new Schema(key, [options])`
