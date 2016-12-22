@@ -11,7 +11,7 @@ export const milestone = new schema.Entity('milestones', {
 export const issue = new schema.Entity('issues', {
   assignee: user,
   assignees: [ user ],
-  label,
+  labels: label,
   milestone,
   user
 });

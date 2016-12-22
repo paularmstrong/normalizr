@@ -1,6 +1,8 @@
 import * as schema from './schema';
+import fs from 'fs';
 import https from 'https';
 import { normalize } from '../../src';
+import path from 'path';
 
 let data = '';
 const request = https.request({
@@ -16,7 +18,9 @@ const request = https.request({
   });
 
   res.on('end', () => {
-    console.log(normalize(JSON.parse(data), [ schema.issue ]));
+    const normalizedData = normalize(JSON.parse(data), [ schema.issue ]);
+    const out = JSON.stringify(normalizedData, null, 2);
+    fs.writeFileSync(path.resolve(__dirname, './output.json'), out);
   });
 
   res.on('error', (e) => {
