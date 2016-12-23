@@ -24,7 +24,8 @@ export default class EntitySchema {
   }
 
   define(definition) {
-    this.schema = Object.entries(definition).reduce((entitySchema, [ key, schema ]) => {
+    this.schema = Object.keys(definition).reduce((entitySchema, key) => {
+      const schema = definition[key];
       return { ...entitySchema, [key]: schema };
     }, this.schema || {});
   }
@@ -39,7 +40,8 @@ export default class EntitySchema {
 
   normalize(input, parent, key, visit, addEntity) {
     const entity = this._processStrategy(input, parent, key);
-    Object.entries(this.schema).forEach(([ key, schema ]) => {
+    Object.keys(this.schema).forEach((key) => {
+      const schema = this.schema[key];
       entity[key] = visit(input[key], input, key, schema, addEntity);
     });
 

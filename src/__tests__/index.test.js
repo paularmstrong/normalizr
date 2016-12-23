@@ -84,7 +84,8 @@ describe('normalize', () => {
 
       normalize(input, parent, key, visit, addEntity) {
         const entity = { ...input };
-        Object.entries(this.schema).forEach(([ key, schema ]) => {
+        Object.keys(this.schema).forEach((key) => {
+          const schema = this.schema[key];
           entity[key] = visit(input[key], input, key, schema, addEntity);
         });
         addEntity(this, entity, parent, key);
