@@ -1,7 +1,8 @@
 export const normalize = (schema, input, parent, key, visit, addEntity) => {
   const object = { ...input };
-  Object.entries(schema).forEach(([ key, schema ]) => {
-    object[key] = visit(input[key], input, key, schema, addEntity);
+  Object.keys(schema).forEach((key) => {
+    const localSchema = schema[key];
+    object[key] = visit(input[key], input, key, localSchema, addEntity);
   });
   return object;
 };
@@ -12,7 +13,8 @@ export default class ObjectSchema {
   }
 
   define(definition) {
-    this.schema = Object.entries(definition).reduce((entitySchema, [ key, schema ]) => {
+    this.schema = Object.keys(definition).reduce((entitySchema, key) => {
+      const schema = definition[key];
       return { ...entitySchema, [key]: schema };
     }, this.schema || {});
   }
