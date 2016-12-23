@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import { normalize, schema } from '../src';
+import { normalize, schema } from '../';
 
 describe('normalize', () => {
   [ 42, null, undefined, '42', () => {} ].forEach((input) => {

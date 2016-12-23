@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import { normalize, schema } from '../../src';
+import { normalize, schema } from '../../';
 
 describe(schema.Union.name, () => {
   it('normalizes an array of multiple entities using string schemaAttribute', () => {

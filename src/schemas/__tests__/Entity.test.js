@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import { normalize, schema } from '../../src';
+import { normalize, schema } from '../../';
 
 describe(schema.Entity.name, () => {
   it('must be created with a key name', () => {

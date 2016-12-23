@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import { normalize, schema } from '../../src';
+import { normalize, schema } from '../../';
 
 describe(schema.Values.name, () => {
   it('normalizes the values of an object with the given schema', () => {
