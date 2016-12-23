@@ -35,6 +35,9 @@
     "test": "jest"
   },
   "author": "Paul Armstrong",
+  "contributors": [
+    "Dan Abramov"
+  ],
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.18.0",
