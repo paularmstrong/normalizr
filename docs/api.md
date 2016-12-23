@@ -20,25 +20,36 @@ const result = normalize(myData, mySchema);
 
 ## `schema`
 
-### `Array(definition)`
+### `Array(definition, schemaAttribute)`
 
 Creates a schema to normalize an array of entities.
 
 * `definition`: **required** A singular schema that this array contains.
+* `schemaAttribute`: **required** The attribute on each entity found that defines what schema, per the definition mapping, to use when normalizing.  
+Can be a string or a function. If given a function, accepts the following arguments:  
+    * `value`: The input value of the entity.
+    * `parent`: The parent object of the input array.
+    * `key`: the key at which the input array appears on the parent object.
 
 #### Usage
 
 ```js
-const data = [ { id: 1 }, { id: 2 } ];
+const data = [ { id: 1, type: 'admin' }, { id: 2, type: 'user' } ];
 
 const userSchema = new schema.Entity('users');
-const myArray = new schema.Array(userSchema);
-// or
-const myArray = new schema.Array([ userSchema ]);
-// or shorthand
-const myArray = [ userSchema ];
+const adminSchema = new schema.Entity('admins');
+const myArray = new schema.Array({
+  admins: adminSchema,
+  users: userSchema
+}, (input, parent, key) => `${input.type}s`);
 
 const normalizedData = normalize(data, myArray);
+```
+
+For simple cases where you know you will have an array of a single Entity, you can use the Array shorthand:
+
+```
+const myArray = [ userSchema ];
 ```
 
 ### `Entity(key, definition = {}, options = {})`

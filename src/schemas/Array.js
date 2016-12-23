@@ -1,3 +1,5 @@
+import UnionSchema from './Union';
+
 const validateSchema = (definition) => {
   const isArray = Array.isArray(definition);
   if (isArray && definition.length > 1) {
@@ -10,26 +12,20 @@ const validateSchema = (definition) => {
 export const normalize = (schema, input, parent, key, visit, addEntity) => {
   schema = validateSchema(schema);
 
-  if (!Array.isArray(input)) {
-    console.log(input);
-    throw new Error(`Expected array of but found ${typeof input}.`);
-  }
+  const values = Array.isArray(input) ? input : Object.values(input);
 
   // Special case: Arrays pass *their* parent on to their children, since there
   // is not any special information that can be gathered from themselves directly
-  return input.map((value, index) => visit(value, parent, index, schema, addEntity));
+  return values.map((value, index) => visit(value, parent, key, schema, addEntity));
 };
 
-export default class ArraySchema {
-  constructor(definition) {
-    this.define(definition);
-  }
+export default class ArraySchema extends UnionSchema {
+  normalize(input, parent, key, visit, addEntity) {
+    const values = Array.isArray(input) ? values : Object.values(input);
 
-  define(definition) {
-    this.schema = definition;
-  }
-
-  normalize(...args) {
-    return normalize(this.schema, ...args);
+    return input.map((value, index) => {
+      const schema = this.inferSchema(value, input, index);
+      return visit(value, parent, key, schema, addEntity);
+    });
   }
 }

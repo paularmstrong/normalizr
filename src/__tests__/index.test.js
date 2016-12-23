@@ -14,9 +14,8 @@ describe('normalize', () => {
 
   it('normalizes entities', () => {
     const mySchema = new schema.Entity('tacos');
-    const inputSchema = new schema.Array(mySchema);
 
-    expect(normalize([ { id: 1, type: 'foo' }, { id: 2, type: 'bar' } ], inputSchema)).toMatchSnapshot();
+    expect(normalize([ { id: 1, type: 'foo' }, { id: 2, type: 'bar' } ], [ mySchema ])).toMatchSnapshot();
   });
 
   it('normalizes nested entities', () => {
@@ -26,7 +25,7 @@ describe('normalize', () => {
     });
     const article = new schema.Entity('articles', {
       author: user,
-      comments: new schema.Array(comment)
+      comments: [ comment ]
     });
 
     const input = {

@@ -13,12 +13,12 @@ export default class UnionSchema {
     this.schema = definition;
   }
 
-  getSchemaAttribute(input, key) {
-    return this._schemaAttribute(input, key);
+  getSchemaAttribute(input, parent, key) {
+    return this._schemaAttribute(input, parent, key);
   }
 
-  inferSchema(input) {
-    const attr = this.getSchemaAttribute(input);
+  inferSchema(input, parent, key) {
+    const attr = this.getSchemaAttribute(input, parent, key);
     const schema = this.schema[attr];
     if (!schema) {
       throw new Error(`No schema found for attribute "${attr}".`);
@@ -32,10 +32,10 @@ export default class UnionSchema {
     }
 
     return input.map((value, index) => {
-      const schema = this.inferSchema(value, index);
+      const schema = this.inferSchema(value, input, index);
       return {
         id: visit(value, input, index, schema, addEntity),
-        schema: schema.getKey(value, input, index)
+        schema: this.getSchemaAttribute(value, input, index)
       };
     });
   }

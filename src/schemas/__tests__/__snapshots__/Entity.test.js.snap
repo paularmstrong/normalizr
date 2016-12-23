@@ -131,13 +131,17 @@ Object {
 exports[`EntitySchema processStrategy can use information from the parent in the process strategy 1`] = `
 Object {
   "entities": Object {
+    "children": Object {
+      "4": Object {
+        "content": "child",
+        "id": 4,
+        "parentId": 1,
+        "parentKey": "child",
+      },
+    },
     "parents": Object {
       "1": Object {
-        "child": undefined,
-        "childKey": Object {
-          "content": "child",
-          "id": 4,
-        },
+        "child": 4,
         "content": "parent",
         "id": 1,
       },

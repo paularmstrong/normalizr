@@ -6,20 +6,20 @@ describe(schema.Union.name, () => {
     const user = new schema.Entity('users');
     const group = new schema.Entity('groups');
     const union = new schema.Union({
-      user: user,
-      group: group
+      users: user,
+      groups: group
     }, 'type');
 
-    expect(normalize([ { id: 1, type: 'user' }, { id: 2, type: 'group' } ], union)).toMatchSnapshot();
+    expect(normalize([ { id: 1, type: 'users' }, { id: 2, type: 'groups' } ], union)).toMatchSnapshot();
   });
 
   it('normalizes an array of multiple entities using a function to infer the schemaAttribute', () => {
     const user = new schema.Entity('users');
     const group = new schema.Entity('groups');
     const union = new schema.Union({
-      user: user,
-      group: group
-    }, (input) => { return input.username ? 'user' : 'group'; });
+      users: user,
+      groups: group
+    }, (input) => { return input.username ? 'users' : 'groups'; });
 
     expect(normalize([ { id: 1, username: 'Janey' }, { id: 2, groupname: 'People' } ], union)).toMatchSnapshot();
   });

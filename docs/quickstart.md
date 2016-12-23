@@ -38,7 +38,7 @@ const comment = new schema.Entity('comments', {
 // Define your article 
 const article = new schema.Entity('articles', { 
   author: user,
-  comments: new schema.Array(comment)
+  comments: [ comment ]
 });
 
 const normalizedData = normalize(originalData, article);

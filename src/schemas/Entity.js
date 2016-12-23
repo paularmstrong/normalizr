@@ -42,8 +42,10 @@ export default class EntitySchema {
   normalize(input, parent, key, visit, addEntity) {
     const processedEntity = this._processStrategy(input, parent, key);
     Object.keys(this.schema).forEach((key) => {
-      const schema = this.schema[key];
-      processedEntity[key] = visit(input[key], input, key, schema, addEntity);
+      if (processedEntity.hasOwnProperty(key) && typeof processedEntity[key] === 'object') {
+        const schema = this.schema[key];
+        processedEntity[key] = visit(input[key], input, key, schema, addEntity);
+      }
     });
 
     addEntity(this, processedEntity, input, parent, key);

@@ -33,13 +33,13 @@ Object {
     "groups": Object {
       "2": Object {
         "id": 2,
-        "type": "group",
+        "type": "groups",
       },
     },
     "users": Object {
       "1": Object {
         "id": 1,
-        "type": "user",
+        "type": "users",
       },
     },
   },

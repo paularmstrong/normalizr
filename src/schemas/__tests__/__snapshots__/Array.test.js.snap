@@ -1,42 +1,135 @@
-exports[`ArraySchema normalizes an array of objects 1`] = `
+exports[`ArraySchema multiple schema normalizes multiple entities 1`] = `
 Object {
   "entities": Object {
-    "item": Object {
-      "1": Object {
-        "id": 1,
+    "cats": Object {
+      "123": Object {
+        "id": "123",
+        "type": "cats",
       },
-      "2": Object {
-        "id": 2,
+      "456": Object {
+        "id": "456",
+        "type": "cats",
+      },
+    },
+    "users": Object {
+      "123": Object {
+        "id": "123",
+        "type": "users",
       },
     },
   },
   "result": Array [
-    1,
-    2,
-  ],
-}
-`;
-
-exports[`ArraySchema normalizes plain arrays as shorthand for ArraySchema 1`] = `
-Object {
-  "entities": Object {
-    "user": Object {
-      "1": Object {
-        "id": 1,
-      },
-      "2": Object {
-        "id": 2,
-      },
+    "123",
+    "123",
+    "456",
+    Object {
+      "id": "789",
     },
-  },
-  "result": Array [
-    1,
-    2,
   ],
 }
 `;
 
-exports[`ArraySchema passes it parent to its children when normalizing 1`] = `
+exports[`ArraySchema multiple schema normalizes multiple entities 2`] = `
+Array [
+  Array [
+    Object {
+      "id": "123",
+      "type": "cats",
+    },
+    Array [
+      Object {
+        "id": "123",
+        "type": "cats",
+      },
+      Object {
+        "id": "123",
+        "type": "users",
+      },
+      Object {
+        "id": "456",
+        "type": "cats",
+      },
+      Object {
+        "id": "789",
+      },
+    ],
+    0,
+  ],
+  Array [
+    Object {
+      "id": "123",
+      "type": "users",
+    },
+    Array [
+      Object {
+        "id": "123",
+        "type": "cats",
+      },
+      Object {
+        "id": "123",
+        "type": "users",
+      },
+      Object {
+        "id": "456",
+        "type": "cats",
+      },
+      Object {
+        "id": "789",
+      },
+    ],
+    1,
+  ],
+  Array [
+    Object {
+      "id": "456",
+      "type": "cats",
+    },
+    Array [
+      Object {
+        "id": "123",
+        "type": "cats",
+      },
+      Object {
+        "id": "123",
+        "type": "users",
+      },
+      Object {
+        "id": "456",
+        "type": "cats",
+      },
+      Object {
+        "id": "789",
+      },
+    ],
+    2,
+  ],
+  Array [
+    Object {
+      "id": "789",
+    },
+    Array [
+      Object {
+        "id": "123",
+        "type": "cats",
+      },
+      Object {
+        "id": "123",
+        "type": "users",
+      },
+      Object {
+        "id": "456",
+        "type": "cats",
+      },
+      Object {
+        "id": "789",
+      },
+    ],
+    3,
+  ],
+]
+`;
+
+exports[`ArraySchema simple Arrays passes its parent to its children when normalizing 1`] = `
 Object {
   "entities": Object {
     "children": Object {
@@ -44,7 +137,7 @@ Object {
         "content": "child",
         "id": 4,
         "parentId": 1,
-        "parentKey": 0,
+        "parentKey": "children",
       },
     },
     "parents": Object {
