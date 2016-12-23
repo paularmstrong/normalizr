@@ -1,3 +1,29 @@
+exports[`normalize can use fully custom entity classes 1`] = `
+Object {
+  "entities": Object {
+    "children": Object {
+      "4": Object {
+        "id": 4,
+        "name": "lettuce",
+      },
+    },
+    "food": Object {
+      "1234": Object {
+        "children": Array [
+          4,
+        ],
+        "name": "tacos",
+        "uuid": "1234",
+      },
+    },
+  },
+  "result": Object {
+    "schema": "food",
+    "uuid": "1234",
+  },
+}
+`;
+
 exports[`normalize ignores null values 1`] = `
 Object {
   "entities": Object {},

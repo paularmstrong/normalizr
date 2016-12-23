@@ -71,4 +71,37 @@ describe('normalize', () => {
     expect(normalize([ undefined ], [ myEntity ])).toMatchSnapshot();
     expect(normalize([ false ], [ myEntity ])).toMatchSnapshot();
   });
+
+  it('can use fully custom entity classes', () => {
+    class MyEntity extends schema.Entity {
+      schema = {
+        children: [ new schema.Entity('children') ]
+      };
+
+      getId(entity, parent, key) {
+        return entity.uuid;
+      }
+
+      normalize(input, parent, key, visit, addEntity) {
+        const entity = { ...input };
+        Object.entries(this.schema).forEach(([ key, schema ]) => {
+          entity[key] = visit(input[key], input, key, schema, addEntity);
+        });
+        addEntity(this, entity, parent, key);
+        return {
+          uuid: this.getId(entity),
+          schema: this.getKey(input, parent, key)
+        };
+      }
+    }
+
+    const mySchema = new MyEntity('food');
+    expect(normalize({
+      uuid: '1234',
+      name: 'tacos',
+      children: [
+        { id: 4, name: 'lettuce' }
+      ]
+    }, mySchema)).toMatchSnapshot();
+  });
 });

@@ -19,16 +19,8 @@ export default class EntitySchema {
     this.define(definition);
   }
 
-  get key() { return this._key; }
-
-  getId(entity, parent, key) { return this._getId(entity, parent, key); }
-
-  merge(entityA, entityB) {
-    return this._mergeStrategy(entityA, entityB);
-  }
-
-  process(entity, parent, key) {
-    return this._processStrategy(entity, parent, key);
+  getKey(entity, parent, key) {
+    return this._key;
   }
 
   define(definition) {
@@ -37,8 +29,16 @@ export default class EntitySchema {
     }, this.schema || {});
   }
 
+  getId(entity, parent, key) {
+    return this._getId(entity, parent, key);
+  }
+
+  merge(entityA, entityB) {
+    return this._mergeStrategy(entityA, entityB);
+  }
+
   normalize(input, parent, key, visit, addEntity) {
-    const entity = this.process(input, parent, key);
+    const entity = this._processStrategy(input, parent, key);
     Object.entries(this.schema).forEach(([ key, schema ]) => {
       entity[key] = visit(input[key], input, key, schema, addEntity);
     });
