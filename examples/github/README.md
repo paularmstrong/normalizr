@@ -1,4 +1,4 @@
-# GitHub Issues
+# Normalizing GitHub Issues
 
 This is a barebones example for node to illustrate how normalizing the GitHub Issues API endpoint could work.
 
