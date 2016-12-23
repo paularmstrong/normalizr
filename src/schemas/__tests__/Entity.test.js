@@ -2,17 +2,26 @@
 import { normalize, schema } from '../../';
 
 describe(schema.Entity.name, () => {
-  it('must be created with a key name', () => {
-    expect(() => new schema.Entity()).toThrow();
-  });
-
-  it('key name must be a string', () => {
-    expect(() => new schema.Entity(42)).toThrow();
-  });
-
   it('normalizes an entity', () => {
     const entity = new schema.Entity('item');
     expect(normalize({ id: 1 }, entity)).toMatchSnapshot();
+  });
+
+  describe('key', () => {
+    it('must be created with a key name', () => {
+      expect(() => new schema.Entity()).toThrow();
+    });
+
+    it('key name must be a string', () => {
+      expect(() => new schema.Entity(42)).toThrow();
+    });
+
+    it('can use a function to infer the key', () => {
+      const inferKey = jest.fn(() => 'tacos');
+      const entity = new schema.Entity(inferKey);
+      expect(normalize({ foo: { id: '4', name: 'bar' } }, { foo: entity })).toMatchSnapshot();
+      expect(inferKey.mock.calls).toMatchSnapshot();
+    });
   });
 
   describe('idAttribute', () => {

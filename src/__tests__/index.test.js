@@ -105,4 +105,24 @@ describe('normalize', () => {
       ]
     }, mySchema)).toMatchSnapshot();
   });
+
+  it('uses the non-normalized input when getting the key for an entity', () => {
+    const userEntity = new schema.Entity('users');
+    const inferKeyFn = jest.fn((nonNormalized, parent, key) => nonNormalized.user.type);
+    const recommendation = new schema.Entity(inferKeyFn, { user: userEntity });
+    expect(normalize({
+      id: '123',user: { id: '456', type: 'user_recommendation' }
+    }, recommendation)).toMatchSnapshot();
+    expect(inferKeyFn.mock.calls).toMatchSnapshot();
+  });
+
+  it('uses the non-normalized input when getting the ID for an entity', () => {
+    const userEntity = new schema.Entity('users');
+    const idAttributeFn = jest.fn((nonNormalized, parent, key) => nonNormalized.user.id);
+    const recommendation = new schema.Entity('recommendations', { user: userEntity }, {
+      idAttribute: idAttributeFn
+    });
+    expect(normalize({  user: { id: '456' } }, recommendation)).toMatchSnapshot();
+    expect(idAttributeFn.mock.calls).toMatchSnapshot();
+  });
 });

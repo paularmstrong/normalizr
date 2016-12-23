@@ -107,3 +107,94 @@ Object {
   "result": "123",
 }
 `;
+
+exports[`normalize uses the non-normalized input when getting the ID for an entity 1`] = `
+Object {
+  "entities": Object {
+    "recommendations": Object {
+      "456": Object {
+        "user": "456",
+      },
+    },
+    "users": Object {
+      "456": Object {
+        "id": "456",
+      },
+    },
+  },
+  "result": "456",
+}
+`;
+
+exports[`normalize uses the non-normalized input when getting the ID for an entity 2`] = `
+Array [
+  Array [
+    Object {
+      "user": Object {
+        "id": "456",
+      },
+    },
+    Object {
+      "user": Object {
+        "id": "456",
+      },
+    },
+    null,
+  ],
+  Array [
+    Object {
+      "user": Object {
+        "id": "456",
+      },
+    },
+    Object {
+      "user": Object {
+        "id": "456",
+      },
+    },
+    null,
+  ],
+]
+`;
+
+exports[`normalize uses the non-normalized input when getting the key for an entity 1`] = `
+Object {
+  "entities": Object {
+    "user_recommendation": Object {
+      "123": Object {
+        "id": "123",
+        "user": "456",
+      },
+    },
+    "users": Object {
+      "456": Object {
+        "id": "456",
+        "type": "user_recommendation",
+      },
+    },
+  },
+  "result": "123",
+}
+`;
+
+exports[`normalize uses the non-normalized input when getting the key for an entity 2`] = `
+Array [
+  Array [
+    Object {
+      "id": "123",
+      "user": Object {
+        "id": "456",
+        "type": "user_recommendation",
+      },
+    },
+    Object {
+      "id": "123",
+      "user": Object {
+        "id": "456",
+        "type": "user_recommendation",
+      },
+    },
+    null,
+  ],
+]
+`;

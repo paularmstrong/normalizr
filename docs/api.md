@@ -4,8 +4,8 @@
 
 Normalizes input data per the schema definition provided.
 
-* `data`: Input JSON (or plain JS object) data that needs normalization.
-* `schema`: A schema definition
+* `data`: **required** Input JSON (or plain JS object) data that needs normalization.
+* `schema`: **required** A schema definition
 
 ### Usage
 
@@ -24,7 +24,7 @@ const result = normalize(myData, mySchema);
 
 Creates a schema to normalize an array of entities.
 
-* `definition`: A singular schema that this array contains.
+* `definition`: **required** A singular schema that this array contains.
 
 #### Usage
 
@@ -43,7 +43,11 @@ const normalizedData = normalize(data, myArray);
 
 ### `Entity(key, definition = {}, options = {})`
 
-* `key`: Required. The key name under which all entities of this type will be listed in the normalized response.
+* `key`: **required** The key name under which all entities of this type will be listed in the normalized response. Can be a string or a function that returns a string.  
+As a function, accepts the following arguments, in order: 
+  - `entity`: the current entity
+  - `parent`: the parent object that holds the entity
+  - `key`: the attribute or index at which the `entity` was found on the `parent`
 * `definition`: A definition of the nested entities found within this entity. Defaults to empty object.  
 You *do not* need to define any keys in your entity other than those that hold nested entities. All other values will be copied to the normalized entity's output.
 * `options`:
@@ -77,7 +81,7 @@ const normalizedData = normalize(data, tweet);
 
 ### `Object(definition)`
 
-* `definition`: A definition of the nested entities found within this object. Defaults to empty object.  
+* `definition`: **required** A definition of the nested entities found within this object. Defaults to empty object.  
 You *do not* need to define any keys in your object other than those that hold other entities. All other values will be copied to the normalized output.
 
 #### Usage
@@ -98,8 +102,8 @@ const normalizedData = normalize(data, responseSchema);
 
 Defines an array that may contain more than one type of entity needing to be normalized.
 
-* `definition`: An object mapping the definition of the nested entities found within the input array
-* `schemaAttribute`: The attribute on each entity found that defines what schema, per the definition mapping, to use when normalizing.  
+* `definition`: **required** An object mapping the definition of the nested entities found within the input array
+* `schemaAttribute`: **required** The attribute on each entity found that defines what schema, per the definition mapping, to use when normalizing.  
 Can be a string or a function. If given a function, accepts the following arguments:  
     * `value`: The input value of the entity
     * `index`: the index at which the entity appears on the parent array.
@@ -123,8 +127,8 @@ const normalizedData = normalize(data, unionSchema);
 
 Defines an object whose values are entities.
 
-* `definition`: An object mapping the definition of the nested entities found within the input array
-* `schemaAttribute`: The attribute on each entity found that defines what schema, per the definition mapping, to use when normalizing.  
+* `definition`: **required** An object mapping the definition of the nested entities found within the input array
+* `schemaAttribute`: **required** The attribute on each entity found that defines what schema, per the definition mapping, to use when normalizing.  
 Can be a string or a function. If given a function, accepts the following arguments:  
     * `value`: The input value of the entity
     * `key`: the key at which the entity appears on the parent object.

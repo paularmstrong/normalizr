@@ -20,7 +20,7 @@ const visit = (value, parent, key, schema, addEntity) => {
   return schema.normalize(value, parent, key, visit, addEntity);
 };
 
-const addEntities = (entities) => (schema, value, parent, key) => {
+const addEntities = (entities) => (schema, processedEntity, value, parent, key) => {
   const schemaKey = schema.getKey(value, parent, key);
   const id = schema.getId(value, parent, key);
   if (!(schemaKey in entities)) {
@@ -29,9 +29,9 @@ const addEntities = (entities) => (schema, value, parent, key) => {
 
   const existingEntity = entities[schemaKey][id];
   if (existingEntity) {
-    entities[schemaKey][id] = schema.merge(existingEntity, value);
+    entities[schemaKey][id] = schema.merge(existingEntity, processedEntity);
   } else {
-    entities[schemaKey][id] = value;
+    entities[schemaKey][id] = processedEntity;
   }
 };
 

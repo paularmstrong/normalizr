@@ -1,7 +1,8 @@
 export default class EntitySchema {
   constructor(key, definition = {}, options = {}) {
-    if (!key || typeof key !== 'string') {
-      throw new Error('A string non-empty key is required');
+    const keyIsFunction = typeof key === 'function';
+    if (!key || typeof key !== 'string' && !keyIsFunction) {
+      throw new Error('A string or function is required to return the entity key.');
     }
 
     const {
@@ -12,15 +13,15 @@ export default class EntitySchema {
       processStrategy = (input) => ({ ...input })
     } = options;
 
-    this._key = key;
+    this._getKey = keyIsFunction ? key : () => key;
     this._getId = typeof idAttribute === 'function' ? idAttribute : (input) => input[idAttribute];
     this._mergeStrategy = mergeStrategy;
     this._processStrategy = processStrategy;
     this.define(definition);
   }
 
-  getKey(entity, parent, key) {
-    return this._key;
+  getKey(input, parent, key) {
+    return this._getKey(input, parent, key);
   }
 
   define(definition) {
@@ -30,8 +31,8 @@ export default class EntitySchema {
     }, this.schema || {});
   }
 
-  getId(entity, parent, key) {
-    return this._getId(entity, parent, key);
+  getId(input, parent, key) {
+    return this._getId(input, parent, key);
   }
 
   merge(entityA, entityB) {
@@ -39,13 +40,13 @@ export default class EntitySchema {
   }
 
   normalize(input, parent, key, visit, addEntity) {
-    const entity = this._processStrategy(input, parent, key);
+    const processedEntity = this._processStrategy(input, parent, key);
     Object.keys(this.schema).forEach((key) => {
       const schema = this.schema[key];
-      entity[key] = visit(input[key], input, key, schema, addEntity);
+      processedEntity[key] = visit(input[key], input, key, schema, addEntity);
     });
 
-    addEntity(this, entity, parent, key);
-    return this.getId(entity, parent, key);
+    addEntity(this, processedEntity, input, parent, key);
+    return this.getId(input, parent, key);
   }
 }
