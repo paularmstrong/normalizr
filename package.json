@@ -19,7 +19,8 @@
   ],
   "files": [
     "dist/",
-    "LICENSE"
+    "LICENSE",
+    "README.md"
   ],
   "main": "dist/index.js",
   "scripts": {

@@ -1,7 +1,5 @@
 # normalizr [![build status](https://img.shields.io/travis/paularmstrong/normalizr/master.svg?style=flat-square)](https://travis-ci.org/paularmstrong/normalizr) [![npm version](https://img.shields.io/npm/v/normalizr.svg?style=flat-square)](https://www.npmjs.com/package/normalizr) [![npm downloads](https://img.shields.io/npm/dm/normalizr.svg?style=flat-square)](https://www.npmjs.com/package/normalizr)
 
-## In-Progress normalizr@3.0.0
-
 ## Motivation
 
 Many APIs, public or not, return JSON data that has deeply nested objects. Using data in this kind of structure is often [very difficult](https://groups.google.com/forum/#!topic/reactjs/jbh50-GJxpg) for JavaScript applications, especially those using [Flux](http://facebook.github.io/flux/) or [Redux](http://redux.js.org/).
@@ -10,7 +8,19 @@ Many APIs, public or not, return JSON data that has deeply nested objects. Using
 
 Normalizr is a small, but powerful utility for taking JSON with a schema definition and returning nested entities with their IDs, gathered in dictionaries.
 
-## Example and Quick Start
+## Documentation
+
+* [Introduction](/docs/introduction.md)
+* [Quick Start](/docs/quickstart.md)
+* [API](/docs/api.md)
+    - [normalize](/docs/api.md#normalize)
+    - [schema](/docs/api.md#schema)
+
+## Examples
+
+* [GitHub Issues](/examples/github)
+
+## Quick Start
 
 Consider a typical blog post. The API response for a single post might look something like this:
 
