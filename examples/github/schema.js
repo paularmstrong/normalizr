@@ -15,3 +15,16 @@ export const issue = new schema.Entity('issues', {
   milestone,
   user
 });
+
+export const pullRequest = new schema.Entity('pullRequests', {
+  assignee: user,
+  assignees: [ user ],
+  labels: label,
+  milestone,
+  user
+});
+
+export const issueOrPullRequest = new schema.Array({
+  issues: issue,
+  pullRequests: pullRequest
+}, (entity) => entity.pull_request ? 'pullRequests' : 'issues');

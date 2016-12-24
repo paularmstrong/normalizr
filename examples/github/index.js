@@ -18,7 +18,7 @@ const request = https.request({
   });
 
   res.on('end', () => {
-    const normalizedData = normalize(JSON.parse(data), [ schema.issue ]);
+    const normalizedData = normalize(JSON.parse(data), schema.issueOrPullRequest);
     const out = JSON.stringify(normalizedData, null, 2);
     fs.writeFileSync(path.resolve(__dirname, './output.json'), out);
   });
