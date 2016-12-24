@@ -147,7 +147,7 @@ Can be a string or a function. If given a function, accepts the following argume
 #### Usage
 
 ```js
-const data = [ { id: 1, type: 'user' }, { id: 2, type: 'group' } ];
+const data = { owner: { id: 1, type: 'user' } };
 
 const user = new schema.Entity('users');
 const group = new schema.Entity('groups');

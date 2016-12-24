@@ -9,10 +9,6 @@ export default class UnionSchema extends PolymorphicSchema {
   }
 
   normalize(input, parent, key, visit, addEntity) {
-    if (!Array.isArray(input)) {
-      throw new Error(`Expected array of but found ${typeof input}.`);
-    }
-
-    return input.map((value, index) => this.normalizeValue(value, input, index, visit, addEntity));
+    return this.normalizeValue(input, parent, key, visit, addEntity);
   }
 }
