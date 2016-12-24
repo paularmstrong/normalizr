@@ -124,4 +124,11 @@ describe('normalize', () => {
     expect(normalize({ user: { id: '456' } }, recommendation)).toMatchSnapshot();
     expect(idAttributeFn.mock.calls).toMatchSnapshot();
   });
+
+  it('passes over pre-normalized values', () => {
+    const userEntity = new schema.Entity('users');
+    const articleEntity = new schema.Entity('articles', { author: userEntity });
+
+    expect(normalize({ id: '123', title: 'normalizr is great!', author: 1 }, articleEntity)).toMatchSnapshot();
+  });
 });

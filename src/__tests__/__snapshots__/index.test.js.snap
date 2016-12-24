@@ -108,6 +108,21 @@ Object {
 }
 `;
 
+exports[`normalize passes over pre-normalized values 1`] = `
+Object {
+  "entities": Object {
+    "articles": Object {
+      "123": Object {
+        "author": 1,
+        "id": "123",
+        "title": "normalizr is great!",
+      },
+    },
+  },
+  "result": "123",
+}
+`;
+
 exports[`normalize uses the non-normalized input when getting the ID for an entity 1`] = `
 Object {
   "entities": Object {
