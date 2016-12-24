@@ -1,5 +1,13 @@
 # API
 
+* [normalize](#normalizedata-schema)
+* [schema](#schema)
+  - [Array](#arraydefinition-schemaattribute)
+  - [Entity](#entitykey-definition-options)
+  - [Object](#objectdefinition)
+  - [Values](#valuesdefinition-schemaattribute)
+  - [Union](#uniondefinition-schemaattribute)
+
 ## `normalize(data, schema)`
 
 Normalizes input data per the schema definition provided.
