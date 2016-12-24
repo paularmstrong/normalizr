@@ -156,7 +156,7 @@ const unionSchema = new schema.Union({
   group: group
 }, 'type');
 
-const normalizedData = normalize(data, unionSchema);
+const normalizedData = normalize(data, { owner: unionSchema });
 ```
 
 ### `Values(definition, schemaAttribute)`
