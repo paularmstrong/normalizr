@@ -1,4 +1,4 @@
-import UnionSchema from './Union';
+import PolymorphicSchema from './Polymorphic';
 
 const validateSchema = (definition) => {
   const isArray = Array.isArray(definition);
@@ -19,13 +19,10 @@ export const normalize = (schema, input, parent, key, visit, addEntity) => {
   return values.map((value, index) => visit(value, parent, key, schema, addEntity));
 };
 
-export default class ArraySchema extends UnionSchema {
+export default class ArraySchema extends PolymorphicSchema {
   normalize(input, parent, key, visit, addEntity) {
     const values = Array.isArray(input) ? values : Object.values(input);
 
-    return input.map((value, index) => {
-      const schema = this.inferSchema(value, input, index);
-      return visit(value, parent, key, schema, addEntity);
-    });
+    return input.map((value, index) => this.normalizeValue(value, parent, key, visit, addEntity));
   }
 }

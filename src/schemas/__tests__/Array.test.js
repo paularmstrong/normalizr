@@ -2,7 +2,7 @@
 import { normalize, schema } from '../../';
 
 describe(schema.Array.name, () => {
-  describe('simple Arrays', () => {
+  describe('Object', () => {
     it('does a thing', () => {
       it(`normalizes plain arrays as shorthand for ${schema.Array.name}`, () => {
         const userSchema = new schema.Entity('user');
@@ -31,22 +31,28 @@ describe(schema.Array.name, () => {
     });
   });
 
-  describe('multiple schema', () => {
+  describe('Class', () => {
+    it('normalizes a single entity', () => {
+      const cats = new schema.Entity('cats');
+      const listSchema = new schema.Array(cats);
+      expect(normalize([ { id: 1 }, { id: 2 } ], listSchema)).toMatchSnapshot();
+    });
+
     it('normalizes multiple entities', () => {
       const inferSchemaFn = jest.fn((input, parent, key) => input.type || 'dogs');
-      const userSchema = new schema.Entity('users');
       const catSchema = new schema.Entity('cats');
+      const peopleSchema = new schema.Entity('person');
       const listSchema = new schema.Array({
-        users: userSchema,
         cats: catSchema,
-        dogs: {}
+        dogs: {},
+        people: peopleSchema
       }, inferSchemaFn);
 
       expect(normalize([
         { type: 'cats', id: '123' },
-        { type: 'users', id: '123' },
-        { type: 'cats', id: '456' },
-        { id: '789' }
+        { type: 'people', id: '123' },
+        { id: '789' },
+        { type: 'cats', id: '456' }
       ], listSchema)).toMatchSnapshot();
       expect(inferSchemaFn.mock.calls).toMatchSnapshot();
     });

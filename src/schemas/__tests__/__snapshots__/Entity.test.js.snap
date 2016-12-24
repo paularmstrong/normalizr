@@ -28,8 +28,14 @@ Object {
     },
   },
   "result": Object {
-    "4": "4",
-    "56": "56",
+    "4": Object {
+      "id": "4",
+      "schema": "users",
+    },
+    "56": Object {
+      "id": "56",
+      "schema": "users",
+    },
   },
 }
 `;

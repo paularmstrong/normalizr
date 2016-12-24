@@ -110,7 +110,7 @@ describe('normalize', () => {
     const inferKeyFn = jest.fn((nonNormalized, parent, key) => nonNormalized.user.type);
     const recommendation = new schema.Entity(inferKeyFn, { user: userEntity });
     expect(normalize({
-      id: '123',user: { id: '456', type: 'user_recommendation' }
+      id: '123', user: { id: '456', type: 'user_recommendation' }
     }, recommendation)).toMatchSnapshot();
     expect(inferKeyFn.mock.calls).toMatchSnapshot();
   });
@@ -121,7 +121,7 @@ describe('normalize', () => {
     const recommendation = new schema.Entity('recommendations', { user: userEntity }, {
       idAttribute: idAttributeFn
     });
-    expect(normalize({  user: { id: '456' } }, recommendation)).toMatchSnapshot();
+    expect(normalize({ user: { id: '456' } }, recommendation)).toMatchSnapshot();
     expect(idAttributeFn.mock.calls).toMatchSnapshot();
   });
 });

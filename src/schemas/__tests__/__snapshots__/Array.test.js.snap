@@ -1,4 +1,23 @@
-exports[`ArraySchema multiple schema normalizes multiple entities 1`] = `
+exports[`ArraySchema Class normalizes a single entity 1`] = `
+Object {
+  "entities": Object {
+    "cats": Object {
+      "1": Object {
+        "id": 1,
+      },
+      "2": Object {
+        "id": 2,
+      },
+    },
+  },
+  "result": Array [
+    1,
+    2,
+  ],
+}
+`;
+
+exports[`ArraySchema Class normalizes multiple entities 1`] = `
 Object {
   "entities": Object {
     "cats": Object {
@@ -11,25 +30,37 @@ Object {
         "type": "cats",
       },
     },
-    "users": Object {
+    "person": Object {
       "123": Object {
         "id": "123",
-        "type": "users",
+        "type": "people",
       },
     },
   },
   "result": Array [
-    "123",
-    "123",
-    "456",
     Object {
-      "id": "789",
+      "id": "123",
+      "schema": "cats",
+    },
+    Object {
+      "id": "123",
+      "schema": "people",
+    },
+    Object {
+      "id": Object {
+        "id": "789",
+      },
+      "schema": "dogs",
+    },
+    Object {
+      "id": "456",
+      "schema": "cats",
     },
   ],
 }
 `;
 
-exports[`ArraySchema multiple schema normalizes multiple entities 2`] = `
+exports[`ArraySchema Class normalizes multiple entities 2`] = `
 Array [
   Array [
     Object {
@@ -43,22 +74,22 @@ Array [
       },
       Object {
         "id": "123",
-        "type": "users",
+        "type": "people",
+      },
+      Object {
+        "id": "789",
       },
       Object {
         "id": "456",
         "type": "cats",
       },
-      Object {
-        "id": "789",
-      },
     ],
-    0,
+    null,
   ],
   Array [
     Object {
       "id": "123",
-      "type": "users",
+      "type": "cats",
     },
     Array [
       Object {
@@ -67,17 +98,111 @@ Array [
       },
       Object {
         "id": "123",
-        "type": "users",
+        "type": "people",
+      },
+      Object {
+        "id": "789",
       },
       Object {
         "id": "456",
         "type": "cats",
       },
+    ],
+    null,
+  ],
+  Array [
+    Object {
+      "id": "123",
+      "type": "people",
+    },
+    Array [
+      Object {
+        "id": "123",
+        "type": "cats",
+      },
+      Object {
+        "id": "123",
+        "type": "people",
+      },
       Object {
         "id": "789",
       },
+      Object {
+        "id": "456",
+        "type": "cats",
+      },
     ],
-    1,
+    null,
+  ],
+  Array [
+    Object {
+      "id": "123",
+      "type": "people",
+    },
+    Array [
+      Object {
+        "id": "123",
+        "type": "cats",
+      },
+      Object {
+        "id": "123",
+        "type": "people",
+      },
+      Object {
+        "id": "789",
+      },
+      Object {
+        "id": "456",
+        "type": "cats",
+      },
+    ],
+    null,
+  ],
+  Array [
+    Object {
+      "id": "789",
+    },
+    Array [
+      Object {
+        "id": "123",
+        "type": "cats",
+      },
+      Object {
+        "id": "123",
+        "type": "people",
+      },
+      Object {
+        "id": "789",
+      },
+      Object {
+        "id": "456",
+        "type": "cats",
+      },
+    ],
+    null,
+  ],
+  Array [
+    Object {
+      "id": "789",
+    },
+    Array [
+      Object {
+        "id": "123",
+        "type": "cats",
+      },
+      Object {
+        "id": "123",
+        "type": "people",
+      },
+      Object {
+        "id": "789",
+      },
+      Object {
+        "id": "456",
+        "type": "cats",
+      },
+    ],
+    null,
   ],
   Array [
     Object {
@@ -91,21 +216,22 @@ Array [
       },
       Object {
         "id": "123",
-        "type": "users",
+        "type": "people",
+      },
+      Object {
+        "id": "789",
       },
       Object {
         "id": "456",
         "type": "cats",
       },
-      Object {
-        "id": "789",
-      },
     ],
-    2,
+    null,
   ],
   Array [
     Object {
-      "id": "789",
+      "id": "456",
+      "type": "cats",
     },
     Array [
       Object {
@@ -114,22 +240,22 @@ Array [
       },
       Object {
         "id": "123",
-        "type": "users",
+        "type": "people",
+      },
+      Object {
+        "id": "789",
       },
       Object {
         "id": "456",
         "type": "cats",
       },
-      Object {
-        "id": "789",
-      },
     ],
-    3,
+    null,
   ],
 ]
 `;
 
-exports[`ArraySchema simple Arrays passes its parent to its children when normalizing 1`] = `
+exports[`ArraySchema Object passes its parent to its children when normalizing 1`] = `
 Object {
   "entities": Object {
     "children": Object {

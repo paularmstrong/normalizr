@@ -1,6 +1,6 @@
-import UnionSchema from './Union';
+import PolymorphicSchema from './Polymorphic';
 
-export default class ValuesSchema extends UnionSchema {
+export default class ValuesSchema extends PolymorphicSchema {
   normalize(input, parent, key, visit, addEntity) {
     if (typeof input !== 'object') {
       throw new Error(`Expected object of but found ${typeof input}.`);
@@ -8,8 +8,10 @@ export default class ValuesSchema extends UnionSchema {
 
     return Object.keys(input).reduce((output, key, index) => {
       const value = input[key];
-      const schema = this.inferSchema(value, key);
-      return { ...output, [key]: visit(value, input, key, schema, addEntity) };
+      return {
+        ...output,
+        [key]: this.normalizeValue(value, input, key, visit, addEntity)
+      };
     }, {});
   }
 }

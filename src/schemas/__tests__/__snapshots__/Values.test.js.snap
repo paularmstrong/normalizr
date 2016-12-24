@@ -15,8 +15,14 @@ Object {
     },
   },
   "result": Object {
-    "fido": 1,
-    "fluffy": 1,
+    "fido": Object {
+      "id": 1,
+      "schema": "dogs",
+    },
+    "fluffy": Object {
+      "id": 1,
+      "schema": "cats",
+    },
   },
 }
 `;
@@ -38,8 +44,14 @@ Object {
     },
   },
   "result": Object {
-    "fido": 1,
-    "fluffy": 1,
+    "fido": Object {
+      "id": 1,
+      "schema": "dogs",
+    },
+    "fluffy": Object {
+      "id": 1,
+      "schema": "cats",
+    },
   },
 }
 `;
