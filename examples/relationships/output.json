@@ -1,0 +1,83 @@
+{
+  "entities": {
+    "users": {
+      "123": {
+        "id": "123",
+        "name": "Paul",
+        "posts": [
+          "1",
+          "2"
+        ],
+        "comments": [
+          "250"
+        ]
+      },
+      "245": {
+        "id": "245",
+        "name": "Jane",
+        "comments": [
+          "249",
+          "251"
+        ],
+        "posts": []
+      },
+      "246": {
+        "id": "246",
+        "name": "Spambot5000",
+        "comments": [
+          "252"
+        ]
+      }
+    },
+    "comments": {
+      "249": {
+        "id": "249",
+        "content": "Nice post!",
+        "commenter": "245",
+        "post": "1"
+      },
+      "250": {
+        "id": "250",
+        "content": "Thanks!",
+        "commenter": "123",
+        "post": "1"
+      },
+      "251": {
+        "id": "251",
+        "content": "Your other post was nicer",
+        "commenter": "245",
+        "post": "2"
+      },
+      "252": {
+        "id": "252",
+        "content": "I am a spammer!",
+        "commenter": "246",
+        "post": "2"
+      }
+    },
+    "posts": {
+      "1": {
+        "id": "1",
+        "title": "My first post!",
+        "author": "123",
+        "comments": [
+          "249",
+          "250"
+        ]
+      },
+      "2": {
+        "id": "2",
+        "title": "This other post",
+        "author": "123",
+        "comments": [
+          "251",
+          "252"
+        ]
+      }
+    }
+  },
+  "result": [
+    "1",
+    "2"
+  ]
+}
