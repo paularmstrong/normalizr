@@ -6,3 +6,4 @@
 * [API](/docs/api.md)
     - [normalize](/docs/api.md#normalize)
     - [schema](/docs/api.md#schema)
+* [Frequently Asked Questions](/docs/faqs.md)
