@@ -34,8 +34,6 @@ const main = () => {
         'Browse current state',
         'Get new data',
         new inquirer.Separator(),
-        'Reset state',
-        new inquirer.Separator(),
         'Quit'
       ]
     }
@@ -45,8 +43,6 @@ const main = () => {
         return browseMain();
       case 'Get new data':
         return pull();
-      case 'Reset state':
-        return reset();
       default:
         return process.exit();
     }
@@ -161,10 +157,6 @@ const pull = () => {
         return main();
     }
   });
-};
-
-const reset = () => {
-
 };
 
 start();

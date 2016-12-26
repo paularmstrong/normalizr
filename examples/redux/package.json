@@ -15,7 +15,6 @@
     "babel-preset-stage-1": "^6.16.0",
     "github": "^7.1.0",
     "inquirer": "^2.0.0",
-    "meow": "^3.7.0",
     "redux": "^3.6.0",
     "redux-thunk": "^2.1.0"
   }
