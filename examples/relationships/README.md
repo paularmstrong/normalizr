@@ -2,6 +2,8 @@
 
 Occasionally, it is useful to have all one-to-one, one-to-many, and many-to-many relationship data on entities. Normalizr does not handle this automatically, but this example shows a simple way of adding relationship handling on a special-case basis.
 
+## Running
+
 ```sh
 # from the root directory:
 yarn
