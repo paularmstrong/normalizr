@@ -1,3 +1,6 @@
+<!--
+Thank you so much for contributing to open source and the Normalizr project!
+-->
 # Problem
 
 Explain the problem that this pull request aims to resolve.
@@ -8,6 +11,6 @@ Explain your approach. Sometimes it helps to justify your approach against some 
 
 # TODO
 
-*Fill in the following:*
-
-- [ ] Add & Update Tests
+- [ ] Add & update tests
+- [ ] Ensure CI is passing (lint, tests, flow)
+- [ ] Update relevant documentation
