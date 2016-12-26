@@ -9,7 +9,7 @@ const start = () => {
     {
       type: 'input',
       name: 'repo',
-      message: 'What is the slug of the repo you wish to browse?',
+      message: 'What is the slug of the repo you wish to browseMain?',
       default: REPO,
       validate: (input) => {
         if (!(/^[a-zA-Z0-9]+\/[a-zA-Z0-9]+/).test(input)) {
@@ -40,9 +40,9 @@ const main = () => {
       ]
     }
   ]).then(({ action }) => {
-    switch(action) {
+    switch (action) {
       case 'Browse current state':
-        return browse();
+        return browseMain();
       case 'Get new data':
         return pull();
       case 'Reset state':
@@ -53,38 +53,114 @@ const main = () => {
   });
 };
 
-const browse = () => {
+const browseMain = () => {
   return inquirer.prompt([
     {
       type: 'list',
-      name: 'browseAction',
+      name: 'browseMainAction',
       message: 'What would you like to do?',
       choices: () => {
         return [
           { value: 'print', name: 'Print the entire state tree' },
           new inquirer.Separator(),
-          ...Object.keys(store.getState()).map((value) => ({ value, name: `Print the "${value}" state` })),
+          ...Object.keys(store.getState()).map((value) => ({ value, name: `Browse ${value}` })),
           new inquirer.Separator(),
           { value: 'main', name: 'Go Back to Main Menu' }
         ];
       }
     }
   ]).then((answers) => {
-    switch(answers.browseAction) {
+    switch (answers.browseMainAction) {
       case 'main':
         return main();
       case 'print':
         console.log(JSON.stringify(store.getState(), null, 2));
-        return browse();
+        return browseMain();
       default:
-        console.log(JSON.stringify(store.getState()[answers.browseAction], null, 2));
-        return browse();
+        return browse(answers.browseMainAction);
     }
   });
 };
 
-const pull = ({ repo }) => {
+const browse = (stateKey) => {
+  return inquirer.prompt([
+    {
+      type: 'list',
+      name: 'action',
+      message: `Browse ${stateKey}`,
+      choices: [
+        { value: 'count', name: 'Show # of Objects' },
+        { value: 'keys', name: 'List All Keys' },
+        { value: 'view', name: 'View by Key' },
+        { value: 'all', name: 'View All' },
+        new inquirer.Separator(),
+        { value: 'browseMain', name: 'Go Back to Browse Menu' },
+        { value: 'main', name: 'Go Back to Main Menu' }
+      ]
+    },
+    {
+      type: 'list',
+      name: 'list',
+      message: `Select the ${stateKey} to view:`,
+      choices: Object.keys(store.getState()[stateKey]),
+      when: ({ action }) => action === 'view'
+    }
+  ]).then(({ action, list }) => {
+    const state = store.getState()[stateKey];
+    if (list) {
+      console.log(JSON.stringify(state[list], null, 2));
+    }
+    switch (action) {
+      case 'count':
+        console.log(`-> ${Object.keys(state).length} items.`);
+        return browse(stateKey);
+      case 'keys':
+        Object.keys(state).map((key) => console.log(key));
+        return browse(stateKey);
+      case 'all':
+        console.log(JSON.stringify(state, null, 2));
+        return browse(stateKey);
+      case 'browseMain':
+        return browseMain();
+      case 'main':
+        return main();
+      default:
+        return browse(stateKey);
+    }
+  });
+};
 
+const pull = () => {
+  return inquirer.prompt([
+    {
+      type: 'list',
+      name: 'pullAction',
+      message: 'What data would you like to fetch?',
+      choices: () => {
+        return [
+          ...Object.keys(store.getState()).map((value) => ({ value, name: value })),
+          new inquirer.Separator(),
+          { value: 'main', name: 'Go Back to Main Menu' }
+        ];
+      }
+    }
+  ]).then((answers) => {
+    switch (answers.pullAction) {
+      case 'commits':
+        return store.dispatch(Action.getCommits()).then(pull);
+      case 'issues':
+        return store.dispatch(Action.getIssues()).then(pull);
+      case 'labels':
+        return store.dispatch(Action.getLabels()).then(pull);
+      case 'milestones':
+        return store.dispatch(Action.getMilestones()).then(pull);
+      case 'pullRequests':
+        return store.dispatch(Action.getPullRequests()).then(pull);
+      case 'main':
+      default:
+        return main();
+    }
+  });
 };
 
 const reset = () => {
