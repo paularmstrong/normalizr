@@ -1,4 +1,4 @@
-export default function reducer(state, action) {
+export default function reducer(state = {}, action) {
   switch (action.type) {
     case Action.ADD_ISSUES:
       return {

@@ -1,6 +1,6 @@
 export default function reducer(state = {}, action) {
   switch (action.type) {
-    case Action.ADD_COMMENTS:
+    case Action.SET_REPO:
       return {
         ...state,
         ...action.payload
@@ -12,10 +12,10 @@ export default function reducer(state = {}, action) {
 }
 
 const Action = {
-  ADD_COMMENTS: 'ADD_COMMENTS'
+  SET_REPO: 'SET_REPO'
 };
 
-export const addComments = (issues) => ({
-  type: Action.ADD_COMMENTS,
-  payload: issues
+export const setRepo = (repo) => ({
+  type: Action.SET_REPO,
+  payload: { repo }
 });
