@@ -174,3 +174,25 @@ Object {
   "result": 1,
 }
 `;
+
+exports[`EntitySchema processStrategy is run before and passed to the schema normalization 1`] = `
+Object {
+  "entities": Object {
+    "attachments": Object {
+      "456": Object {
+        "id": "456",
+      },
+    },
+    "entries": Object {
+      "123": Object {
+        "data": Object {
+          "attachment": "456",
+        },
+        "id": "123",
+        "type": "message",
+      },
+    },
+  },
+  "result": "123",
+}
+`;
