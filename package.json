@@ -19,10 +19,12 @@
   ],
   "files": [
     "dist/",
+    "index.d.ts",
     "LICENSE",
     "README.md"
   ],
   "main": "dist/index.js",
+  "typings": "index.d.ts",
   "scripts": {
     "build": "npm run clean && mkdirp dist && npm-run-all --parallel build:development build:production",
     "build:development": "NODE_ENV=development rollup -c",
@@ -56,6 +58,8 @@
     "rollup": "^0.37.0",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-filesize": "^1.0.1",
-    "rollup-plugin-uglify": "^1.0.1"
+    "rollup-plugin-uglify": "^1.0.1",
+    "typescript": "^2.1.4",
+    "typescript-definition-tester": "0.0.5"
   }
 }
