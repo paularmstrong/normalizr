@@ -36,7 +36,7 @@ export default class PolymorphicSchema {
   normalizeValue(value, parent, key, visit, addEntity) {
     const schema = this.inferSchema(value, parent, key);
     const normalizedValue = visit(value, parent, key, schema, addEntity);
-    return this.isSingleSchema ?
+    return this.isSingleSchema || normalizedValue === undefined || normalizedValue === null ?
       normalizedValue :
       { id: normalizedValue, schema: this.getSchemaAttribute(value, parent, key) };
   }

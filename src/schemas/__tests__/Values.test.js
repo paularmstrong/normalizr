@@ -38,4 +38,19 @@ describe(schema.Values.name, () => {
 
     expect(() => normalize({ fluffy: { id: 1, type: 'cat' } }, valuesSchema)).toThrow();
   });
+
+  it('filters out null and undefined values', () => {
+    const cat = new schema.Entity('cats');
+    const dog = new schema.Entity('dogs');
+    const valuesSchema = new schema.Values({
+      dogs: dog,
+      cats: cat
+    }, (entity, key) => entity.type);
+
+    expect(normalize({
+      fido: undefined,
+      milo: null,
+      fluffy: { id: 1, type: 'cats' }
+    }, valuesSchema)).toMatchSnapshot();
+  });
 });

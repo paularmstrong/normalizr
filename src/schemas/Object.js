@@ -2,7 +2,12 @@ export const normalize = (schema, input, parent, key, visit, addEntity) => {
   const object = { ...input };
   Object.keys(schema).forEach((key) => {
     const localSchema = schema[key];
-    object[key] = visit(input[key], input, key, localSchema, addEntity);
+    const value = visit(input[key], input, key, localSchema, addEntity);
+    if (value === undefined || value === null) {
+      delete object[key];
+    } else {
+      object[key] = value;
+    }
   });
   return object;
 };

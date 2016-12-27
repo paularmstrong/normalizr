@@ -23,6 +23,7 @@ export default class ArraySchema extends PolymorphicSchema {
   normalize(input, parent, key, visit, addEntity) {
     const values = Array.isArray(input) ? input : Object.values(input);
 
-    return values.map((value, index) => this.normalizeValue(value, parent, key, visit, addEntity));
+    return values.map((value, index) => this.normalizeValue(value, parent, key, visit, addEntity))
+      .filter((value) => value !== undefined && value !== null);
   }
 }

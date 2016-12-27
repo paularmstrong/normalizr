@@ -1,3 +1,18 @@
+exports[`ArraySchema Class filters out undefined and null normalized values 1`] = `
+Object {
+  "entities": Object {
+    "user": Object {
+      "123": Object {
+        "id": 123,
+      },
+    },
+  },
+  "result": Array [
+    123,
+  ],
+}
+`;
+
 exports[`ArraySchema Class normalizes Objects using their values 1`] = `
 Object {
   "entities": Object {
