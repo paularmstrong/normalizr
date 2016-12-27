@@ -6,3 +6,5 @@ script:
   - npm run flow
   - npm run test
   - npm run build
+after_success:
+  - npm run test:coverage

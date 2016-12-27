@@ -32,7 +32,8 @@
     "lint": "eslint ./ --fix",
     "prebuild": "npm run clean",
     "prepublish": "npm run build",
-    "test": "jest"
+    "test": "jest",
+    "test:coverage": "npm run test -- --coverage && cat ./coverage/lcov.info | coveralls"
   },
   "author": "Paul Armstrong",
   "contributors": [
@@ -45,6 +46,7 @@
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-es2015-rollup": "^3.0.0",
     "babel-preset-stage-1": "^6.16.0",
+    "coveralls": "^2.11.15",
     "eslint": "^3.12.2",
     "flow-bin": "^0.37.1",
     "jest": "^18.0.0",
