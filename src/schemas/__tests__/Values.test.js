@@ -29,4 +29,13 @@ describe(schema.Values.name, () => {
       fluffy: { id: 1, type: 'cat' }
     }, valuesSchema)).toMatchSnapshot();
   });
+
+  it('throws if cannot find a matching schema', () => {
+    const dog = new schema.Entity('dogs');
+    const valuesSchema = new schema.Values({
+      dogs: dog
+    }, (entity) => `${entity.type}s`);
+
+    expect(() => normalize({ fluffy: { id: 1, type: 'cat' } }, valuesSchema)).toThrow();
+  });
 });

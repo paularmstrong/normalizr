@@ -106,6 +106,24 @@ Object {
 }
 `;
 
+exports[`EntitySchema mergeStrategy defaults to plain merging 1`] = `
+Object {
+  "entities": Object {
+    "tacos": Object {
+      "1": Object {
+        "alias": "bar",
+        "id": 1,
+        "name": "bar",
+      },
+    },
+  },
+  "result": Array [
+    1,
+    1,
+  ],
+}
+`;
+
 exports[`EntitySchema normalizes an entity 1`] = `
 Object {
   "entities": Object {

@@ -48,6 +48,14 @@ describe(schema.Entity.name, () => {
   });
 
   describe('mergeStrategy', () => {
+    it('defaults to plain merging', () => {
+      const mySchema = new schema.Entity('tacos');
+      expect(normalize([
+        { id: 1, name: 'foo' },
+        { id: 1, name: 'bar', alias: 'bar' }
+      ], [ mySchema ])).toMatchSnapshot();
+    });
+
     it('can use a custom merging strategy', () => {
       const mergeStrategy = (entityA, entityB) => {
         return { ...entityA, ...entityB, name: entityA.name };

@@ -3,11 +3,9 @@ import { normalize, schema } from '../../';
 
 describe(schema.Array.name, () => {
   describe('Object', () => {
-    it('does a thing', () => {
-      it(`normalizes plain arrays as shorthand for ${schema.Array.name}`, () => {
-        const userSchema = new schema.Entity('user');
-        expect(normalize([ { id: 1 }, { id: 2 } ], [ userSchema ])).toMatchSnapshot();
-      });
+    it(`normalizes plain arrays as shorthand for ${schema.Array.name}`, () => {
+      const userSchema = new schema.Entity('user');
+      expect(normalize([ { id: 1 }, { id: 2 } ], [ userSchema ])).toMatchSnapshot();
     });
 
     it('throws an error if created with more than one schema', () => {
@@ -28,6 +26,11 @@ describe(schema.Array.name, () => {
       expect(normalize({
         id: 1, content: 'parent', children: [ { id: 4, content: 'child' } ]
       }, parentEntity)).toMatchSnapshot();
+    });
+
+    it('normalizes Objects using their values', () => {
+      const userSchema = new schema.Entity('user');
+      expect(normalize({ foo: { id: 1 }, bar: { id: 2 } }, [ userSchema ])).toMatchSnapshot();
     });
   });
 
@@ -55,6 +58,12 @@ describe(schema.Array.name, () => {
         { type: 'cats', id: '456' }
       ], listSchema)).toMatchSnapshot();
       expect(inferSchemaFn.mock.calls).toMatchSnapshot();
+    });
+
+    it('normalizes Objects using their values', () => {
+      const userSchema = new schema.Entity('user');
+      const users = new schema.Array(userSchema);
+      expect(normalize({ foo: { id: 1 }, bar: { id: 2 } }, users)).toMatchSnapshot();
     });
   });
 });

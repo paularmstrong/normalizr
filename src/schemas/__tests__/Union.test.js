@@ -2,6 +2,10 @@
 import { normalize, schema } from '../../';
 
 describe(schema.Union.name, () => {
+  it('throws if not given a schemaAttribute', () => {
+    expect(() => new schema.Union({})).toThrow();
+  });
+
   it('normalizes an object using string schemaAttribute', () => {
     const user = new schema.Entity('users');
     const group = new schema.Entity('groups');

@@ -1,3 +1,22 @@
+exports[`ArraySchema Class normalizes Objects using their values 1`] = `
+Object {
+  "entities": Object {
+    "user": Object {
+      "1": Object {
+        "id": 1,
+      },
+      "2": Object {
+        "id": 2,
+      },
+    },
+  },
+  "result": Array [
+    1,
+    2,
+  ],
+}
+`;
+
 exports[`ArraySchema Class normalizes a single entity 1`] = `
 Object {
   "entities": Object {
@@ -253,6 +272,44 @@ Array [
     null,
   ],
 ]
+`;
+
+exports[`ArraySchema Object normalizes Objects using their values 1`] = `
+Object {
+  "entities": Object {
+    "user": Object {
+      "1": Object {
+        "id": 1,
+      },
+      "2": Object {
+        "id": 2,
+      },
+    },
+  },
+  "result": Array [
+    1,
+    2,
+  ],
+}
+`;
+
+exports[`ArraySchema Object normalizes plain arrays as shorthand for ArraySchema 1`] = `
+Object {
+  "entities": Object {
+    "user": Object {
+      "1": Object {
+        "id": 1,
+      },
+      "2": Object {
+        "id": 2,
+      },
+    },
+  },
+  "result": Array [
+    1,
+    2,
+  ],
+}
 `;
 
 exports[`ArraySchema Object passes its parent to its children when normalizing 1`] = `

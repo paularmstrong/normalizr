@@ -9,7 +9,7 @@ const visit = (value, parent, key, schema, addEntity) => {
     return value;
   }
 
-  if (!schema.normalize || typeof schema.normalize !== 'function' && typeof schema === 'object') {
+  if (typeof schema === 'object' && (!schema.normalize || typeof schema.normalize !== 'function')) {
     let method = normalizeObject;
     if (Array.isArray(schema)) {
       method = normalizeArray;

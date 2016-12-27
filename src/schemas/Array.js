@@ -6,7 +6,7 @@ const validateSchema = (definition) => {
     throw new Error(`Expected schema definition to be a single schema, but found ${definition.length}.`);
   }
 
-  return isArray ? definition[0] : definition;
+  return definition[0];
 };
 
 export const normalize = (schema, input, parent, key, visit, addEntity) => {
@@ -21,8 +21,8 @@ export const normalize = (schema, input, parent, key, visit, addEntity) => {
 
 export default class ArraySchema extends PolymorphicSchema {
   normalize(input, parent, key, visit, addEntity) {
-    const values = Array.isArray(input) ? values : Object.values(input);
+    const values = Array.isArray(input) ? input : Object.values(input);
 
-    return input.map((value, index) => this.normalizeValue(value, parent, key, visit, addEntity));
+    return values.map((value, index) => this.normalizeValue(value, parent, key, visit, addEntity));
   }
 }
