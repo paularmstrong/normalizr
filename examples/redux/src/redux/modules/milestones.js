@@ -1,29 +1,21 @@
 import * as Repo from './repos';
 import { normalize } from '../../../../../src';
+import { ADD_ENTITIES, addEntities } from '../actions';
 
 export const STATE_KEY = 'milestones';
 
 export default function reducer(state = {}, action) {
   switch (action.type) {
-    case Action.ADD_MILESTONES:
+    case ADD_ENTITIES:
       return {
         ...state,
-        ...action.payload
+        ...action.payload.milestones
       };
 
     default:
       return state;
   }
 }
-
-const Action = {
-  ADD_MILESTONES: 'ADD_MILESTONES'
-};
-
-export const addMilestones = (milestones = {}) => ({
-  type: Action.ADD_MILESTONES,
-  payload: milestones
-});
 
 export const getMilestones = ({ page = 0 } = {}) => (dispatch, getState, { api, schema }) => {
   const state = getState();
@@ -34,7 +26,7 @@ export const getMilestones = ({ page = 0 } = {}) => (dispatch, getState, { api, 
     repo
   }).then((response) => {
     const data = normalize(response, [ schema.milestone ]);
-    dispatch(addMilestones(data.entities.milestones));
+    dispatch(addEntities(data.entities));
     return response;
   }).catch((error) => {
     console.error(error);

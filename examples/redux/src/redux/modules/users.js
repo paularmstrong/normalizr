@@ -1,9 +1,11 @@
+import { ADD_ENTITIES } from '../actions';
+
 export const STATE_KEY = 'users';
 
 export default function reducer(state = {}, action) {
   switch (action.type) {
-    case Action.ADD_USERS:
-      return Object.entries(action.payload).reduce((mergedUsers, [ id, user ]) => {
+    case ADD_ENTITIES:
+      return Object.entries(action.payload.users).reduce((mergedUsers, [ id, user ]) => {
         return {
           ...mergedUsers,
           [id]: {
@@ -17,12 +19,3 @@ export default function reducer(state = {}, action) {
       return state;
   }
 }
-
-const Action = {
-  ADD_USERS: 'ADD_USERS'
-};
-
-export const addUsers = (users = {}) => ({
-  type: Action.ADD_USERS,
-  payload: users
-});

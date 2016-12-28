@@ -1,29 +1,21 @@
 import * as Repo from './repos';
 import { normalize } from '../../../../../src';
+import { ADD_ENTITIES, addEntities } from '../actions';
 
 export const STATE_KEY = 'labels';
 
 export default function reducer(state = {}, action) {
   switch (action.type) {
-    case Action.ADD_LABELS:
+    case ADD_ENTITIES:
       return {
         ...state,
-        ...action.payload
+        ...action.payload.labels
       };
 
     default:
       return state;
   }
 }
-
-const Action = {
-  ADD_LABELS: 'ADD_LABELS'
-};
-
-export const addLabels = (labels = {}) => ({
-  type: Action.ADD_LABELS,
-  payload: labels
-});
 
 export const getLabels = ({ page = 0 } = {}) => (dispatch, getState, { api, schema }) => {
   const state = getState();
@@ -34,7 +26,7 @@ export const getLabels = ({ page = 0 } = {}) => (dispatch, getState, { api, sche
     repo
   }).then((response) => {
     const data = normalize(response, [ schema.label ]);
-    dispatch(addLabels(data.entities.labels));
+    dispatch(addEntities(data.entities));
     return response;
   }).catch((error) => {
     console.error(error);
