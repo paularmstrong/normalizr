@@ -656,7 +656,7 @@
         "created_at": "2016-12-21T15:42:53Z",
         "updated_at": "2016-12-22T14:57:41Z",
         "closed_at": null,
-        "body": "# Problem\r\n\r\n@paularmstrong doesn't know typescript and is too lazy to learn\r\n\r\n# Solution\r\n\r\nTry to get someone from the community donate a little time adding a typescript definition file and tests for the [v3.0.0 branch](https://github.com/paularmstrong/normalizr/tree/normalizr3) before launch"
+        "body": "# Problem\r\n\r\n@paularmstrong doesn't know typescript and is too lazy to learn\r\n\r\n# Solution\r\n\r\nTry to get someone from the community donate a little time adding a typescript definition file and tests for the [v3.0.0 branch](https://github.com/paularmstrong/normalizr/tree/master) before launch"
       }
     },
     "pullRequests": {
