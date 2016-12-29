@@ -71,11 +71,7 @@ const normalizedData = normalize(data, myArray);
 
 ### `Entity(key, definition = {}, options = {})`
 
-* `key`: **required** The key name under which all entities of this type will be listed in the normalized response. Can be a string or a function that returns a string.  
-As a function, accepts the following arguments, in order: 
-  * `value`: The input value of the entity.
-  * `parent`: The parent object of the input array.
-  * `key`: The key at which the input array appears on the parent object.
+* `key`: **required** The key name under which all entities of this type will be listed in the normalized response. Must be a string name.
 * `definition`: A definition of the nested entities found within this entity. Defaults to empty object.  
 You *do not* need to define any keys in your entity other than those that hold nested entities. All other values will be copied to the normalized entity's output.
 * `options`:

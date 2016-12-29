@@ -21,7 +21,7 @@ const visit = (value, parent, key, schema, addEntity) => {
 };
 
 const addEntities = (entities) => (schema, processedEntity, value, parent, key) => {
-  const schemaKey = schema.getKey(value, parent, key);
+  const schemaKey = schema.key;
   const id = schema.getId(value, parent, key);
   if (!(schemaKey in entities)) {
     entities[schemaKey] = {};

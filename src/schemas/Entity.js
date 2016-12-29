@@ -1,8 +1,7 @@
 export default class EntitySchema {
   constructor(key, definition = {}, options = {}) {
-    const keyIsFunction = typeof key === 'function';
-    if (!key || typeof key !== 'string' && !keyIsFunction) {
-      throw new Error('A string or function is required to return the entity key.');
+    if (!key || typeof key !== 'string') {
+      throw new Error(`Expected a string key for Entity, but found ${key}.`);
     }
 
     const {
@@ -13,15 +12,15 @@ export default class EntitySchema {
       processStrategy = (input) => ({ ...input })
     } = options;
 
-    this._getKey = keyIsFunction ? key : () => key;
+    this._key = key;
     this._getId = typeof idAttribute === 'function' ? idAttribute : (input) => input[idAttribute];
     this._mergeStrategy = mergeStrategy;
     this._processStrategy = processStrategy;
     this.define(definition);
   }
 
-  getKey(input, parent, key) {
-    return this._getKey(input, parent, key);
+  get key() {
+    return this._key;
   }
 
   define(definition) {

@@ -54,40 +54,6 @@ Object {
 }
 `;
 
-exports[`EntitySchema key can use a function to infer the key 1`] = `
-Object {
-  "entities": Object {
-    "tacos": Object {
-      "4": Object {
-        "id": "4",
-        "name": "bar",
-      },
-    },
-  },
-  "result": Object {
-    "foo": "4",
-  },
-}
-`;
-
-exports[`EntitySchema key can use a function to infer the key 2`] = `
-Array [
-  Array [
-    Object {
-      "id": "4",
-      "name": "bar",
-    },
-    Object {
-      "foo": Object {
-        "id": "4",
-        "name": "bar",
-      },
-    },
-    "foo",
-  ],
-]
-`;
-
 exports[`EntitySchema mergeStrategy can use a custom merging strategy 1`] = `
 Object {
   "entities": Object {

@@ -15,13 +15,6 @@ describe(schema.Entity.name, () => {
     it('key name must be a string', () => {
       expect(() => new schema.Entity(42)).toThrow();
     });
-
-    it('can use a function to infer the key', () => {
-      const inferKey = jest.fn(() => 'tacos');
-      const entity = new schema.Entity(inferKey);
-      expect(normalize({ foo: { id: '4', name: 'bar' } }, { foo: entity })).toMatchSnapshot();
-      expect(inferKey.mock.calls).toMatchSnapshot();
-    });
   });
 
   describe('idAttribute', () => {
