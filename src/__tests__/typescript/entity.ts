@@ -1,0 +1,20 @@
+import { normalize, schema } from '../../../index';
+
+const data = {/*...*/};
+const user = new schema.Entity('users', {}, { idAttribute: 'id_str' });
+const tweet = new schema.Entity('tweets', { user: user }, {
+    idAttribute: 'id_str',
+    // Apply everything from entityB over entityA, except for "favorites"
+    mergeStrategy: (entityA, entityB) => ({
+      ...entityA,
+      ...entityB,
+      favorites: entityA.favorites
+    }),
+    // Remove the URL field from the entity
+    processStrategy: (entity) => {
+      const {url, ...entityWithoutUrl} = entity;
+      return entityWithoutUrl;
+    }
+});
+
+const normalizedData = normalize(data, tweet);
