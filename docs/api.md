@@ -41,6 +41,10 @@ Can be a string or a function. If given a function, accepts the following argume
     * `parent`: The parent object of the input array.
     * `key`: The key at which the input array appears on the parent object.
 
+#### Instance Methods
+
+* `define(definition)`: When used, the `definition` passed in will be merged with the original definition passed to the `Array` constructor. This method tends to be useful for creating circular references in schema.
+
 #### Usage
 
 To describe a simple array of a singular entity type:
@@ -89,6 +93,11 @@ You *do not* need to define any keys in your entity other than those that hold n
       * `parent`: The parent object of the input array.
       * `key`: The key at which the input array appears on the parent object.
 
+#### Instance Methods
+
+* `define(definition)`: When used, the `definition` passed in will be merged with the original definition passed to the `Entity` constructor. This method tends to be useful for creating circular references in schema.
+* `key`: Returns the key provided to the constructor.
+
 #### Usage
 
 ```js
@@ -115,6 +124,10 @@ Define a plain object mapping that has values needing to be normalized into Enti
 * `definition`: **required** A definition of the nested entities found within this object. Defaults to empty object.  
 You *do not* need to define any keys in your object other than those that hold other entities. All other values will be copied to the normalized output.
 
+#### Instance Methods
+
+* `define(definition)`: When used, the `definition` passed in will be merged with the original definition passed to the `Object` constructor. This method tends to be useful for creating circular references in schema.
+
 #### Usage
 
 ```js
@@ -139,6 +152,10 @@ Can be a string or a function. If given a function, accepts the following argume
   * `value`: The input value of the entity.
   * `parent`: The parent object of the input array.
   * `key`: The key at which the input array appears on the parent object.
+
+#### Instance Methods
+
+* `define(definition)`: When used, the `definition` passed in will be merged with the original definition passed to the `Union` constructor. This method tends to be useful for creating circular references in schema.
 
 #### Usage
 
@@ -165,6 +182,10 @@ Can be a string or a function. If given a function, accepts the following argume
   * `value`: The input value of the entity.
   * `parent`: The parent object of the input array.
   * `key`: The key at which the input array appears on the parent object.
+
+#### Instance Methods
+
+* `define(definition)`: When used, the `definition` passed in will be merged with the original definition passed to the `Values` constructor. This method tends to be useful for creating circular references in schema.
 
 #### Usage
 
