@@ -86,7 +86,7 @@ You *do not* need to define any keys in your entity other than those that hold n
       * `parent`: The parent object of the input array.
       * `key`: The key at which the input array appears on the parent object.
     - `mergeStrategy(entityA, entityB)`: Strategy to use when merging two entities with the same `id` value. Defaults to merge the more recently found entity onto the previous.
-    - `processStrategy(value parent, key)`: Strategy to use when pre-processing the entity. Use this method to add extra data, defaults, and/or completely change the entity before normalization is complete. Defaults to returning a shallow copy of the input entity.  
+    - `processStrategy(value, parent, key)`: Strategy to use when pre-processing the entity. Use this method to add extra data, defaults, and/or completely change the entity before normalization is complete. Defaults to returning a shallow copy of the input entity.  
     *Note: It is recommended to always return a copy of your input and not modify the original.*  
     The function accepts the following arguments, in order: 
       * `value`: The input value of the entity.
