@@ -83,7 +83,7 @@ Now, `normalizedData` will be:
       }
     },
     "users": {
-      "1": { "id": "1", "name": "Paul" }
+      "1": { "id": "1", "name": "Paul" },
       "2": { "id": "2", "name": "Nicole" }
     },
     "comments": {
