@@ -1,6 +1,12 @@
 # Contributing
 
-## Submitting a Pull Request
+## Issues
+
+1. Follow the [Issue Template](/.github/ISSUE_TEMPLATE.md) provided when opening a new Issue.
+2. Provide a minimal, reproducible test-case.
+3. Do not ask for help or usage questions in Issues. Use [StackOverflow](http://stackoverflow.com/questions/tagged/normalizr) for those.
+
+## Pull Requests
 
 First, thank you so much for contributing to open source and the Normalizr project!
 
