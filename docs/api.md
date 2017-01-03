@@ -20,10 +20,10 @@ Normalizes input data per the schema definition provided.
 ```js
 import { normalize, schema } from 'normalizr';
 
-const myData = { ... };
+const myData = { users: [ { id: 1 }, { id: 2 } ] };
 const user = new schema.Entity('users');
 const mySchema = { users: [ user ] }
-const result = normalize(myData, mySchema);
+const normalizedData = normalize(myData, mySchema);
 ```
 
 ## `schema`
@@ -56,6 +56,24 @@ const userSchema = new schema.Entity('users');
 const userListSchema = new schema.Array(userSchema);
 // or use shorthand syntax:
 const userListSchema = [ userSchema ];
+
+const normalizedData = normalize(data, userListSchema);
+```
+
+#### Output
+
+```js
+{
+  entities: {
+    users: {
+      '123': { id: '123', name: 'Jim' },
+      '456': { id: '456', name: 'Jane' }
+    }
+  },
+  result: {
+    users: [ '123', '456' ]
+  }
+}
 ```
 
 If your input data is an array of more than one type of entity, it is necessary to define a schema mapping. For example:
@@ -71,6 +89,21 @@ const myArray = new schema.Array({
 }, (input, parent, key) => `${input.type}s`);
 
 const normalizedData = normalize(data, myArray);
+```
+
+#### Output
+
+```js
+{
+  entities: {
+    admins: { '1': { id: 1, type: 'admin' } },
+    users: { '2': { id: 2, type: 'user' } }
+  },
+  result: [
+    { id: 1, schema: 'admins' },
+    { id: 2, schema: 'users' }
+  ]
+}
 ```
 
 ### `Entity(key, definition = {}, options = {})`
@@ -101,6 +134,8 @@ You *do not* need to define any keys in your entity other than those that hold n
 #### Usage
 
 ```js
+const data = { id_str: '123', url: 'https://twitter.com', user: { id_str: '456', name: 'Jimmy' } };
+
 const user = new schema.Entity('users', {}, { idAttribute: 'id_str' });
 const tweet = new schema.Entity('tweets', { user: user }, { 
     idAttribute: 'id_str',
@@ -115,6 +150,18 @@ const tweet = new schema.Entity('tweets', { user: user }, {
 });
 
 const normalizedData = normalize(data, tweet);
+```
+
+#### Output
+
+```js
+{
+  entities: {
+    tweets: { '123': { id_str: '123', user: '456' } },
+    users: { '456': { id_str: '456', name: 'Jimmy' } }
+  },
+  result: '123'
+}
 ```
 
 ### `Object(definition)`
@@ -132,14 +179,25 @@ You *do not* need to define any keys in your object other than those that hold o
 
 ```js
 // Example data response
-const data = { users: [ /*...*/ ] };
+const data = { users: [ { id: '123', name: 'Beth' } ] };
 
-const user = new schema.Entity('users')
+const user = new schema.Entity('users');
 const responseSchema = new schema.Object({ users: new schema.Array(user) });
 // or shorthand
 const responseSchema = { users: new schema.Array(user) };
 
 const normalizedData = normalize(data, responseSchema);
+```
+
+#### Output
+
+```js
+{
+  entities: {
+    users: { '123': { id_str: '123', name: 'Beth' } }
+  },
+  result: { users: [ '123' ] }
+}
 ```
 
 ### `Union(definition, schemaAttribute)`
@@ -160,7 +218,7 @@ Can be a string or a function. If given a function, accepts the following argume
 #### Usage
 
 ```js
-const data = { owner: { id: 1, type: 'user' } };
+const data = { owner: { id: 1, type: 'user', name: 'Anne' } };
 
 const user = new schema.Entity('users');
 const group = new schema.Entity('groups');
@@ -170,6 +228,17 @@ const unionSchema = new schema.Union({
 }, 'type');
 
 const normalizedData = normalize(data, { owner: unionSchema });
+```
+
+#### Output
+
+```js
+{
+  entities: {
+    users: { '1': { id: 1, type: 'user', name: 'Anne' } }
+  },
+  result: { owner: { id: 1, schema: 'user' } }
+}
 ```
 
 ### `Values(definition, schemaAttribute)`
@@ -196,4 +265,15 @@ const item = new schema.Entity('items');
 const valuesSchema = new schema.Values(item);
 
 const normalizedData = normalize(data, valuesSchema);
+```
+
+#### Output
+
+```js
+{
+  entities: {
+    items: { '1': { id: 1 }, '2': { id: 2 } }
+  },
+  result: { firstThing: 1, secondThing: 2 }
+}
 ```
