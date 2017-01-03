@@ -9,10 +9,12 @@ const validateSchema = (definition) => {
   return definition[0];
 };
 
+const getValues = (input) => Array.isArray(input) ? input : Object.keys(input).map((key) => input[key]);
+
 export const normalize = (schema, input, parent, key, visit, addEntity) => {
   schema = validateSchema(schema);
 
-  const values = Array.isArray(input) ? input : Object.values(input);
+  const values = getValues(input);
 
   // Special case: Arrays pass *their* parent on to their children, since there
   // is not any special information that can be gathered from themselves directly
@@ -21,7 +23,7 @@ export const normalize = (schema, input, parent, key, visit, addEntity) => {
 
 export default class ArraySchema extends PolymorphicSchema {
   normalize(input, parent, key, visit, addEntity) {
-    const values = Array.isArray(input) ? input : Object.values(input);
+    const values = getValues(input);
 
     return values.map((value, index) => this.normalizeValue(value, parent, key, visit, addEntity))
       .filter((value) => value !== undefined && value !== null);
