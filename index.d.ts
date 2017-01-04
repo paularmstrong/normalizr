@@ -1,6 +1,7 @@
 declare namespace schema {
-  export type SchemaFunction = (value: any, parent: any, key: string) => string
-  export type MergeFunction = (entityA: any, entityB: any) => any
+  export type StrategyFunction = (value: any, parent: any, key: string) => any;
+  export type SchemaFunction = (value: any, parent: any, key: string) => string;
+  export type MergeFunction = (entityA: any, entityB: any) => any;
 
   export class Array {
     constructor(definition: Schema, schemaAttribute?: string | SchemaFunction)
@@ -10,7 +11,7 @@ declare namespace schema {
   export interface EntityOptions {
     idAttribute?: string | SchemaFunction
     mergeStrategy?: MergeFunction
-    processStrategy?: SchemaFunction
+    processStrategy?: StrategyFunction
   }
 
   export class Entity {
