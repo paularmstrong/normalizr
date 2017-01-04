@@ -1,5 +1,5 @@
 declare namespace schema {
-  export type SchemaFunction = (value: any, parent: any, key: string) => string
+  export type SchemaFunction = (value: any, parent: any, key: string) => any
   export type MergeFunction = (entityA: any, entityB: any) => any
 
   export class Array {
