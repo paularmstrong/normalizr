@@ -70,9 +70,7 @@ const normalizedData = normalize(data, userListSchema);
       '456': { id: '456', name: 'Jane' }
     }
   },
-  result: {
-    users: [ '123', '456' ]
-  }
+  result: [ '123', '456' ]
 }
 ```
 
