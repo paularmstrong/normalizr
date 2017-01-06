@@ -23,6 +23,10 @@ Object {
       "id": 1,
       "schema": "cats",
     },
+    "jim": Object {
+      "id": 2,
+      "type": "lizard",
+    },
   },
 }
 `;

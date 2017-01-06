@@ -47,14 +47,13 @@ describe(schema.Array.name, () => {
       const peopleSchema = new schema.Entity('person');
       const listSchema = new schema.Array({
         cats: catSchema,
-        dogs: {},
         people: peopleSchema
       }, inferSchemaFn);
 
       expect(normalize([
         { type: 'cats', id: '123' },
         { type: 'people', id: '123' },
-        { id: '789' },
+        { id: '789', name: 'fido' },
         { type: 'cats', id: '456' }
       ], listSchema)).toMatchSnapshot();
       expect(inferSchemaFn.mock.calls).toMatchSnapshot();

@@ -24,9 +24,10 @@ describe(schema.Union.name, () => {
     const union = new schema.Union({
       users: user,
       groups: group
-    }, (input) => { return input.username ? 'users' : 'groups'; });
+    }, (input) => { return input.username ? 'users' : input.groupname ? 'groups' : null; });
 
     expect(normalize({ id: 1, username: 'Janey' }, union)).toMatchSnapshot();
     expect(normalize({ id: 2, groupname: 'People' }, union)).toMatchSnapshot();
+    expect(normalize({ id: 3, notdefined: 'yep' }, union)).toMatchSnapshot();
   });
 });

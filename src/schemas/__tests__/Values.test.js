@@ -26,17 +26,9 @@ describe(schema.Values.name, () => {
 
     expect(normalize({
       fido: { id: 1, type: 'dog' },
-      fluffy: { id: 1, type: 'cat' }
+      fluffy: { id: 1, type: 'cat' },
+      jim: { id: 2, type: 'lizard' }
     }, valuesSchema)).toMatchSnapshot();
-  });
-
-  it('throws if cannot find a matching schema', () => {
-    const dog = new schema.Entity('dogs');
-    const valuesSchema = new schema.Values({
-      dogs: dog
-    }, (entity) => `${entity.type}s`);
-
-    expect(() => normalize({ fluffy: { id: 1, type: 'cat' } }, valuesSchema)).toThrow();
   });
 
   it('filters out null and undefined values', () => {

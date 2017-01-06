@@ -26,15 +26,14 @@ export default class PolymorphicSchema {
     }
 
     const attr = this.getSchemaAttribute(input, parent, key);
-    const schema = this.schema[attr];
-    if (!schema) {
-      throw new Error(`No schema found for attribute "${attr}".`);
-    }
-    return schema;
+    return this.schema[attr];
   }
 
   normalizeValue(value, parent, key, visit, addEntity) {
     const schema = this.inferSchema(value, parent, key);
+    if (!schema) {
+      return value;
+    }
     const normalizedValue = visit(value, parent, key, schema, addEntity);
     return this.isSingleSchema || normalizedValue === undefined || normalizedValue === null ?
       normalizedValue :
