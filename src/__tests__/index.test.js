@@ -129,6 +129,10 @@ describe('denormalize', () => {
     expect(() => denormalize({})).toThrow();
   });
 
+  it('returns the input if falsy', () => {
+    expect(denormalize(false, {}, {})).toBe(false);
+  });
+
   it('denormalizes entities', () => {
     const mySchema = new schema.Entity('tacos');
     const entities = {

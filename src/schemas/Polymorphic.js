@@ -42,7 +42,7 @@ export default class PolymorphicSchema {
 
   denormalizeValue(value, unvisit, entities) {
     if (!this.isSingleSchema && !value.schema) {
-      throw new Error(`Unable to denormalize polymorphic schema. No definition found for ${JSON.stringify(value)}`);
+      return value;
     }
     const schema = this.isSingleSchema ? this.schema : this.schema[value.schema];
     return unvisit(value.id || value, schema, entities);

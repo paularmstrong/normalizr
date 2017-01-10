@@ -30,6 +30,12 @@ Object {
 }
 `;
 
+exports[`UnionSchema denormalization returns the original value no schema is given 1`] = `
+Object {
+  "id": 1,
+}
+`;
+
 exports[`UnionSchema normalization normalizes an array of multiple entities using a function to infer the schemaAttribute 1`] = `
 Object {
   "entities": Object {

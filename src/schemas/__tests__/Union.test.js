@@ -63,4 +63,13 @@ describe(`${schema.Union.name} denormalization`, () => {
     expect(denormalize({ id: 1, schema: 'users' }, union, entities)).toMatchSnapshot();
     expect(denormalize({ id: 2, schema: 'groups' }, union, entities)).toMatchSnapshot();
   });
+
+  it('returns the original value no schema is given', () => {
+    const union = new schema.Union({
+      users: user,
+      groups: group
+    }, (input) => { return input.username ? 'users' : 'groups'; });
+
+    expect(denormalize({ id: 1 }, union, entities)).toMatchSnapshot();
+  });
 });

@@ -43,6 +43,6 @@ describe(`${schema.Object.name} denormalization`, () => {
         1: { id: 1, name: 'Jane' }
       }
     };
-    expect(denormalize({ user: 1 }, { user: userSchema }, entities)).toMatchSnapshot();
+    expect(denormalize({ user: 1 }, { user: userSchema, tacos: {} }, entities)).toMatchSnapshot();
   });
 });

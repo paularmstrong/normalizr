@@ -109,4 +109,42 @@ describe(`${schema.Entity.name} denormalization`, () => {
     };
     expect(denormalize(1, mySchema, entities)).toMatchSnapshot();
   });
+
+  it('denormalizes deep entities', () => {
+    const foodSchema = new schema.Entity('foods');
+    const menuSchema = new schema.Entity('menus', {
+      food: foodSchema
+    });
+
+    const entities = {
+      menus: {
+        1: { id: 1, food: 1 },
+        2: { id: 2 }
+      },
+      foods: {
+        1: { id: 1 }
+      }
+    };
+
+    expect(denormalize(1, menuSchema, entities)).toMatchSnapshot();
+    expect(denormalize(2, menuSchema, entities)).toMatchSnapshot();
+  });
+
+  it('can denormalize already partially denormalized data', () => {
+    const foodSchema = new schema.Entity('foods');
+    const menuSchema = new schema.Entity('menus', {
+      food: foodSchema
+    });
+
+    const entities = {
+      menus: {
+        1: { id: 1, food: { id: 1 } }
+      },
+      foods: {
+        1: { id: 1 }
+      }
+    };
+
+    expect(denormalize(1, menuSchema, entities)).toMatchSnapshot();
+  });
 });
