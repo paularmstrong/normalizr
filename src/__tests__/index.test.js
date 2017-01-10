@@ -123,7 +123,6 @@ describe('normalize', () => {
   });
 });
 
-
 describe('denormalize', () => {
   it('cannot denormalize without a schema', () => {
     expect(() => denormalize({})).toThrow();

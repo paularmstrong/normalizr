@@ -1,5 +1,6 @@
 import * as Repo from './repos';
-import { normalize } from '../../../../../src';
+import { milestone } from '../../api/schema';
+import { denormalize, normalize } from '../../../../../src';
 import { ADD_ENTITIES, addEntities } from '../actions';
 
 export const STATE_KEY = 'milestones';
@@ -32,3 +33,5 @@ export const getMilestones = ({ page = 0 } = {}) => (dispatch, getState, { api, 
     console.error(error);
   });
 };
+
+export const selectHydrated = (state, id) => denormalize(id, milestone, state);

@@ -1,5 +1,6 @@
 import * as Repo from './repos';
-import { normalize } from '../../../../../src';
+import { denormalize, normalize } from '../../../../../src';
+import { pullRequest } from '../../api/schema';
 import { ADD_ENTITIES, addEntities } from '../actions';
 
 export const STATE_KEY = 'pullRequests';
@@ -32,3 +33,5 @@ export const getPullRequests = ({ page = 0 } = {}) => (dispatch, getState, { api
     console.error(error);
   });
 };
+
+export const selectHydrated = (state, id) => denormalize(id, pullRequest, state);
