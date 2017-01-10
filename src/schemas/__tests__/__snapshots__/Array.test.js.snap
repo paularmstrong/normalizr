@@ -1,4 +1,50 @@
-exports[`ArraySchema Class filters out undefined and null normalized values 1`] = `
+exports[`ArraySchema denormalization Class denormalizes a single entity 1`] = `
+Array [
+  Object {
+    "id": 1,
+    "name": "Milo",
+  },
+  Object {
+    "id": 2,
+    "name": "Jake",
+  },
+]
+`;
+
+exports[`ArraySchema denormalization Class denormalizes multiple entities 1`] = `
+Array [
+  Object {
+    "id": "123",
+    "type": "cats",
+  },
+  Object {
+    "id": "123",
+    "type": "people",
+  },
+  Object {
+    "id": "789",
+  },
+  Object {
+    "id": "456",
+    "type": "cats",
+  },
+]
+`;
+
+exports[`ArraySchema denormalization Object denormalizes a single entity 1`] = `
+Array [
+  Object {
+    "id": 1,
+    "name": "Milo",
+  },
+  Object {
+    "id": 2,
+    "name": "Jake",
+  },
+]
+`;
+
+exports[`ArraySchema normalization Class filters out undefined and null normalized values 1`] = `
 Object {
   "entities": Object {
     "user": Object {
@@ -13,7 +59,7 @@ Object {
 }
 `;
 
-exports[`ArraySchema Class normalizes Objects using their values 1`] = `
+exports[`ArraySchema normalization Class normalizes Objects using their values 1`] = `
 Object {
   "entities": Object {
     "user": Object {
@@ -32,7 +78,7 @@ Object {
 }
 `;
 
-exports[`ArraySchema Class normalizes a single entity 1`] = `
+exports[`ArraySchema normalization Class normalizes a single entity 1`] = `
 Object {
   "entities": Object {
     "cats": Object {
@@ -51,7 +97,7 @@ Object {
 }
 `;
 
-exports[`ArraySchema Class normalizes multiple entities 1`] = `
+exports[`ArraySchema normalization Class normalizes multiple entities 1`] = `
 Object {
   "entities": Object {
     "cats": Object {
@@ -92,7 +138,7 @@ Object {
 }
 `;
 
-exports[`ArraySchema Class normalizes multiple entities 2`] = `
+exports[`ArraySchema normalization Class normalizes multiple entities 2`] = `
 Array [
   Array [
     Object {
@@ -272,7 +318,7 @@ Array [
 ]
 `;
 
-exports[`ArraySchema Object normalizes Objects using their values 1`] = `
+exports[`ArraySchema normalization Object normalizes Objects using their values 1`] = `
 Object {
   "entities": Object {
     "user": Object {
@@ -291,7 +337,7 @@ Object {
 }
 `;
 
-exports[`ArraySchema Object normalizes plain arrays as shorthand for ArraySchema 1`] = `
+exports[`ArraySchema normalization Object normalizes plain arrays as shorthand for ArraySchema 1`] = `
 Object {
   "entities": Object {
     "user": Object {
@@ -310,7 +356,7 @@ Object {
 }
 `;
 
-exports[`ArraySchema Object passes its parent to its children when normalizing 1`] = `
+exports[`ArraySchema normalization Object passes its parent to its children when normalizing 1`] = `
 Object {
   "entities": Object {
     "children": Object {

@@ -1,4 +1,11 @@
-exports[`EntitySchema idAttribute can build the entity's ID from the parent object 1`] = `
+exports[`EntitySchema denormalization denormalizes an entity 1`] = `
+Object {
+  "id": 1,
+  "type": "foo",
+}
+`;
+
+exports[`EntitySchema normalization idAttribute can build the entity's ID from the parent object 1`] = `
 Object {
   "entities": Object {
     "users": Object {
@@ -15,7 +22,7 @@ Object {
 }
 `;
 
-exports[`EntitySchema idAttribute can normalize entity IDs based on their object key 1`] = `
+exports[`EntitySchema normalization idAttribute can normalize entity IDs based on their object key 1`] = `
 Object {
   "entities": Object {
     "users": Object {
@@ -40,7 +47,7 @@ Object {
 }
 `;
 
-exports[`EntitySchema idAttribute can use a custom idAttribute string 1`] = `
+exports[`EntitySchema normalization idAttribute can use a custom idAttribute string 1`] = `
 Object {
   "entities": Object {
     "users": Object {
@@ -54,7 +61,7 @@ Object {
 }
 `;
 
-exports[`EntitySchema mergeStrategy can use a custom merging strategy 1`] = `
+exports[`EntitySchema normalization mergeStrategy can use a custom merging strategy 1`] = `
 Object {
   "entities": Object {
     "tacos": Object {
@@ -72,7 +79,7 @@ Object {
 }
 `;
 
-exports[`EntitySchema mergeStrategy defaults to plain merging 1`] = `
+exports[`EntitySchema normalization mergeStrategy defaults to plain merging 1`] = `
 Object {
   "entities": Object {
     "tacos": Object {
@@ -90,7 +97,7 @@ Object {
 }
 `;
 
-exports[`EntitySchema normalizes an entity 1`] = `
+exports[`EntitySchema normalization normalizes an entity 1`] = `
 Object {
   "entities": Object {
     "item": Object {
@@ -103,7 +110,7 @@ Object {
 }
 `;
 
-exports[`EntitySchema processStrategy can use a custom processing strategy 1`] = `
+exports[`EntitySchema normalization processStrategy can use a custom processing strategy 1`] = `
 Object {
   "entities": Object {
     "tacos": Object {
@@ -118,7 +125,7 @@ Object {
 }
 `;
 
-exports[`EntitySchema processStrategy can use information from the parent in the process strategy 1`] = `
+exports[`EntitySchema normalization processStrategy can use information from the parent in the process strategy 1`] = `
 Object {
   "entities": Object {
     "children": Object {
@@ -141,7 +148,7 @@ Object {
 }
 `;
 
-exports[`EntitySchema processStrategy is run before and passed to the schema normalization 1`] = `
+exports[`EntitySchema normalization processStrategy is run before and passed to the schema normalization 1`] = `
 Object {
   "entities": Object {
     "attachments": Object {

@@ -1,7 +1,7 @@
 /* eslint-env jest */
-import { normalize, schema } from '../../';
+import { denormalize, normalize, schema } from '../../';
 
-describe(schema.Entity.name, () => {
+describe(`${schema.Entity.name} normalization`, () => {
   it('normalizes an entity', () => {
     const entity = new schema.Entity('item');
     expect(normalize({ id: 1 }, entity)).toMatchSnapshot();
@@ -96,5 +96,17 @@ describe(schema.Entity.name, () => {
 
       expect(normalize({ message: { id: '123', data: { attachment: { id: '456' } } } }, myEntity)).toMatchSnapshot();
     });
+  });
+});
+
+describe(`${schema.Entity.name} denormalization`, () => {
+  it('denormalizes an entity', () => {
+    const mySchema = new schema.Entity('tacos');
+    const entities = {
+      tacos: {
+        1: { id: 1, type: 'foo' }
+      }
+    };
+    expect(denormalize(1, mySchema, entities)).toMatchSnapshot();
   });
 });

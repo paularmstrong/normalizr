@@ -56,3 +56,9 @@ export function normalize(
   entities: any,
   result: any
 };
+
+export function denormalize(
+  input: any,
+  schema: Schema,
+  entities: any
+): any;

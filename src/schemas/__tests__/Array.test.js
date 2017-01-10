@@ -1,7 +1,7 @@
 /* eslint-env jest */
-import { normalize, schema } from '../../';
+import { denormalize, normalize, schema } from '../../';
 
-describe(schema.Array.name, () => {
+describe(`${schema.Array.name} normalization`, () => {
   describe('Object', () => {
     it(`normalizes plain arrays as shorthand for ${schema.Array.name}`, () => {
       const userSchema = new schema.Entity('user');
@@ -69,6 +69,73 @@ describe(schema.Array.name, () => {
       const userSchema = new schema.Entity('user');
       const users = new schema.Array(userSchema);
       expect(normalize([ undefined, { id: 123 }, null ], users)).toMatchSnapshot();
+    });
+  });
+});
+
+describe(`${schema.Array.name} denormalization`, () => {
+  describe('Object', () => {
+    it('denormalizes a single entity', () => {
+      const cats = new schema.Entity('cats');
+      const entities = {
+        cats: {
+          1: { id: 1, name: 'Milo' },
+          2: { id: 2, name: 'Jake' }
+        }
+      };
+      expect(denormalize([ 1, 2 ], [ cats ], entities)).toMatchSnapshot();
+    });
+  });
+
+  describe('Class', () => {
+    it('denormalizes a single entity', () => {
+      const cats = new schema.Entity('cats');
+      const entities = {
+        cats: {
+          1: { id: 1, name: 'Milo' },
+          2: { id: 2, name: 'Jake' }
+        }
+      };
+      const catList = new schema.Array(cats);
+      expect(denormalize([ 1, 2 ], catList, entities)).toMatchSnapshot();
+    });
+
+    it('denormalizes multiple entities', () => {
+      const catSchema = new schema.Entity('cats');
+      const peopleSchema = new schema.Entity('person');
+      const listSchema = new schema.Array({
+        cats: catSchema,
+        dogs: {},
+        people: peopleSchema
+      }, (input, parent, key) => input.type || 'dogs');
+
+      const entities = {
+        cats: {
+          '123': {
+            id: '123',
+            type: 'cats'
+          },
+          '456': {
+            id: '456',
+            type: 'cats'
+          }
+        },
+        person: {
+          '123': {
+            id: '123',
+            type: 'people'
+          }
+        }
+      };
+
+      const input = [
+        { id: '123', schema: 'cats' },
+        { id: '123', schema: 'people' },
+        { id: { id: '789' }, schema: 'dogs' },
+        { id: '456', schema: 'cats' }
+      ];
+
+      expect(denormalize(input, listSchema, entities)).toMatchSnapshot();
     });
   });
 });

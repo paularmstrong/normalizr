@@ -1,4 +1,4 @@
-import { normalize, schema } from '../../../index';
+import { denormalize, normalize, schema } from '../../../index';
 
 type User = {
   id_str: string,
@@ -30,3 +30,4 @@ const tweet = new schema.Entity('tweets', { user: user }, {
 });
 
 const normalizedData = normalize(data, tweet);
+const denormalizedData = denormalize(normalizedData.result, tweet, normalizedData.entities);

@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import { normalize, schema } from '../';
+import { denormalize, normalize, schema } from '../';
 
 describe('normalize', () => {
   [ 42, null, undefined, '42', () => {} ].forEach((input) => {
@@ -120,5 +120,87 @@ describe('normalize', () => {
     const articleEntity = new schema.Entity('articles', { author: userEntity });
 
     expect(normalize({ id: '123', title: 'normalizr is great!', author: 1 }, articleEntity)).toMatchSnapshot();
+  });
+});
+
+
+describe('denormalize', () => {
+  it('cannot denormalize without a schema', () => {
+    expect(() => denormalize({})).toThrow();
+  });
+
+  it('denormalizes entities', () => {
+    const mySchema = new schema.Entity('tacos');
+    const entities = {
+      tacos: {
+        1: { id: 1, type: 'foo' },
+        2: { id: 2, type: 'bar' }
+      }
+    };
+    expect(denormalize([ 1, 2 ], [ mySchema ], entities)).toMatchSnapshot();
+  });
+
+  it('denormalizes nested entities', () => {
+    const user = new schema.Entity('users');
+    const comment = new schema.Entity('comments', {
+      user: user
+    });
+    const article = new schema.Entity('articles', {
+      author: user,
+      comments: [ comment ]
+    });
+
+    const entities = {
+      articles: {
+        '123': {
+          author: '8472',
+          body: 'This article is great.',
+          comments: [
+            'comment-123-4738'
+          ],
+          id: '123',
+          title: 'A Great Article'
+        }
+      },
+      comments: {
+        'comment-123-4738': {
+          comment: 'I like it!',
+          id: 'comment-123-4738',
+          user: '10293'
+        }
+      },
+      users: {
+        '10293': {
+          id: '10293',
+          name: 'Jane'
+        },
+        '8472': {
+          id: '8472',
+          name: 'Paul'
+        }
+      }
+    };
+    expect(denormalize('123', article, entities)).toMatchSnapshot();
+  });
+
+  it('does not modify the original entities', () => {
+    const user = new schema.Entity('users');
+    const article = new schema.Entity('articles', { author: user });
+    const entities = Object.freeze({
+      articles: Object.freeze({
+        '123': Object.freeze({
+          id: '123',
+          title: 'A Great Article',
+          author: '8472'
+        })
+      }),
+      users: Object.freeze({
+        '8472': Object.freeze({
+          id: '8472',
+          name: 'Paul'
+        })
+      })
+    });
+    expect(() => denormalize('123', article, entities)).not.toThrow();
   });
 });
