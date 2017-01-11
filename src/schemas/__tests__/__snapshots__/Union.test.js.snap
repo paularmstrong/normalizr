@@ -32,6 +32,16 @@ Object {
 }
 `;
 
+exports[`UnionSchema normalizes an array of multiple entities using a function to infer the schemaAttribute 3`] = `
+Object {
+  "entities": Object {},
+  "result": Object {
+    "id": 3,
+    "notdefined": "yep",
+  },
+}
+`;
+
 exports[`UnionSchema normalizes an object using string schemaAttribute 1`] = `
 Object {
   "entities": Object {

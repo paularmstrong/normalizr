@@ -81,10 +81,8 @@ Object {
       "schema": "people",
     },
     Object {
-      "id": Object {
-        "id": "789",
-      },
-      "schema": "dogs",
+      "id": "789",
+      "name": "fido",
     },
     Object {
       "id": "456",
@@ -112,6 +110,7 @@ Array [
       },
       Object {
         "id": "789",
+        "name": "fido",
       },
       Object {
         "id": "456",
@@ -136,30 +135,7 @@ Array [
       },
       Object {
         "id": "789",
-      },
-      Object {
-        "id": "456",
-        "type": "cats",
-      },
-    ],
-    null,
-  ],
-  Array [
-    Object {
-      "id": "123",
-      "type": "people",
-    },
-    Array [
-      Object {
-        "id": "123",
-        "type": "cats",
-      },
-      Object {
-        "id": "123",
-        "type": "people",
-      },
-      Object {
-        "id": "789",
+        "name": "fido",
       },
       Object {
         "id": "456",
@@ -184,6 +160,7 @@ Array [
       },
       Object {
         "id": "789",
+        "name": "fido",
       },
       Object {
         "id": "456",
@@ -194,7 +171,8 @@ Array [
   ],
   Array [
     Object {
-      "id": "789",
+      "id": "123",
+      "type": "people",
     },
     Array [
       Object {
@@ -207,6 +185,7 @@ Array [
       },
       Object {
         "id": "789",
+        "name": "fido",
       },
       Object {
         "id": "456",
@@ -218,6 +197,7 @@ Array [
   Array [
     Object {
       "id": "789",
+      "name": "fido",
     },
     Array [
       Object {
@@ -230,6 +210,7 @@ Array [
       },
       Object {
         "id": "789",
+        "name": "fido",
       },
       Object {
         "id": "456",
@@ -254,6 +235,7 @@ Array [
       },
       Object {
         "id": "789",
+        "name": "fido",
       },
       Object {
         "id": "456",
@@ -278,6 +260,7 @@ Array [
       },
       Object {
         "id": "789",
+        "name": "fido",
       },
       Object {
         "id": "456",
