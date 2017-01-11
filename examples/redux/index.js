@@ -1,6 +1,7 @@
 import inquirer from 'inquirer';
 import store from './src/redux';
 import * as Action from './src/redux/actions';
+import * as Selector from './src/redux/selectors';
 
 const REPO = 'paularmstrong/normalizr';
 
@@ -89,6 +90,7 @@ const browse = (stateKey) => {
         { value: 'keys', name: 'List All Keys' },
         { value: 'view', name: 'View by Key' },
         { value: 'all', name: 'View All' },
+        { value: 'denormalize', name: 'Denormalize' },
         new inquirer.Separator(),
         { value: 'browseMain', name: 'Go Back to Browse Menu' },
         { value: 'main', name: 'Go Back to Main Menu' }
@@ -116,12 +118,42 @@ const browse = (stateKey) => {
       case 'all':
         console.log(JSON.stringify(state, null, 2));
         return browse(stateKey);
+      case 'denormalize':
+        return browseDenormalized(stateKey);
       case 'browseMain':
         return browseMain();
       case 'main':
         return main();
       default:
         return browse(stateKey);
+    }
+  });
+};
+
+const browseDenormalized = (stateKey) => {
+  return inquirer.prompt([
+    {
+      type: 'list',
+      name: 'selector',
+      message: `Denormalize a/and ${stateKey} entity`,
+      choices: [
+        ...Object.keys(store.getState()[stateKey]),
+        new inquirer.Separator(),
+        { value: 'browse', name: 'Go Back to Browse Menu' },
+        { value: 'main', name: 'Go Back to Main Menu' }
+      ]
+    }
+  ]).then(({ selector }) => {
+    switch (selector) {
+      case 'browse':
+        return browse(stateKey);
+      case 'main':
+        return main();
+      default: {
+        const data = Selector[`select${stateKey.replace(/s$/, '')}`](store.getState(), selector);
+        console.log(JSON.stringify(data, null, 2));
+        return browseDenormalized(stateKey);
+      }
     }
   });
 };

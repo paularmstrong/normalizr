@@ -1,5 +1,6 @@
 import * as Repo from './repos';
-import { normalize } from '../../../../../src';
+import { label } from '../../api/schema';
+import { denormalize, normalize } from '../../../../../src';
 import { ADD_ENTITIES, addEntities } from '../actions';
 
 export const STATE_KEY = 'labels';
@@ -32,3 +33,5 @@ export const getLabels = ({ page = 0 } = {}) => (dispatch, getState, { api, sche
     console.error(error);
   });
 };
+
+export const selectHydrated = (state, id) => denormalize(id, label, state);

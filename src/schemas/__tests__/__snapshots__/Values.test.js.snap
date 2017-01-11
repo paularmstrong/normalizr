@@ -1,4 +1,17 @@
-exports[`ValuesSchema can use a function to determine the schema when normalizing 1`] = `
+exports[`ValuesSchema denormalization denormalizes the values of an object with the given schema 1`] = `
+Object {
+  "fido": Object {
+    "id": 1,
+    "type": "dogs",
+  },
+  "fluffy": Object {
+    "id": 1,
+    "type": "cats",
+  },
+}
+`;
+
+exports[`ValuesSchema normalization can use a function to determine the schema when normalizing 1`] = `
 Object {
   "entities": Object {
     "cats": Object {
@@ -31,7 +44,7 @@ Object {
 }
 `;
 
-exports[`ValuesSchema filters out null and undefined values 1`] = `
+exports[`ValuesSchema normalization filters out null and undefined values 1`] = `
 Object {
   "entities": Object {
     "cats": Object {
@@ -50,7 +63,7 @@ Object {
 }
 `;
 
-exports[`ValuesSchema normalizes the values of an object with the given schema 1`] = `
+exports[`ValuesSchema normalization normalizes the values of an object with the given schema 1`] = `
 Object {
   "entities": Object {
     "cats": Object {

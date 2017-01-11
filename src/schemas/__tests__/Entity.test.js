@@ -1,7 +1,7 @@
 /* eslint-env jest */
-import { normalize, schema } from '../../';
+import { denormalize, normalize, schema } from '../../';
 
-describe(schema.Entity.name, () => {
+describe(`${schema.Entity.name} normalization`, () => {
   it('normalizes an entity', () => {
     const entity = new schema.Entity('item');
     expect(normalize({ id: 1 }, entity)).toMatchSnapshot();
@@ -96,5 +96,55 @@ describe(schema.Entity.name, () => {
 
       expect(normalize({ message: { id: '123', data: { attachment: { id: '456' } } } }, myEntity)).toMatchSnapshot();
     });
+  });
+});
+
+describe(`${schema.Entity.name} denormalization`, () => {
+  it('denormalizes an entity', () => {
+    const mySchema = new schema.Entity('tacos');
+    const entities = {
+      tacos: {
+        1: { id: 1, type: 'foo' }
+      }
+    };
+    expect(denormalize(1, mySchema, entities)).toMatchSnapshot();
+  });
+
+  it('denormalizes deep entities', () => {
+    const foodSchema = new schema.Entity('foods');
+    const menuSchema = new schema.Entity('menus', {
+      food: foodSchema
+    });
+
+    const entities = {
+      menus: {
+        1: { id: 1, food: 1 },
+        2: { id: 2 }
+      },
+      foods: {
+        1: { id: 1 }
+      }
+    };
+
+    expect(denormalize(1, menuSchema, entities)).toMatchSnapshot();
+    expect(denormalize(2, menuSchema, entities)).toMatchSnapshot();
+  });
+
+  it('can denormalize already partially denormalized data', () => {
+    const foodSchema = new schema.Entity('foods');
+    const menuSchema = new schema.Entity('menus', {
+      food: foodSchema
+    });
+
+    const entities = {
+      menus: {
+        1: { id: 1, food: { id: 1 } }
+      },
+      foods: {
+        1: { id: 1 }
+      }
+    };
+
+    expect(denormalize(1, menuSchema, entities)).toMatchSnapshot();
   });
 });

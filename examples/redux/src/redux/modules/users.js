@@ -1,4 +1,6 @@
 import { ADD_ENTITIES } from '../actions';
+import { denormalize } from '../../../../../src';
+import { user } from '../../api/schema';
 
 export const STATE_KEY = 'users';
 
@@ -19,3 +21,5 @@ export default function reducer(state = {}, action) {
       return state;
   }
 }
+
+export const selectHydrated = (state, id) => denormalize(id, user, state);

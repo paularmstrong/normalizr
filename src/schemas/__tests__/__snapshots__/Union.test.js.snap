@@ -1,4 +1,42 @@
-exports[`UnionSchema normalizes an array of multiple entities using a function to infer the schemaAttribute 1`] = `
+exports[`UnionSchema denormalization denormalizes an array of multiple entities using a function to infer the schemaAttribute 1`] = `
+Object {
+  "id": 1,
+  "type": "users",
+  "username": "Janey",
+}
+`;
+
+exports[`UnionSchema denormalization denormalizes an array of multiple entities using a function to infer the schemaAttribute 2`] = `
+Object {
+  "groupname": "People",
+  "id": 2,
+  "type": "groups",
+}
+`;
+
+exports[`UnionSchema denormalization denormalizes an object using string schemaAttribute 1`] = `
+Object {
+  "id": 1,
+  "type": "users",
+  "username": "Janey",
+}
+`;
+
+exports[`UnionSchema denormalization denormalizes an object using string schemaAttribute 2`] = `
+Object {
+  "groupname": "People",
+  "id": 2,
+  "type": "groups",
+}
+`;
+
+exports[`UnionSchema denormalization returns the original value no schema is given 1`] = `
+Object {
+  "id": 1,
+}
+`;
+
+exports[`UnionSchema normalization normalizes an array of multiple entities using a function to infer the schemaAttribute 1`] = `
 Object {
   "entities": Object {
     "users": Object {
@@ -15,7 +53,7 @@ Object {
 }
 `;
 
-exports[`UnionSchema normalizes an array of multiple entities using a function to infer the schemaAttribute 2`] = `
+exports[`UnionSchema normalization normalizes an array of multiple entities using a function to infer the schemaAttribute 2`] = `
 Object {
   "entities": Object {
     "groups": Object {
@@ -32,7 +70,7 @@ Object {
 }
 `;
 
-exports[`UnionSchema normalizes an array of multiple entities using a function to infer the schemaAttribute 3`] = `
+exports[`UnionSchema normalization normalizes an array of multiple entities using a function to infer the schemaAttribute 3`] = `
 Object {
   "entities": Object {},
   "result": Object {
@@ -42,7 +80,7 @@ Object {
 }
 `;
 
-exports[`UnionSchema normalizes an object using string schemaAttribute 1`] = `
+exports[`UnionSchema normalization normalizes an object using string schemaAttribute 1`] = `
 Object {
   "entities": Object {
     "users": Object {
@@ -59,7 +97,7 @@ Object {
 }
 `;
 
-exports[`UnionSchema normalizes an object using string schemaAttribute 2`] = `
+exports[`UnionSchema normalization normalizes an object using string schemaAttribute 2`] = `
 Object {
   "entities": Object {
     "groups": Object {

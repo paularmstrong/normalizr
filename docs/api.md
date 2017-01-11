@@ -1,6 +1,7 @@
 # API
 
 * [normalize](#normalizedata-schema)
+* [denormalize](#denormalizeinput-schema-entities)
 * [schema](#schema)
   - [Array](#arraydefinition-schemaattribute)
   - [Entity](#entitykey-definition---options--)
@@ -24,6 +25,52 @@ const myData = { users: [ { id: 1 }, { id: 2 } ] };
 const user = new schema.Entity('users');
 const mySchema = { users: [ user ] }
 const normalizedData = normalize(myData, mySchema);
+```
+
+### Output
+
+```js
+{
+  result: { users: [ 1, 2 ] },
+  entities: {
+    users: {
+      '1': { id: 1 },
+      '2': { id: 2 }
+    }
+  }
+}
+```
+
+## `denormalize(input, schema, entities)`
+
+Denormalizes an input based on schema and provided entities. The reverse of `normalize`.
+
+*Special Note:* Be careful with denormalization. Prematurely reverting your data to large, nested objects could cause performance impacts in React (and other) applications.
+
+* `input`: **required** The normalized result that should be *de-normalized*. Usually the same value that was given in the `result` key of the output of `normalize`.
+* `schema`: **required** A schema definition that was used to get the value for `input`.
+* `entities`: **required** An object, keyed by entity schema names that may appear in the denormalized output.
+
+### Usage
+
+```js
+import { denormalize, schema } from 'normalizr';
+
+const user = new schema.Entity('users');
+const mySchema = { users: [ user ] }
+const entities = { users: { '1': { id: 1 }, '2': { id: 2 } } };
+const denormalizedData = denormalize({ users: [ 1, 2 ] }, mySchema, entities);
+```
+
+### Output
+
+```js
+{ 
+  users: [
+    { id: 1 },
+    { id: 2 }
+  ]
+}
 ```
 
 ## `schema`
@@ -312,9 +359,9 @@ const normalizedData = normalize(data, valuesSchema);
     admins: { '1': { id: 1, type: 'admin' } },
     users: { '2': { id: 2, type: 'user' } }
   },
-  result: [
-    { id: 1, schema: 'admins' },
-    { id: 2, schema: 'users' }
-  ]
+  result: {
+    '1': { id: 1, schema: 'admins' },
+    '2': { id: 2, schema: 'users' }
+  }
 }
 ```

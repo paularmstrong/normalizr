@@ -1,8 +1,8 @@
 import EntitySchema from './schemas/Entity';
 import UnionSchema from './schemas/Union';
 import ValuesSchema from './schemas/Values';
-import ArraySchema, { normalize as normalizeArray } from './schemas/Array';
-import ObjectSchema, { normalize as normalizeObject } from './schemas/Object';
+import ArraySchema, * as ArrayUtils from './schemas/Array';
+import ObjectSchema, * as ObjectUtils from './schemas/Object';
 
 const visit = (value, parent, key, schema, addEntity) => {
   if (typeof value !== 'object' || !value) {
@@ -10,9 +10,9 @@ const visit = (value, parent, key, schema, addEntity) => {
   }
 
   if (typeof schema === 'object' && (!schema.normalize || typeof schema.normalize !== 'function')) {
-    let method = normalizeObject;
+    let method = ObjectUtils.normalize;
     if (Array.isArray(schema)) {
-      method = normalizeArray;
+      method = ArrayUtils.normalize;
     }
     return method(schema, value, parent, key, visit, addEntity);
   }
@@ -53,4 +53,24 @@ export const normalize = (input, schema) => {
 
   const result = visit(input, input, null, schema, addEntity);
   return { entities, result };
+};
+
+const unvisit = (input, schema, entities) => {
+  if (typeof schema === 'object' && (!schema.normalize || typeof schema.normalize !== 'function')) {
+    let method = ObjectUtils.denormalize;
+    if (Array.isArray(schema)) {
+      method = ArrayUtils.denormalize;
+    }
+    return method(schema, input, unvisit, entities);
+  }
+
+  return schema.denormalize(input, unvisit, entities);
+};
+
+export const denormalize = (input, schema, entities) => {
+  if (!input) {
+    return input;
+  }
+
+  return unvisit(input, schema, entities);
 };

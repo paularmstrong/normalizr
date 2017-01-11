@@ -11,4 +11,8 @@ export default class UnionSchema extends PolymorphicSchema {
   normalize(input, parent, key, visit, addEntity) {
     return this.normalizeValue(input, parent, key, visit, addEntity);
   }
+
+  denormalize(input, unvisit, entities) {
+    return this.denormalizeValue(input, unvisit, entities);
+  }
 }
