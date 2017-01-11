@@ -3,7 +3,7 @@ import filesize from 'rollup-plugin-filesize';
 import uglify from 'rollup-plugin-uglify';
 
 const isProduction = process.env.NODE_ENV === 'production';
-const dest = `dist/index${isProduction ? '.min' : ''}.js`;
+const dest = `dist/normalizr${isProduction ? '.min' : ''}.js`;
 
 export default {
   entry: 'src/index.js',

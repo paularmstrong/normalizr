@@ -1,3 +1,9 @@
+# v3.1.0
+
+* **Added** `denormalize`. (gh-214)
+* **Changed** No longer requires all input in a polymorphic schema (`Array`, `Union`, `Values`) have a matching schema definition. (gh-208)
+* **Changed** Builds do both rollup and plain babel file conversions. `"main"` property in package.json points to babel-converted files.
+
 # v3.0.0
 
 The entire normalizr package has been rewritten from v2.x for this version. Please refer to the [documentation](/docs) for all changes.

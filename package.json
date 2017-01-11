@@ -23,12 +23,13 @@
     "LICENSE",
     "README.md"
   ],
-  "main": "dist/index.js",
+  "main": "dist/src/index.js",
   "typings": "index.d.ts",
   "scripts": {
-    "build": "npm run clean && mkdirp dist && npm-run-all --parallel build:development build:production",
+    "build": "npm run clean && mkdirp dist && npm-run-all --parallel build:development build:production build:node",
     "build:development": "NODE_ENV=development rollup -c",
     "build:production": "NODE_ENV=production rollup -c",
+    "build:node": "babel src/*.js -d dist && babel src/schemas/*.js -d dist",
     "clean": "rimraf dist",
     "flow": "flow src; test $? -eq 0 -o $? -eq 2",
     "lint": "eslint ./ --fix",
