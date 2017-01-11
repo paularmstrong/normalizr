@@ -76,7 +76,11 @@ const normalizedData = normalize(data, userListSchema);
 }
 ```
 
-If your input data is an array of more than one type of entity, it is necessary to define a schema mapping. For example:
+If your input data is an array of more than one type of entity, it is necessary to define a schema mapping. 
+
+*Note: If your data returns an object that you did not provide a mapping for, the original object will be returned in the result and an entity will not be created.*
+
+For example:
 
 ```js
 const data = [ { id: 1, type: 'admin' }, { id: 2, type: 'user' } ];
@@ -217,6 +221,8 @@ Can be a string or a function. If given a function, accepts the following argume
 
 #### Usage
 
+*Note: If your data returns an object that you did not provide a mapping for, the original object will be returned in the result and an entity will not be created.*
+
 ```js
 const data = { owner: { id: 1, type: 'user', name: 'Anne' } };
 
@@ -275,5 +281,42 @@ const normalizedData = normalize(data, valuesSchema);
     items: { '1': { id: 1 }, '2': { id: 2 } }
   },
   result: { firstThing: 1, secondThing: 2 }
+}
+```
+
+If your input data is an object that has values of more than one type of entity, but their schema is not easily defined by the key, you can use a mapping of schema, much like `schema.Union` and `schema.Array`.
+
+*Note: If your data returns an object that you did not provide a mapping for, the original object will be returned in the result and an entity will not be created.*
+
+For example:
+
+```js
+const data = {
+  '1': { id: 1, type: 'admin' }, 
+  '2': { id: 2, type: 'user' }
+};
+
+const userSchema = new schema.Entity('users');
+const adminSchema = new schema.Entity('admins');
+const valuesSchema = new schema.Values({
+  admins: adminSchema,
+  users: userSchema
+}, (input, parent, key) => `${input.type}s`);
+
+const normalizedData = normalize(data, valuesSchema);
+```
+
+#### Output
+
+```js
+{
+  entities: {
+    admins: { '1': { id: 1, type: 'admin' } },
+    users: { '2': { id: 2, type: 'user' } }
+  },
+  result: [
+    { id: 1, schema: 'admins' },
+    { id: 2, schema: 'users' }
+  ]
 }
 ```
