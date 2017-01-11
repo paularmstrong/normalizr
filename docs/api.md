@@ -359,9 +359,9 @@ const normalizedData = normalize(data, valuesSchema);
     admins: { '1': { id: 1, type: 'admin' } },
     users: { '2': { id: 2, type: 'user' } }
   },
-  result: [
-    { id: 1, schema: 'admins' },
-    { id: 2, schema: 'users' }
-  ]
+  result: {
+    '1': { id: 1, schema: 'admins' },
+    '2': { id: 2, schema: 'users' }
+  }
 }
 ```
