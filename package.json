@@ -27,8 +27,8 @@
   "typings": "index.d.ts",
   "scripts": {
     "build": "npm run clean && mkdirp dist && npm-run-all --parallel build:development build:production build:node",
-    "build:development": "NODE_ENV=development rollup -c",
-    "build:production": "NODE_ENV=production rollup -c",
+    "build:development": "cross-env NODE_ENV=development rollup -c",
+    "build:production": "cross-env NODE_ENV=production rollup -c",
     "build:node": "babel src/*.js -d dist && babel src/schemas/*.js -d dist",
     "clean": "rimraf dist",
     "flow": "flow src; test $? -eq 0 -o $? -eq 2",
@@ -50,6 +50,7 @@
     "babel-preset-es2015-rollup": "^3.0.0",
     "babel-preset-stage-1": "^6.16.0",
     "coveralls": "^2.11.15",
+    "cross-env": "^3.1.4",
     "eslint": "^3.12.2",
     "flow-bin": "^0.37.1",
     "jest": "^18.0.0",
