@@ -45,6 +45,11 @@ export default class PolymorphicSchema {
       return value;
     }
     const schema = this.isSingleSchema ? this.schema : this.schema[value.schema];
-    return unvisit(value.id || value, schema, entities);
+    let idOrValue;
+    if (typeof schema.getId === 'function') {
+      idOrValue = schema.getId(value) || value;
+    } else { idOrValue = value.id || value; }
+
+    return unvisit(idOrValue, schema, entities);
   }
 }

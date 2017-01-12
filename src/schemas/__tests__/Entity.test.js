@@ -147,4 +147,13 @@ describe(`${schema.Entity.name} denormalization`, () => {
 
     expect(denormalize(1, menuSchema, entities)).toMatchSnapshot();
   });
+  it('can denormalize previously normalized data', () => {
+    const mySchema = new schema.Entity('cats', {}, { idAttribute: 'meow' });
+    const cat = { 'meow': 'Meow', hair: 'none' };
+    const normalizedCat = normalize(cat, mySchema);
+    expect(normalizedCat).toMatchSnapshot();
+    const denormalizedCat = denormalize(cat, mySchema, normalizedCat.entities);
+    expect(denormalizedCat).toEqual(cat);
+    expect(denormalizedCat).toMatchSnapshot();
+  });
 });

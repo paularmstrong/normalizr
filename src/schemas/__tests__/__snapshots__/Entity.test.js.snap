@@ -7,6 +7,27 @@ Object {
 }
 `;
 
+exports[`EntitySchema denormalization can denormalize previously normalized data 1`] = `
+Object {
+  "entities": Object {
+    "cats": Object {
+      "Meow": Object {
+        "hair": "none",
+        "meow": "Meow",
+      },
+    },
+  },
+  "result": "Meow",
+}
+`;
+
+exports[`EntitySchema denormalization can denormalize previously normalized data 2`] = `
+Object {
+  "hair": "none",
+  "meow": "Meow",
+}
+`;
+
 exports[`EntitySchema denormalization denormalizes an entity 1`] = `
 Object {
   "id": 1,
