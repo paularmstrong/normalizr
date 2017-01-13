@@ -33,6 +33,21 @@ Object {
 }
 `;
 
+exports[`denormalize denormalizes recursive dependencies 1`] = `
+Object {
+  "title": "Weekly report",
+  "user": Object {
+    "reports": Array [
+      Object {
+        "title": "Weekly report",
+        "user": Object {},
+      },
+    ],
+    "role": "manager",
+  },
+}
+`;
+
 exports[`normalize can use fully custom entity classes 1`] = `
 Object {
   "entities": Object {

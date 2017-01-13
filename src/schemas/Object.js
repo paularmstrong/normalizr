@@ -17,7 +17,21 @@ export const denormalize = (schema, input, unvisit, entities) => {
   Object.keys(schema).forEach((key) => {
     const localSchema = schema[key];
     if (object[key]) {
-      object[key] = unvisit(object[key], localSchema, entities);
+      if (Array.isArray(object[key])) {
+        object[key] = unvisit(object[key], localSchema, entities);
+      } else {
+        const skey = localSchema.key;
+        if (!entities.__cache[skey]) {
+          entities.__cache[skey] = {};
+        }
+
+        if (!entities.__cache[skey][object[key]]) {
+          entities.__cache[skey][object[key]] = {};
+          entities.__cache[skey][object[key]] = unvisit(object[key], localSchema, entities);
+        }
+
+        object[key] = entities.__cache[skey][object[key]];
+      }
     }
   });
   return object;

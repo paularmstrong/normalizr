@@ -72,5 +72,6 @@ export const denormalize = (input, schema, entities) => {
     return input;
   }
 
+  entities = { ...entities, __cache: {} };
   return unvisit(input, schema, entities);
 };
