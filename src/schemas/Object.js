@@ -12,25 +12,27 @@ export const normalize = (schema, input, parent, key, visit, addEntity) => {
   return object;
 };
 
-export const denormalize = (schema, input, unvisit, entities) => {
+const denormalizeItem = (id, schema, unvisit, entities, visitedEntities) => {
+  if (!visitedEntities[schema.key]) {
+    visitedEntities[schema.key] = {};
+  }
+
+  if (!visitedEntities[schema.key][id]) {
+    visitedEntities[schema.key][id] = { ...entities[schema.key][id] };
+    visitedEntities[schema.key][id] = unvisit(id, schema, entities, visitedEntities);
+  }
+
+  return visitedEntities[schema.key][id];
+};
+
+export const denormalize = (schema, input, unvisit, entities, visitedEntities) => {
   const object = { ...input };
   Object.keys(schema).forEach((key) => {
-    const localSchema = schema[key];
     if (object[key]) {
       if (Array.isArray(object[key])) {
-        object[key] = unvisit(object[key], localSchema, entities);
+        object[key] = unvisit(object[key], schema[key], entities, visitedEntities);
       } else {
-        const skey = localSchema.key;
-        if (!entities.__cache[skey]) {
-          entities.__cache[skey] = {};
-        }
-
-        if (!entities.__cache[skey][object[key]]) {
-          entities.__cache[skey][object[key]] = {};
-          entities.__cache[skey][object[key]] = unvisit(object[key], localSchema, entities);
-        }
-
-        object[key] = entities.__cache[skey][object[key]];
+        object[key] = denormalizeItem(object[key], schema[key], unvisit, entities, visitedEntities);
       }
     }
   });

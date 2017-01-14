@@ -40,7 +40,12 @@ Object {
     "reports": Array [
       Object {
         "title": "Weekly report",
-        "user": Object {},
+        "user": Object {
+          "reports": Array [
+            1,
+          ],
+          "role": "manager",
+        },
       },
     ],
     "role": "manager",
