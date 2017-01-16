@@ -55,6 +55,17 @@ export default class EntitySchema {
 
   denormalize(entityOrId, unvisit, entities, visitedEntities) {
     const entity = typeof entityOrId === 'object' ? entityOrId : entities[this.key][entityOrId];
+
+    if (!visitedEntities[this.key]) {
+      visitedEntities[this.key] = {};
+    }
+
+    const id = this.getId(entity);
+    if (visitedEntities[this.key][id]) {
+      return id;
+    }
+    visitedEntities[this.key][id] = true;
+
     return denormalize(this.schema, entity, unvisit, entities, visitedEntities);
   }
 }
