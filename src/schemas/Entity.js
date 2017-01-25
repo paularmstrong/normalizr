@@ -14,6 +14,7 @@ export default class EntitySchema {
 
     this._key = key;
     this._getId = typeof idAttribute === 'function' ? idAttribute : (input) => input[idAttribute];
+    this._idAttribute = idAttribute
     this._mergeStrategy = mergeStrategy;
     this._processStrategy = processStrategy;
     this.define(definition);
@@ -21,6 +22,10 @@ export default class EntitySchema {
 
   get key() {
     return this._key;
+  }
+  
+  get idAttribute() {
+    return this._idAttribute
   }
 
   define(definition) {
