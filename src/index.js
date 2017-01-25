@@ -61,10 +61,6 @@ const unvisit = (input, schema, entities) => {
   return schema.denormalize(input, unvisit, entities);
 };
 
-export const denormalize = (input, schema, entities) => {
-  if (!input) {
-    return input;
-  }
-
-  return unvisit(input, schema, entities);
-};
+export const denormalize = (input, schema, entities) => (
+  input ? unvisit(input, schema, entities) : input
+);
