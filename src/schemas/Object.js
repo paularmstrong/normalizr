@@ -13,13 +13,25 @@ export const normalize = (schema, input, parent, key, visit, addEntity) => {
 };
 
 export const denormalize = (schema, input, unvisit, entities) => {
+  if (!input) {
+    return null;
+  }
+  let failure = false;
   const object = { ...input };
   Object.keys(schema).forEach((key) => {
     const localSchema = schema[key];
     if (object[key]) {
-      object[key] = unvisit(object[key], localSchema, entities);
+      const val = unvisit(object[key], localSchema, entities);
+      if (val) {
+        object[key] = val;
+      } else {
+        failure = true;
+      }
     }
   });
+  if (failure) {
+    return null;
+  }
   return object;
 };
 
