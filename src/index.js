@@ -10,10 +10,7 @@ const visit = (value, parent, key, schema, addEntity) => {
   }
 
   if (typeof schema === 'object' && (!schema.normalize || typeof schema.normalize !== 'function')) {
-    let method = ObjectUtils.normalize;
-    if (Array.isArray(schema)) {
-      method = ArrayUtils.normalize;
-    }
+    const method = Array.isArray(schema) ? ArrayUtils.normalize : ObjectUtils.normalize;
     return method(schema, value, parent, key, visit, addEntity);
   }
 
@@ -57,10 +54,7 @@ export const normalize = (input, schema) => {
 
 const unvisit = (input, schema, getDenormalizedEntity) => {
   if (typeof schema === 'object' && (!schema.denormalize || typeof schema.denormalize !== 'function')) {
-    let method = ObjectUtils.denormalize;
-    if (Array.isArray(schema)) {
-      method = ArrayUtils.denormalize;
-    }
+    const method = Array.isArray(schema) ? ArrayUtils.denormalize : ObjectUtils.denormalize;
     return method(schema, input, unvisit, getDenormalizedEntity);
   }
 
