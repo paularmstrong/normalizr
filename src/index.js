@@ -55,16 +55,32 @@ export const normalize = (input, schema) => {
   return { entities, result };
 };
 
-const unvisit = (input, schema, entities) => {
-  if (typeof schema === 'object' && (!schema.normalize || typeof schema.normalize !== 'function')) {
+const unvisit = (input, schema, getDenormalizedEntity) => {
+  if (typeof schema === 'object' && (!schema.denormalize || typeof schema.denormalize !== 'function')) {
     let method = ObjectUtils.denormalize;
     if (Array.isArray(schema)) {
       method = ArrayUtils.denormalize;
     }
-    return method(schema, input, unvisit, entities);
+    return method(schema, input, unvisit, getDenormalizedEntity);
   }
 
-  return schema.denormalize(input, unvisit, entities);
+  return schema.denormalize(input, unvisit, getDenormalizedEntity);
+};
+
+const getEntities = (entities, visitedEntities) => (schema, entityOrId) => {
+  const schemaKey = schema.key;
+  if (!visitedEntities[schemaKey]) {
+    visitedEntities[schemaKey] = {};
+  }
+
+  const entity = typeof entityOrId === 'object' ? entityOrId : entities[schemaKey][entityOrId];
+  const id = schema.getId(entity);
+  if (visitedEntities[schemaKey][id]) {
+    return id;
+  }
+
+  visitedEntities[schemaKey][id] = true;
+  return entity;
 };
 
 export const denormalize = (input, schema, entities) => {
@@ -72,5 +88,6 @@ export const denormalize = (input, schema, entities) => {
     return input;
   }
 
-  return unvisit(input, schema, entities);
+  const getDenormalizedEntity = getEntities(entities, {});
+  return unvisit(input, schema, getDenormalizedEntity);
 };

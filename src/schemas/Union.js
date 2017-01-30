@@ -12,7 +12,7 @@ export default class UnionSchema extends PolymorphicSchema {
     return this.normalizeValue(input, parent, key, visit, addEntity);
   }
 
-  denormalize(input, unvisit, entities) {
-    return this.denormalizeValue(input, unvisit, entities);
+  denormalize(input, unvisit, getDenormalizedEntity) {
+    return this.denormalizeValue(input, unvisit, getDenormalizedEntity);
   }
 }
