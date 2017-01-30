@@ -220,55 +220,20 @@ describe('denormalize', () => {
 
     const entities = {
       reports: {
-        1: {
-          id: 1,
+        '123': {
+          id: '123',
           title: 'Weekly report',
-          user: 1
+          user: '456'
         }
       },
       users: {
-        1: {
-          id: 1,
+        '456': {
+          id: '456',
           role: 'manager',
-          reports: [ 1 ]
+          reports: [ '123' ]
         }
       }
     };
-    expect(denormalize('1', report, entities)).toMatchSnapshot();
-  });
-
-  it('denormalizes recursive dependencies with custom idAttribute', () => {
-    const user = new schema.Entity('users');
-    const report = new schema.Entity('reports', {}, { idAttribute: 'uuid' });
-
-    user.define({
-      reports: [ report ]
-    });
-    report.define({
-      user: user
-    });
-
-    const entities = {
-      reports: {
-        1: {
-          uuid: 1,
-          title: 'Weekly report',
-          user: 1
-        },
-        2: {
-          uuid: 2,
-          title: 'Monthly report',
-          user: 1
-        }
-      },
-      users: {
-        1: {
-          id: 1,
-          role: 'manager',
-          reports: [ 1, 2 ]
-        }
-      }
-    };
-    expect(denormalize('1', report, entities)).toMatchSnapshot();
+    expect(denormalize('123', report, entities)).toMatchSnapshot();
   });
 });

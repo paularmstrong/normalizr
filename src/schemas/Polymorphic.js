@@ -40,11 +40,11 @@ export default class PolymorphicSchema {
       { id: normalizedValue, schema: this.getSchemaAttribute(value, parent, key) };
   }
 
-  denormalizeValue(value, unvisit, entities, visitedEntities) {
+  denormalizeValue(value, unvisit, getDenormalizedEntity) {
     if (!this.isSingleSchema && !value.schema) {
       return value;
     }
     const schema = this.isSingleSchema ? this.schema : this.schema[value.schema];
-    return unvisit(value.id || value, schema, entities, visitedEntities);
+    return unvisit(value.id || value, schema, getDenormalizedEntity);
   }
 }

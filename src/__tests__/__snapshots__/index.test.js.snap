@@ -35,34 +35,15 @@ Object {
 
 exports[`denormalize denormalizes recursive dependencies 1`] = `
 Object {
-  "id": 1,
+  "id": "123",
   "title": "Weekly report",
   "user": Object {
-    "id": 1,
+    "id": "456",
     "reports": Array [
-      1,
+      "123",
     ],
     "role": "manager",
   },
-}
-`;
-
-exports[`denormalize denormalizes recursive dependencies with custom idAttribute 1`] = `
-Object {
-  "title": "Weekly report",
-  "user": Object {
-    "id": 1,
-    "reports": Array [
-      1,
-      Object {
-        "title": "Monthly report",
-        "user": 1,
-        "uuid": 2,
-      },
-    ],
-    "role": "manager",
-  },
-  "uuid": 1,
 }
 `;
 
