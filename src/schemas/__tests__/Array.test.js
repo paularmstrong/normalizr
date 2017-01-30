@@ -85,6 +85,21 @@ describe(`${schema.Array.name} denormalization`, () => {
       };
       expect(denormalize([ 1, 2 ], [ cats ], entities)).toMatchSnapshot();
     });
+
+    it('returns the input value if is not an array', () => {
+      const filling = new schema.Entity('fillings');
+      const taco = new schema.Entity('tacos', { fillings: [ filling ] });
+      const entities = {
+        tacos: {
+          '123': {
+            id: '123',
+            fillings: null
+          }
+        }
+      };
+
+      expect(denormalize('123', taco, entities)).toMatchSnapshot();
+    });
   });
 
   describe('Class', () => {
@@ -136,6 +151,22 @@ describe(`${schema.Array.name} denormalization`, () => {
       ];
 
       expect(denormalize(input, listSchema, entities)).toMatchSnapshot();
+    });
+
+    it('returns the input value if is not an array', () => {
+      const filling = new schema.Entity('fillings');
+      const fillings = new schema.Array(filling);
+      const taco = new schema.Entity('tacos', { fillings });
+      const entities = {
+        tacos: {
+          '123': {
+            id: '123',
+            fillings: null
+          }
+        }
+      };
+
+      expect(denormalize('123', taco, entities)).toMatchSnapshot();
     });
   });
 });

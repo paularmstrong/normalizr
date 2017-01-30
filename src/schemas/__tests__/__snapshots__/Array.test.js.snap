@@ -31,6 +31,13 @@ Array [
 ]
 `;
 
+exports[`ArraySchema denormalization Class returns the input value if is not an array 1`] = `
+Object {
+  "fillings": null,
+  "id": "123",
+}
+`;
+
 exports[`ArraySchema denormalization Object denormalizes a single entity 1`] = `
 Array [
   Object {
@@ -42,6 +49,13 @@ Array [
     "name": "Jake",
   },
 ]
+`;
+
+exports[`ArraySchema denormalization Object returns the input value if is not an array 1`] = `
+Object {
+  "fillings": null,
+  "id": "123",
+}
 `;
 
 exports[`ArraySchema normalization Class filters out undefined and null normalized values 1`] = `
