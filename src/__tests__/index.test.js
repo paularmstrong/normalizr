@@ -113,6 +113,7 @@ describe('normalize', () => {
     });
     expect(normalize({ user: { id: '456' } }, recommendation)).toMatchSnapshot();
     expect(idAttributeFn.mock.calls).toMatchSnapshot();
+    expect(recommendation.idAttribute).toBe(idAttributeFn);
   });
 
   it('passes over pre-normalized values', () => {
