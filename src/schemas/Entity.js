@@ -1,3 +1,5 @@
+import { denormalize } from './Object';
+
 export default class EntitySchema {
   constructor(key, definition = {}, options = {}) {
     if (!key || typeof key !== 'string') {
@@ -51,16 +53,19 @@ export default class EntitySchema {
     return this.getId(input, parent, key);
   }
 
-  denormalize(entityOrId, unvisit, entities) {
+  denormalize(entityOrId, unvisit, entities, visitedEntities) {
     const entity = typeof entityOrId === 'object' ? entityOrId : entities[this.key][entityOrId];
-    const entityCopy = { ...entity };
-    Object.keys(this.schema).forEach((key) => {
-      if (entityCopy.hasOwnProperty(key)) {
-        const schema = this.schema[key];
-        entityCopy[key] = unvisit(entityCopy[key], schema, entities);
-      }
-    });
 
-    return entityCopy;
+    if (!visitedEntities[this.key]) {
+      visitedEntities[this.key] = {};
+    }
+
+    const id = this.getId(entity);
+    if (visitedEntities[this.key][id]) {
+      return id;
+    }
+    visitedEntities[this.key][id] = true;
+
+    return denormalize(this.schema, entity, unvisit, entities, visitedEntities);
   }
 }

@@ -12,12 +12,11 @@ export const normalize = (schema, input, parent, key, visit, addEntity) => {
   return object;
 };
 
-export const denormalize = (schema, input, unvisit, entities) => {
+export const denormalize = (schema, input, unvisit, entities, visitedEntities) => {
   const object = { ...input };
   Object.keys(schema).forEach((key) => {
-    const localSchema = schema[key];
     if (object[key]) {
-      object[key] = unvisit(object[key], localSchema, entities);
+      object[key] = unvisit(object[key], schema[key], entities, visitedEntities);
     }
   });
   return object;

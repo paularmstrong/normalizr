@@ -55,16 +55,16 @@ export const normalize = (input, schema) => {
   return { entities, result };
 };
 
-const unvisit = (input, schema, entities) => {
-  if (typeof schema === 'object' && (!schema.normalize || typeof schema.normalize !== 'function')) {
+const unvisit = (input, schema, entities, visitedEntities) => {
+  if (typeof schema === 'object' && (!schema.denormalize || typeof schema.denormalize !== 'function')) {
     let method = ObjectUtils.denormalize;
     if (Array.isArray(schema)) {
       method = ArrayUtils.denormalize;
     }
-    return method(schema, input, unvisit, entities);
+    return method(schema, input, unvisit, entities, visitedEntities);
   }
 
-  return schema.denormalize(input, unvisit, entities);
+  return schema.denormalize(input, unvisit, entities, visitedEntities);
 };
 
 export const denormalize = (input, schema, entities) => {
@@ -72,5 +72,6 @@ export const denormalize = (input, schema, entities) => {
     return input;
   }
 
-  return unvisit(input, schema, entities);
+  const visitedEntities = {};
+  return unvisit(input, schema, entities, visitedEntities);
 };
