@@ -8,6 +8,22 @@ Object {
 
 exports[`UnionSchema denormalization denormalizes an array of multiple entities using a function to infer the schemaAttribute 2`] = `
 Object {
+  "id": 1,
+  "type": "users",
+  "username": "Janey",
+}
+`;
+
+exports[`UnionSchema denormalization denormalizes an array of multiple entities using a function to infer the schemaAttribute 3`] = `
+Object {
+  "groupname": "People",
+  "id": 2,
+  "type": "groups",
+}
+`;
+
+exports[`UnionSchema denormalization denormalizes an array of multiple entities using a function to infer the schemaAttribute 4`] = `
+Object {
   "groupname": "People",
   "id": 2,
   "type": "groups",
@@ -24,6 +40,22 @@ Object {
 
 exports[`UnionSchema denormalization denormalizes an object using string schemaAttribute 2`] = `
 Object {
+  "id": 1,
+  "type": "users",
+  "username": "Janey",
+}
+`;
+
+exports[`UnionSchema denormalization denormalizes an object using string schemaAttribute 3`] = `
+Object {
+  "groupname": "People",
+  "id": 2,
+  "type": "groups",
+}
+`;
+
+exports[`UnionSchema denormalization denormalizes an object using string schemaAttribute 4`] = `
+Object {
   "groupname": "People",
   "id": 2,
   "type": "groups",
@@ -31,6 +63,12 @@ Object {
 `;
 
 exports[`UnionSchema denormalization returns the original value no schema is given 1`] = `
+Object {
+  "id": 1,
+}
+`;
+
+exports[`UnionSchema denormalization returns the original value no schema is given 2`] = `
 Object {
   "id": 1,
 }

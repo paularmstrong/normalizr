@@ -1,4 +1,5 @@
 /* eslint-env jest */
+import { fromJS } from 'immutable';
 import { denormalize, normalize, schema } from '../../';
 
 describe(`${schema.Object.name} normalization`, () => {
@@ -34,6 +35,8 @@ describe(`${schema.Object.name} denormalization`, () => {
       }
     };
     expect(denormalize({ user: 1 }, object, entities)).toMatchSnapshot();
+    expect(denormalize({ user: 1 }, object, fromJS(entities))).toMatchSnapshot();
+    expect(denormalize(fromJS({ user: 1 }), object, fromJS(entities))).toMatchSnapshot();
   });
 
   it('denormalizes plain object shorthand', () => {
@@ -44,5 +47,7 @@ describe(`${schema.Object.name} denormalization`, () => {
       }
     };
     expect(denormalize({ user: 1 }, { user: userSchema, tacos: {} }, entities)).toMatchSnapshot();
+    expect(denormalize({ user: 1 }, { user: userSchema, tacos: {} }, fromJS(entities))).toMatchSnapshot();
+    expect(denormalize(fromJS({ user: 1 }), { user: userSchema, tacos: {} }, fromJS(entities))).toMatchSnapshot();
   });
 });

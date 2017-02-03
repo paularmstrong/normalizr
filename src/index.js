@@ -3,6 +3,7 @@ import UnionSchema from './schemas/Union';
 import ValuesSchema from './schemas/Values';
 import ArraySchema, * as ArrayUtils from './schemas/Array';
 import ObjectSchema, * as ObjectUtils from './schemas/Object';
+import * as ImmutableUtils from './schemas/ImmutableUtils';
 
 const visit = (value, parent, key, schema, addEntity) => {
   if (typeof value !== 'object' || !value) {
@@ -67,7 +68,9 @@ const getEntities = (entities, visitedEntities) => (schema, entityOrId) => {
     visitedEntities[schemaKey] = {};
   }
 
-  const entity = typeof entityOrId === 'object' ? entityOrId : entities[schemaKey][entityOrId];
+  const entity = typeof entityOrId === 'object' ?
+    entityOrId :
+    ImmutableUtils.getIn(entities, [ schemaKey, entityOrId ]);
   const id = schema.getId(entity);
   if (visitedEntities[schemaKey][id]) {
     return id;

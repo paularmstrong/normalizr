@@ -7,7 +7,23 @@ Object {
 }
 `;
 
+exports[`EntitySchema denormalization can denormalize already partially denormalized data 2`] = `
+Object {
+  "food": Object {
+    "id": 1,
+  },
+  "id": 1,
+}
+`;
+
 exports[`EntitySchema denormalization denormalizes an entity 1`] = `
+Object {
+  "id": 1,
+  "type": "foo",
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes an entity 2`] = `
 Object {
   "id": 1,
   "type": "foo",
@@ -24,6 +40,21 @@ Object {
 `;
 
 exports[`EntitySchema denormalization denormalizes deep entities 2`] = `
+Object {
+  "food": Object {
+    "id": 1,
+  },
+  "id": 1,
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes deep entities 3`] = `
+Object {
+  "id": 2,
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes deep entities 4`] = `
 Object {
   "id": 2,
 }

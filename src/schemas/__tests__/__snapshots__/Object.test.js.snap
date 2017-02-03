@@ -7,7 +7,43 @@ Object {
 }
 `;
 
+exports[`ObjectSchema denormalization denormalizes an object 2`] = `
+Object {
+  "user": Object {
+    "id": 1,
+    "name": "Nacho",
+  },
+}
+`;
+
+exports[`ObjectSchema denormalization denormalizes an object 3`] = `
+Object {
+  "user": Object {
+    "id": 1,
+    "name": "Nacho",
+  },
+}
+`;
+
 exports[`ObjectSchema denormalization denormalizes plain object shorthand 1`] = `
+Object {
+  "user": Object {
+    "id": 1,
+    "name": "Jane",
+  },
+}
+`;
+
+exports[`ObjectSchema denormalization denormalizes plain object shorthand 2`] = `
+Object {
+  "user": Object {
+    "id": 1,
+    "name": "Jane",
+  },
+}
+`;
+
+exports[`ObjectSchema denormalization denormalizes plain object shorthand 3`] = `
 Object {
   "user": Object {
     "id": 1,

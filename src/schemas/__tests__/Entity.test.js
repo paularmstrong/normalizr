@@ -1,4 +1,5 @@
 /* eslint-env jest */
+import { fromJS } from 'immutable';
 import { denormalize, normalize, schema } from '../../';
 
 describe(`${schema.Entity.name} normalization`, () => {
@@ -108,6 +109,7 @@ describe(`${schema.Entity.name} denormalization`, () => {
       }
     };
     expect(denormalize(1, mySchema, entities)).toMatchSnapshot();
+    expect(denormalize(1, mySchema, fromJS(entities))).toMatchSnapshot();
   });
 
   it('denormalizes deep entities', () => {
@@ -127,7 +129,10 @@ describe(`${schema.Entity.name} denormalization`, () => {
     };
 
     expect(denormalize(1, menuSchema, entities)).toMatchSnapshot();
+    expect(denormalize(1, menuSchema, fromJS(entities))).toMatchSnapshot();
+
     expect(denormalize(2, menuSchema, entities)).toMatchSnapshot();
+    expect(denormalize(2, menuSchema, fromJS(entities))).toMatchSnapshot();
   });
 
   it('can denormalize already partially denormalized data', () => {
@@ -146,5 +151,6 @@ describe(`${schema.Entity.name} denormalization`, () => {
     };
 
     expect(denormalize(1, menuSchema, entities)).toMatchSnapshot();
+    expect(denormalize(1, menuSchema, fromJS(entities))).toMatchSnapshot();
   });
 });

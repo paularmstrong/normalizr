@@ -11,7 +11,40 @@ Array [
 ]
 `;
 
+exports[`ArraySchema denormalization Class denormalizes a single entity 2`] = `
+Array [
+  Object {
+    "id": 1,
+    "name": "Milo",
+  },
+  Object {
+    "id": 2,
+    "name": "Jake",
+  },
+]
+`;
+
 exports[`ArraySchema denormalization Class denormalizes multiple entities 1`] = `
+Array [
+  Object {
+    "id": "123",
+    "type": "cats",
+  },
+  Object {
+    "id": "123",
+    "type": "people",
+  },
+  Object {
+    "id": "789",
+  },
+  Object {
+    "id": "456",
+    "type": "cats",
+  },
+]
+`;
+
+exports[`ArraySchema denormalization Class denormalizes multiple entities 2`] = `
 Array [
   Object {
     "id": "123",
@@ -38,6 +71,13 @@ Object {
 }
 `;
 
+exports[`ArraySchema denormalization Class returns the input value if is not an array 2`] = `
+Object {
+  "fillings": null,
+  "id": "123",
+}
+`;
+
 exports[`ArraySchema denormalization Object denormalizes a single entity 1`] = `
 Array [
   Object {
@@ -51,7 +91,27 @@ Array [
 ]
 `;
 
+exports[`ArraySchema denormalization Object denormalizes a single entity 2`] = `
+Array [
+  Object {
+    "id": 1,
+    "name": "Milo",
+  },
+  Object {
+    "id": 2,
+    "name": "Jake",
+  },
+]
+`;
+
 exports[`ArraySchema denormalization Object returns the input value if is not an array 1`] = `
+Object {
+  "fillings": null,
+  "id": "123",
+}
+`;
+
+exports[`ArraySchema denormalization Object returns the input value if is not an array 2`] = `
 Object {
   "fillings": null,
   "id": "123",

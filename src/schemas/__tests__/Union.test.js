@@ -1,4 +1,5 @@
 /* eslint-env jest */
+import { fromJS } from 'immutable';
 import { denormalize, normalize, schema } from '../../';
 
 describe(`${schema.Union.name} normalization`, () => {
@@ -51,7 +52,10 @@ describe(`${schema.Union.name} denormalization`, () => {
     }, 'type');
 
     expect(denormalize({ id: 1, schema: 'users' }, union, entities)).toMatchSnapshot();
+    expect(denormalize({ id: 1, schema: 'users' }, union, fromJS(entities))).toMatchSnapshot();
+
     expect(denormalize({ id: 2, schema: 'groups' }, union, entities)).toMatchSnapshot();
+    expect(denormalize({ id: 2, schema: 'groups' }, union, fromJS(entities))).toMatchSnapshot();
   });
 
   it('denormalizes an array of multiple entities using a function to infer the schemaAttribute', () => {
@@ -61,7 +65,10 @@ describe(`${schema.Union.name} denormalization`, () => {
     }, (input) => { return input.username ? 'users' : 'groups'; });
 
     expect(denormalize({ id: 1, schema: 'users' }, union, entities)).toMatchSnapshot();
+    expect(denormalize({ id: 1, schema: 'users' }, union, fromJS(entities))).toMatchSnapshot();
+
     expect(denormalize({ id: 2, schema: 'groups' }, union, entities)).toMatchSnapshot();
+    expect(denormalize({ id: 2, schema: 'groups' }, union, fromJS(entities))).toMatchSnapshot();
   });
 
   it('returns the original value no schema is given', () => {
@@ -71,5 +78,6 @@ describe(`${schema.Union.name} denormalization`, () => {
     }, (input) => { return input.username ? 'users' : 'groups'; });
 
     expect(denormalize({ id: 1 }, union, entities)).toMatchSnapshot();
+    expect(denormalize({ id: 1 }, union, fromJS(entities))).toMatchSnapshot();
   });
 });
