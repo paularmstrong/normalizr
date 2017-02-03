@@ -15,16 +15,17 @@ export const normalize = (schema, input, parent, key, visit, addEntity) => {
 };
 
 export const denormalize = (schema, input, unvisit, getDenormalizedEntity) => {
-  let processedObject = ImmutableUtils.isImmutable(input) ? input : { ...input };
+  if (ImmutableUtils.isImmutable(input)) {
+    return ImmutableUtils.denormalizeImmutable(schema, input, unvisit, getDenormalizedEntity);
+  }
+
+  const object = { ...input };
   Object.keys(schema).forEach((key) => {
-    if (ImmutableUtils.hasIn(processedObject, [ key ])) {
-      const localSchema = schema[key];
-      const value = ImmutableUtils.getIn(processedObject, [ key ]);
-      const denormalizedEntity = unvisit(value, localSchema, getDenormalizedEntity);
-      processedObject = ImmutableUtils.setIn(processedObject, [ key ], denormalizedEntity);
+    if (object[key]) {
+      object[key] = unvisit(object[key], schema[key], getDenormalizedEntity);
     }
   });
-  return processedObject;
+  return object;
 };
 
 export default class ObjectSchema {

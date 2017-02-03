@@ -17,7 +17,7 @@ export default class EntitySchema {
     this._key = key;
     this._getId = typeof idAttribute === 'function' ?
       idAttribute :
-      (input) => ImmutableUtils.getIn(input, [ idAttribute ]);
+      (input) => ImmutableUtils.isImmutable(input) ? input.get(idAttribute) : input[idAttribute];
     this._idAttribute = idAttribute;
     this._mergeStrategy = mergeStrategy;
     this._processStrategy = processStrategy;
@@ -66,13 +66,15 @@ export default class EntitySchema {
       return entity;
     }
 
-    let processedEntity = ImmutableUtils.isImmutable(entity) ? entity : { ...entity };
+    if (ImmutableUtils.isImmutable(entity)) {
+      return ImmutableUtils.denormalizeImmutable(this.schema, entity, unvisit, getDenormalizedEntity);
+    }
+
+    const processedEntity = { ...entity };
     Object.keys(this.schema).forEach((key) => {
-      if (ImmutableUtils.hasIn(processedEntity, [ key ])) {
+      if (processedEntity.hasOwnProperty(key)) {
         const schema = this.schema[key];
-        const value = ImmutableUtils.getIn(processedEntity, [ key ]);
-        const denormalizedEntity = unvisit(value, schema, getDenormalizedEntity);
-        processedEntity = ImmutableUtils.setIn(processedEntity, [ key ], denormalizedEntity);
+        processedEntity[key] = unvisit(processedEntity[key], schema, getDenormalizedEntity);
       }
     });
     return processedEntity;

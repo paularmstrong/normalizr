@@ -62,15 +62,25 @@ const unvisit = (input, schema, getDenormalizedEntity) => {
   return schema.denormalize(input, unvisit, getDenormalizedEntity);
 };
 
+const getEntity = (entityOrId, schemaKey, entities) => {
+  if (typeof entityOrId === 'object') {
+    return entityOrId;
+  }
+
+  if (ImmutableUtils.isImmutable(entities)) {
+    return entities.getIn([ schemaKey, entityOrId.toString() ]);
+  }
+
+  return entities[schemaKey][entityOrId];
+};
+
 const getEntities = (entities, visitedEntities) => (schema, entityOrId) => {
   const schemaKey = schema.key;
   if (!visitedEntities[schemaKey]) {
     visitedEntities[schemaKey] = {};
   }
 
-  const entity = typeof entityOrId === 'object' ?
-    entityOrId :
-    ImmutableUtils.getIn(entities, [ schemaKey, entityOrId ]);
+  const entity = getEntity(entityOrId, schemaKey, entities);
   const id = schema.getId(entity);
   if (visitedEntities[schemaKey][id]) {
     return id;

@@ -3,75 +3,39 @@
  * the 'immutable' package as a dependency.
  */
 
-function stringifiedArray(array) {
-  return array.map((item) => item && item.toString());
-}
-
 /**
- * Check if an object is immutable by checking if it implements the
- * getIn method.
+ * Check if an object is immutable by checking if it has a key specific
+ * to the immutable library.
  *
  * @param  {any} object
  * @return {bool}
  */
 export function isImmutable(object) {
-  return !!(object && object.getIn);
+  return !!(object && (
+    object.hasOwnProperty('__ownerID') || // Immutable.Map
+    (object._map && object._map.object.hasOwnProperty('__ownerID')) // Immutable.Record
+  ));
 }
 
 /**
- * If the object responds to getIn, that's called directly. Otherwise
- * recursively apply object/array access to get the value.
+ * Denormalize an immutable entity.
  *
- * @param  {Object, Immutable.Map, Immutable.Record} object
- * @param  {Array<string, number>} keyPath
- * @return {any}
+ * @param  {Schema} schema
+ * @param  {Immutable.Map|Immutable.Record} input
+ * @param  {function} unvisit
+ * @param  {function} getDenormalizedEntity
+ * @return {Immutable.Map|Immutable.Record}
  */
-export function getIn(object, keyPath) {
-  if (object.getIn) {
-    return object.getIn(stringifiedArray(keyPath));
-  }
+export function denormalizeImmutable(schema, input, unvisit, getDenormalizedEntity) {
+  return Object.keys(schema).reduce((object, key) => {
+    // Immutable maps cast keys to strings on write so we need to ensure
+    // we're accessing them using string keys.
+    const stringKey = typeof key === 'string' ? key : key.toString();
 
-  return keyPath.reduce((memo, key) => memo[key], object);
-}
-
-/**
- * If the object responds to hasIn, that's called directly. Otherwise
- * recursively apply object/array access and check if the full path exists
- * using hasOwnProperty.
- *
- * @param  {Object, Immutable.Map, Immutable.Record} object
- * @param  {Array<string, number>} keyPath
- * @return {any}
- */
-export function hasIn(object, keyPath) {
-  if (object.hasIn) {
-    return object.hasIn(stringifiedArray(keyPath));
-  }
-
-  const lastKey = keyPath.pop();
-  const location = getIn(object, keyPath);
-
-  return location.hasOwnProperty(lastKey);
-}
-
-/**
- * If the object responds to setIn, that's called directly. Otherwise
- * recursively apply object/array access and set the value at that location.
- *
- * @param  {Object, Immutable.Map, Immutable.Record} object
- * @param  {Array<string, number>} keyPath
- * @param  {any} value
- * @return {any}
- */
-export function setIn(object, keyPath, value) {
-  if (object.setIn) {
-    return object.setIn(stringifiedArray(keyPath), value);
-  }
-
-  const lastKey = keyPath.pop();
-  const location = getIn(object, keyPath);
-
-  location[lastKey] = value;
-
-  return object;
+    if (object.has(stringKey)) {
+      return object.set(stringKey, unvisit(object.get(stringKey), schema[stringKey], getDenormalizedEntity));
+    } else {
+      return object;
+    }
+  }, input);
 }
