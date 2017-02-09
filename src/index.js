@@ -83,6 +83,11 @@ const getEntities = (entities, visitedEntities, isImmutable) => (schema, entityO
   }
 
   const entity = getEntity(entityOrId, schemaKey, entities, isImmutable);
+
+  if (typeof entity !== 'object' || entity === null) {
+    return entity;
+  }
+
   const id = schema.getId(entity);
   if (visitedEntities[schemaKey][id]) {
     return id;
