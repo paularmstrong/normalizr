@@ -53,6 +53,7 @@
     "coveralls": "^2.11.15",
     "eslint": "^3.12.2",
     "flow-bin": "^0.37.1",
+    "immutable": "^3.8.1",
     "jest": "^18.0.0",
     "mkdirp": "^0.5.1",
     "npm-run-all": "^3.1.2",

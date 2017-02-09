@@ -11,6 +11,19 @@ Object {
 }
 `;
 
+exports[`ValuesSchema denormalization denormalizes the values of an object with the given schema 2`] = `
+Object {
+  "fido": Object {
+    "id": 1,
+    "type": "dogs",
+  },
+  "fluffy": Object {
+    "id": 1,
+    "type": "cats",
+  },
+}
+`;
+
 exports[`ValuesSchema normalization can use a function to determine the schema when normalizing 1`] = `
 Object {
   "entities": Object {

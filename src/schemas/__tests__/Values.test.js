@@ -1,4 +1,5 @@
 /* eslint-env jest */
+import { fromJS } from 'immutable';
 import { denormalize, normalize, schema } from '../../';
 
 describe(`${schema.Values.name} normalization`, () => {
@@ -65,5 +66,10 @@ describe(`${schema.Values.name} denormalization`, () => {
       fido: { id: 1, schema: 'dogs' },
       fluffy: { id: 1, schema: 'cats' }
     }, valuesSchema, entities)).toMatchSnapshot();
+
+    expect(denormalize({
+      fido: { id: 1, schema: 'dogs' },
+      fluffy: { id: 1, schema: 'cats' }
+    }, valuesSchema, fromJS(entities))).toMatchSnapshot();
   });
 });

@@ -3,6 +3,7 @@ import UnionSchema from './schemas/Union';
 import ValuesSchema from './schemas/Values';
 import ArraySchema, * as ArrayUtils from './schemas/Array';
 import ObjectSchema, * as ObjectUtils from './schemas/Object';
+import * as ImmutableUtils from './schemas/ImmutableUtils';
 
 const visit = (value, parent, key, schema, addEntity) => {
   if (typeof value !== 'object' || !value) {
@@ -58,16 +59,30 @@ const unvisit = (input, schema, getDenormalizedEntity) => {
     return method(schema, input, unvisit, getDenormalizedEntity);
   }
 
+  if (input === undefined || input === null) {
+    return input;
+  }
+
   return schema.denormalize(input, unvisit, getDenormalizedEntity);
 };
 
-const getEntities = (entities, visitedEntities) => (schema, entityOrId) => {
+const getEntity = (entityOrId, schemaKey, entities, isImmutable) => {
+  if (typeof entityOrId === 'object') {
+    return entityOrId;
+  }
+
+  return isImmutable ?
+    entities.getIn([ schemaKey, entityOrId.toString() ]) :
+    entities[schemaKey][entityOrId];
+};
+
+const getEntities = (entities, visitedEntities, isImmutable) => (schema, entityOrId) => {
   const schemaKey = schema.key;
   if (!visitedEntities[schemaKey]) {
     visitedEntities[schemaKey] = {};
   }
 
-  const entity = typeof entityOrId === 'object' ? entityOrId : entities[schemaKey][entityOrId];
+  const entity = getEntity(entityOrId, schemaKey, entities, isImmutable);
   const id = schema.getId(entity);
   if (visitedEntities[schemaKey][id]) {
     return id;
@@ -82,6 +97,7 @@ export const denormalize = (input, schema, entities) => {
     return input;
   }
 
-  const getDenormalizedEntity = getEntities(entities, {});
+  const isImmutable = ImmutableUtils.isImmutable(entities);
+  const getDenormalizedEntity = getEntities(entities, {}, isImmutable);
   return unvisit(input, schema, getDenormalizedEntity);
 };

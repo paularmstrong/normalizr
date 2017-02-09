@@ -1,4 +1,5 @@
 /* eslint-env jest */
+import { fromJS } from 'immutable';
 import { denormalize, normalize, schema } from '../../';
 
 describe(`${schema.Array.name} normalization`, () => {
@@ -84,6 +85,7 @@ describe(`${schema.Array.name} denormalization`, () => {
         }
       };
       expect(denormalize([ 1, 2 ], [ cats ], entities)).toMatchSnapshot();
+      expect(denormalize([ 1, 2 ], [ cats ], fromJS(entities))).toMatchSnapshot();
     });
 
     it('returns the input value if is not an array', () => {
@@ -99,6 +101,7 @@ describe(`${schema.Array.name} denormalization`, () => {
       };
 
       expect(denormalize('123', taco, entities)).toMatchSnapshot();
+      expect(denormalize('123', taco, fromJS(entities))).toMatchSnapshot();
     });
   });
 
@@ -113,6 +116,7 @@ describe(`${schema.Array.name} denormalization`, () => {
       };
       const catList = new schema.Array(cats);
       expect(denormalize([ 1, 2 ], catList, entities)).toMatchSnapshot();
+      expect(denormalize([ 1, 2 ], catList, fromJS(entities))).toMatchSnapshot();
     });
 
     it('denormalizes multiple entities', () => {
@@ -151,6 +155,7 @@ describe(`${schema.Array.name} denormalization`, () => {
       ];
 
       expect(denormalize(input, listSchema, entities)).toMatchSnapshot();
+      expect(denormalize(input, listSchema, fromJS(entities))).toMatchSnapshot();
     });
 
     it('returns the input value if is not an array', () => {
@@ -167,6 +172,7 @@ describe(`${schema.Array.name} denormalization`, () => {
       };
 
       expect(denormalize('123', taco, entities)).toMatchSnapshot();
+      expect(denormalize('123', taco, fromJS(entities))).toMatchSnapshot();
     });
   });
 });

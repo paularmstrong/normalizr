@@ -1,3 +1,5 @@
+import * as ImmutableUtils from './ImmutableUtils';
+
 export const normalize = (schema, input, parent, key, visit, addEntity) => {
   const object = { ...input };
   Object.keys(schema).forEach((key) => {
@@ -13,6 +15,10 @@ export const normalize = (schema, input, parent, key, visit, addEntity) => {
 };
 
 export const denormalize = (schema, input, unvisit, getDenormalizedEntity) => {
+  if (ImmutableUtils.isImmutable(input)) {
+    return ImmutableUtils.denormalizeImmutable(schema, input, unvisit, getDenormalizedEntity);
+  }
+
   const object = { ...input };
   Object.keys(schema).forEach((key) => {
     if (object[key]) {
