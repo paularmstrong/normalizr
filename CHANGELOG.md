@@ -1,3 +1,10 @@
+# v3.2.0
+
+* **Added** Support denormoalizing from Immutable entities (gh-228)
+* **Added** Brought back `get idAttribute()` to `schema.Entity` (gh-226)
+* **Fixed** Gracefully handle missing data in `denormalize` (gh-232)
+* **Fixed** Prevent infinite recursion in `denormalize` (gh-220)
+
 # v3.1.0
 
 * **Added** `denormalize`. (gh-214)
