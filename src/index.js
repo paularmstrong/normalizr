@@ -59,6 +59,10 @@ const unvisit = (input, schema, getDenormalizedEntity) => {
     return method(schema, input, unvisit, getDenormalizedEntity);
   }
 
+  if (input === undefined || input === null) {
+    return input;
+  }
+
   return schema.denormalize(input, unvisit, getDenormalizedEntity);
 };
 

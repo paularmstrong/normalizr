@@ -60,6 +60,38 @@ Object {
 }
 `;
 
+exports[`EntitySchema denormalization denormalizes deep entities with records 1`] = `
+Object {
+  "food": Object {
+    "id": 1,
+  },
+  "id": 1,
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes deep entities with records 2`] = `
+Object {
+  "food": Object {
+    "id": 1,
+  },
+  "id": 1,
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes deep entities with records 3`] = `
+Object {
+  "food": null,
+  "id": 2,
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes deep entities with records 4`] = `
+Object {
+  "food": null,
+  "id": 2,
+}
+`;
+
 exports[`EntitySchema normalization idAttribute can build the entity's ID from the parent object 1`] = `
 Object {
   "entities": Object {

@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import { fromJS } from 'immutable';
+import { fromJS, Record } from 'immutable';
 import { denormalize, normalize, schema } from '../../';
 
 describe(`${schema.Entity.name} normalization`, () => {
@@ -125,6 +125,32 @@ describe(`${schema.Entity.name} denormalization`, () => {
       },
       foods: {
         1: { id: 1 }
+      }
+    };
+
+    expect(denormalize(1, menuSchema, entities)).toMatchSnapshot();
+    expect(denormalize(1, menuSchema, fromJS(entities))).toMatchSnapshot();
+
+    expect(denormalize(2, menuSchema, entities)).toMatchSnapshot();
+    expect(denormalize(2, menuSchema, fromJS(entities))).toMatchSnapshot();
+  });
+
+  it('denormalizes deep entities with records', () => {
+    const foodSchema = new schema.Entity('foods');
+    const menuSchema = new schema.Entity('menus', {
+      food: foodSchema
+    });
+
+    const Food = new Record({ id: null });
+    const Menu = new Record({ id: null, food: null });
+
+    const entities = {
+      menus: {
+        1: new Menu({ id: 1, food: 1 }),
+        2: new Menu({ id: 2 })
+      },
+      foods: {
+        1: new Food({ id: 1 })
       }
     };
 
