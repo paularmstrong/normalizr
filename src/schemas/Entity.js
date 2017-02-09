@@ -63,7 +63,7 @@ export default class EntitySchema {
 
   denormalize(entityOrId, unvisit, getDenormalizedEntity) {
     const entity = getDenormalizedEntity(this, entityOrId);
-    if (typeof entity !== 'object') {
+    if (typeof entity !== 'object' || entity === null) {
       return entity;
     }
 

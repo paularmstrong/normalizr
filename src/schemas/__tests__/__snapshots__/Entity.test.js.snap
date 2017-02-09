@@ -92,6 +92,24 @@ Object {
 }
 `;
 
+exports[`EntitySchema denormalization denormalizes to undefined for missing data 1`] = `
+Object {
+  "food": undefined,
+  "id": 1,
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes to undefined for missing data 2`] = `
+Object {
+  "food": undefined,
+  "id": 1,
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes to undefined for missing data 3`] = `undefined`;
+
+exports[`EntitySchema denormalization denormalizes to undefined for missing data 4`] = `undefined`;
+
 exports[`EntitySchema normalization idAttribute can build the entity's ID from the parent object 1`] = `
 Object {
   "entities": Object {
