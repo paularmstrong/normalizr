@@ -135,6 +135,28 @@ describe(`${schema.Entity.name} denormalization`, () => {
     expect(denormalize(2, menuSchema, fromJS(entities))).toMatchSnapshot();
   });
 
+  it('denormalizes to undefined for missing data', () => {
+    const foodSchema = new schema.Entity('foods');
+    const menuSchema = new schema.Entity('menus', {
+      food: foodSchema
+    });
+
+    const entities = {
+      menus: {
+        1: { id: 1, food: 2 }
+      },
+      foods: {
+        1: { id: 1 }
+      }
+    };
+
+    expect(denormalize(1, menuSchema, entities)).toMatchSnapshot();
+    expect(denormalize(1, menuSchema, fromJS(entities))).toMatchSnapshot();
+
+    expect(denormalize(2, menuSchema, entities)).toMatchSnapshot();
+    expect(denormalize(2, menuSchema, fromJS(entities))).toMatchSnapshot();
+  });
+
   it('denormalizes deep entities with records', () => {
     const foodSchema = new schema.Entity('foods');
     const menuSchema = new schema.Entity('menus', {
