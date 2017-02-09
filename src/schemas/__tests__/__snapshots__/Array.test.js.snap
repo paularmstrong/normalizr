@@ -66,14 +66,14 @@ Array [
 
 exports[`ArraySchema denormalization Class returns the input value if is not an array 1`] = `
 Object {
-  "fillings": null,
+  "fillings": Object {},
   "id": "123",
 }
 `;
 
 exports[`ArraySchema denormalization Class returns the input value if is not an array 2`] = `
 Object {
-  "fillings": null,
+  "fillings": Object {},
   "id": "123",
 }
 `;

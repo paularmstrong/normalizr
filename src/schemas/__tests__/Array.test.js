@@ -166,7 +166,7 @@ describe(`${schema.Array.name} denormalization`, () => {
         tacos: {
           '123': {
             id: '123',
-            fillings: null
+            fillings: {}
           }
         }
       };
