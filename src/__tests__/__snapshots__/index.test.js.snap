@@ -33,20 +33,6 @@ Object {
 }
 `;
 
-exports[`denormalize denormalizes recursive dependencies 1`] = `
-Object {
-  "id": "123",
-  "title": "Weekly report",
-  "user": Object {
-    "id": "456",
-    "reports": Array [
-      "123",
-    ],
-    "role": "manager",
-  },
-}
-`;
-
 exports[`normalize can use fully custom entity classes 1`] = `
 Object {
   "entities": Object {
