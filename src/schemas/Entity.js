@@ -75,9 +75,7 @@ export default class EntitySchema {
         return ImmutableUtils.denormalizeImmutable(this.schema, entity, unvisit, getDenormalizedEntity);
       }
 
-      cache[this.key][this.getId(entity)] = { ...entity };
-
-      const processedEntity = cache[this.key][this.getId(entity)];
+      const processedEntity = cache({ ...entity });
       Object.keys(this.schema).forEach((key) => {
         if (processedEntity.hasOwnProperty(key)) {
           const schema = this.schema[key];

@@ -79,19 +79,22 @@ const getEntity = (entityOrId, schemaKey, entities, isImmutable) => {
 const getEntities = (entities, cache, isImmutable) => (schema, entityOrId) => {
   return (handleCacheHit, handleCacheMiss) => {
     const schemaKey = schema.key;
-    const entityId = typeof entityOrId === 'object' ? schema.getId(entityOrId) : entityOrId;
+    const getEntityId = (entity) => typeof entity === 'object' ? schema.getId(entity) : entity;
 
     if (!cache[schemaKey]) {
       cache[schemaKey] = {};
     }
 
-    if (cache[schemaKey][entityId]) {
-      return handleCacheHit(cache[schemaKey][entityId]);
+    if (cache[schemaKey][getEntityId(entityOrId)]) {
+      return handleCacheHit(cache[schemaKey][getEntityId(entityOrId)]);
     }
 
     const entity = getEntity(entityOrId, schemaKey, entities, isImmutable);
 
-    return handleCacheMiss(entity, cache);
+    return handleCacheMiss(entity, (entityToCache) => {
+      cache[schemaKey][getEntityId(entityToCache)] = entityToCache;
+      return cache[schemaKey][getEntityId(entityToCache)];
+    });
   };
 };
 
