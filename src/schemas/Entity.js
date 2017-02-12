@@ -62,27 +62,27 @@ export default class EntitySchema {
   }
 
   denormalize(entityOrId, unvisit, getDenormalizedEntity) {
-    const getCachedEntity = getDenormalizedEntity(this, entityOrId);
-
-    return getCachedEntity((cachedEntity) => {
-      return cachedEntity;
-    }, (entity, cache) => {
+    return getDenormalizedEntity(this, entityOrId, (entity, addToCache) => {
       if (typeof entity !== 'object' || entity === null) {
         return entity;
       }
 
       if (ImmutableUtils.isImmutable(entity)) {
-        return ImmutableUtils.denormalizeImmutable(this.schema, entity, unvisit, getDenormalizedEntity);
+        const entityId = entity.get(this._idAttribute);
+        const preCachedEntity = addToCache(this.key, entityId, entity);
+        const updateCache = (entity) => addToCache(this.key, entityId, entity);
+        const normalized = ImmutableUtils.denormalizeImmutable(this.schema, preCachedEntity, updateCache, unvisit, getDenormalizedEntity);
+        return addToCache(this.key, entityId, normalized);
       }
 
-      const processedEntity = cache({ ...entity });
+      const cachedEntity = addToCache(this.key, this.getId(entity), { ...entity });
       Object.keys(this.schema).forEach((key) => {
-        if (processedEntity.hasOwnProperty(key)) {
+        if (cachedEntity.hasOwnProperty(key)) {
           const schema = this.schema[key];
-          processedEntity[key] = unvisit(processedEntity[key], schema, getDenormalizedEntity);
+          cachedEntity[key] = unvisit(cachedEntity[key], schema, getDenormalizedEntity);
         }
       });
-      return processedEntity;
+      return cachedEntity;
     });
   }
 }

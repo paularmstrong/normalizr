@@ -34,17 +34,84 @@ Object {
 `;
 
 exports[`denormalize denormalizes recursive dependencies 1`] = `
-Object {
-  "id": 1,
-  "title": "Weekly report",
-  "user": Object {
-    "id": 1,
-    "reports": Array [
-      [Circular],
-    ],
-    "role": "manager",
+Array [
+  Object {
+    "id": "1",
+    "title": "Weekly report",
+    "user": Object {
+      "id": "1",
+      "reports": Array [
+        [Circular],
+        Object {
+          "id": "2",
+          "title": "Monthly report",
+          "user": [Circular],
+        },
+      ],
+      "role": "manager",
+    },
   },
-}
+  Object {
+    "id": "2",
+    "title": "Monthly report",
+    "user": Object {
+      "id": "1",
+      "reports": Array [
+        Object {
+          "id": "1",
+          "title": "Weekly report",
+          "user": [Circular],
+        },
+        [Circular],
+      ],
+      "role": "manager",
+    },
+  },
+]
+`;
+
+exports[`denormalize denormalizes recursive immutables 1`] = `
+Array [
+  Object {
+    "id": "1",
+    "title": "Weekly report",
+    "user": Object {
+      "id": "1",
+      "reports": Array [
+        Object {
+          "id": "1",
+          "title": "Weekly report",
+          "user": "1",
+        },
+        Object {
+          "id": "2",
+          "title": "Monthly report",
+          "user": Object {
+            "id": "1",
+            "reports": Array [
+              "1",
+              "2",
+            ],
+            "role": "manager",
+          },
+        },
+      ],
+      "role": "manager",
+    },
+  },
+  Object {
+    "id": "2",
+    "title": "Monthly report",
+    "user": Object {
+      "id": "1",
+      "reports": Array [
+        "1",
+        "2",
+      ],
+      "role": "manager",
+    },
+  },
+]
 `;
 
 exports[`normalize can use fully custom entity classes 1`] = `

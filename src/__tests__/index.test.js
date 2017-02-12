@@ -1,5 +1,6 @@
 /* eslint-env jest */
 import { denormalize, normalize, schema } from '../';
+import { fromJS, Record } from 'immutable';
 
 describe('normalize', () => {
   [ 42, null, undefined, '42', () => {} ].forEach((input) => {
@@ -210,31 +211,54 @@ describe('denormalize', () => {
 
   it('denormalizes recursive dependencies', () => {
     const user = new schema.Entity('users');
-    const report = new schema.Entity('reports');
-
-    user.define({
-      reports: [ report ]
-    });
-    report.define({
-      user: user
-    });
+    const report = new schema.Entity('reports', { user });
+    user.define({ reports: [ report ] });
 
     const entities = {
       reports: {
-        1: {
-          id: 1,
-          title: 'Weekly report',
-          user: 1
+        '1': {
+          id: '1', title: 'Weekly report', user: '1'
+        },
+        '2': {
+          id: '2', title: 'Monthly report', user: '1'
         }
       },
       users: {
-        1: {
-          id: 1,
+        '1': {
+          id: '1',
           role: 'manager',
-          reports: [ 1 ]
+          reports: [ '1', '2' ]
         }
       }
     };
-    expect(denormalize('1', report, entities)).toMatchSnapshot();
+    const output = denormalize([ '1', '2' ], [ report ], entities);
+    expect(output).toMatchSnapshot();
+    expect(output[0].user.reports[0]).toEqual(output[0]);
+    expect(output[0].user.reports[0].user).toEqual(output[0].user);
+    expect(output[0].user).toEqual(output[1].user);
+  });
+
+  it('denormalizes recursive immutables', () => {
+    const user = new schema.Entity('users');
+    const report = new schema.Entity('reports', { user });
+    user.define({ reports: [ report ] });
+
+    const Report = new Record({ id: null, title: null, user: null });
+    const User = new Record({ id: null, reports: null, role: null });
+
+    const entities = {
+      reports: {
+        '1': new Report({ id: '1', title: 'Weekly report', user: '1' }),
+        '2': new Report({ id: '2', title: 'Monthly report', user: '1' })
+      },
+      users: {
+        '1': new User({ id: '1', reports: [ '1', '2' ], role: 'manager' })
+      }
+    };
+    const output = denormalize([ '1', '2' ], [ report ], entities);
+    expect(output).toMatchSnapshot();
+    expect(output[0].user.reports[0]).toEqual(output[0]);
+    expect(output[0].user.reports[0].user).toEqual(output[0].user);
+    expect(output[0].user).toEqual(output[1].user);
   });
 });
