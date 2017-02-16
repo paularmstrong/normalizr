@@ -201,4 +201,40 @@ describe(`${schema.Entity.name} denormalization`, () => {
     expect(denormalize(1, menuSchema, entities)).toMatchSnapshot();
     expect(denormalize(1, menuSchema, fromJS(entities))).toMatchSnapshot();
   });
+
+  it('denormalizes recursive dependencies', () => {
+    const user = new schema.Entity('users');
+    const report = new schema.Entity('reports');
+
+    user.define({
+      reports: [ report ]
+    });
+    report.define({
+      draftedBy: user,
+      publishedBy: user
+    });
+
+    const entities = {
+      reports: {
+        '123': {
+          id: '123',
+          title: 'Weekly report',
+          draftedBy: '456',
+          publishedBy: '456'
+        }
+      },
+      users: {
+        '456': {
+          id: '456',
+          role: 'manager',
+          reports: [ '123' ]
+        }
+      }
+    };
+    expect(denormalize('123', report, entities)).toMatchSnapshot();
+    expect(denormalize('123', report, fromJS(entities))).toMatchSnapshot();
+
+    expect(denormalize('456', user, entities)).toMatchSnapshot();
+    expect(denormalize('456', user, fromJS(entities))).toMatchSnapshot();
+  });
 });

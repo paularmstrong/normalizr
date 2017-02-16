@@ -53,33 +53,69 @@ export const normalize = (input, schema) => {
   return { entities, result };
 };
 
-const unvisit = (input, schema, getDenormalizedEntity) => {
-  if (typeof schema === 'object' && (!schema.denormalize || typeof schema.denormalize !== 'function')) {
-    const method = Array.isArray(schema) ? ArrayUtils.denormalize : ObjectUtils.denormalize;
-    return method(schema, input, unvisit, getDenormalizedEntity);
+const unvisitEntity = (input, schema, unvisit, getEntity, cache) => {
+  const entity = getEntity(input, schema);
+  if (typeof entity !== 'object' || entity === null) {
+    return entity;
   }
 
-  if (input === undefined || input === null) {
-    return input;
+  const id = schema.getId(entity);
+
+  if (!cache[schema.key]) {
+    cache[schema.key] = {};
   }
 
-  return schema.denormalize(input, unvisit, getDenormalizedEntity);
+  if (!cache[schema.key][id]) {
+    // Ensure we don't mutate it non-immutable objects
+    const entityCopy = ImmutableUtils.isImmutable(entity) ? entity : { ...entity };
+
+    // Need to set this first so that if it is referenced further within the
+    // denormalization the reference will already exist.
+    cache[schema.key][id] = entityCopy;
+    cache[schema.key][id] = schema.denormalize(entityCopy, unvisit);
+  }
+
+  return cache[schema.key][id];
 };
 
-const getEntity = (entityOrId, schemaKey, entities, isImmutable) => {
-  if (typeof entityOrId === 'object') {
-    return entityOrId;
-  }
+const getUnvisit = (entities) => {
+  const cache = {};
+  const getEntity = getEntities(entities);
 
-  return isImmutable ?
-    entities.getIn([ schemaKey, entityOrId.toString() ]) :
-    entities[schemaKey][entityOrId];
+  const unvisit = (input, schema) => {
+    if (typeof schema === 'object' && (!schema.denormalize || typeof schema.denormalize !== 'function')) {
+      const method = Array.isArray(schema) ? ArrayUtils.denormalize : ObjectUtils.denormalize;
+      return method(schema, input, unvisit);
+    }
+
+    if (input === undefined || input === null) {
+      return input;
+    }
+
+    if (schema instanceof EntitySchema) {
+      return unvisitEntity(input, schema, unvisit, getEntity, cache);
+    }
+
+    return schema.denormalize(input, unvisit);
+  };
+
+  return unvisit;
 };
 
-const getEntities = (entities, isImmutable) => (schema, entityOrId) => {
-  const schemaKey = schema.key;
+const getEntities = (entities) => {
+  const isImmutable = ImmutableUtils.isImmutable(entities);
 
-  return getEntity(entityOrId, schemaKey, entities, isImmutable);
+  return (entityOrId, schema) => {
+    const schemaKey = schema.key;
+
+    if (typeof entityOrId === 'object') {
+      return entityOrId;
+    }
+
+    return isImmutable ?
+      entities.getIn([ schemaKey, entityOrId.toString() ]) :
+      entities[schemaKey][entityOrId];
+  };
 };
 
 export const denormalize = (input, schema, entities) => {
@@ -87,7 +123,5 @@ export const denormalize = (input, schema, entities) => {
     return input;
   }
 
-  const isImmutable = ImmutableUtils.isImmutable(entities);
-  const getDenormalizedEntity = getEntities(entities, isImmutable);
-  return unvisit(input, schema, getDenormalizedEntity);
+  return getUnvisit(entities)(input, schema);
 };
