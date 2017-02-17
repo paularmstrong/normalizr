@@ -82,7 +82,7 @@ const getUnvisit = (entities) => {
   const cache = {};
   const getEntity = getEntities(entities);
 
-  const unvisit = (input, schema) => {
+  return function unvisit(input, schema) {
     if (typeof schema === 'object' && (!schema.denormalize || typeof schema.denormalize !== 'function')) {
       const method = Array.isArray(schema) ? ArrayUtils.denormalize : ObjectUtils.denormalize;
       return method(schema, input, unvisit);
@@ -98,8 +98,6 @@ const getUnvisit = (entities) => {
 
     return schema.denormalize(input, unvisit);
   };
-
-  return unvisit;
 };
 
 const getEntities = (entities) => {
