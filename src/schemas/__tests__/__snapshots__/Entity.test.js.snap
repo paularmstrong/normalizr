@@ -92,6 +92,100 @@ Object {
 }
 `;
 
+exports[`EntitySchema denormalization denormalizes recursive dependencies 1`] = `
+Object {
+  "draftedBy": Object {
+    "id": "456",
+    "reports": Array [
+      [Circular],
+    ],
+    "role": "manager",
+  },
+  "id": "123",
+  "publishedBy": Object {
+    "id": "456",
+    "reports": Array [
+      [Circular],
+    ],
+    "role": "manager",
+  },
+  "title": "Weekly report",
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes recursive dependencies 2`] = `
+Object {
+  "draftedBy": Object {
+    "id": "456",
+    "reports": Array [
+      Object {
+        "draftedBy": "456",
+        "id": "123",
+        "publishedBy": "456",
+        "title": "Weekly report",
+      },
+    ],
+    "role": "manager",
+  },
+  "id": "123",
+  "publishedBy": Object {
+    "id": "456",
+    "reports": Array [
+      Object {
+        "draftedBy": "456",
+        "id": "123",
+        "publishedBy": "456",
+        "title": "Weekly report",
+      },
+    ],
+    "role": "manager",
+  },
+  "title": "Weekly report",
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes recursive dependencies 3`] = `
+Object {
+  "id": "456",
+  "reports": Array [
+    Object {
+      "draftedBy": [Circular],
+      "id": "123",
+      "publishedBy": [Circular],
+      "title": "Weekly report",
+    },
+  ],
+  "role": "manager",
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes recursive dependencies 4`] = `
+Object {
+  "id": "456",
+  "reports": Array [
+    Object {
+      "draftedBy": Object {
+        "id": "456",
+        "reports": Array [
+          "123",
+        ],
+        "role": "manager",
+      },
+      "id": "123",
+      "publishedBy": Object {
+        "id": "456",
+        "reports": Array [
+          "123",
+        ],
+        "role": "manager",
+      },
+      "title": "Weekly report",
+    },
+  ],
+  "role": "manager",
+}
+`;
+
 exports[`EntitySchema denormalization denormalizes to undefined for missing data 1`] = `
 Object {
   "food": undefined,

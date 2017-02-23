@@ -11,12 +11,12 @@ export default class ValuesSchema extends PolymorphicSchema {
     }, {});
   }
 
-  denormalize(input, unvisit, getDenormalizedEntity) {
+  denormalize(input, unvisit) {
     return Object.keys(input).reduce((output, key) => {
       const entityOrId = input[key];
       return {
         ...output,
-        [key]: this.denormalizeValue(entityOrId, unvisit, getDenormalizedEntity)
+        [key]: this.denormalizeValue(entityOrId, unvisit)
       };
     }, {});
   }
