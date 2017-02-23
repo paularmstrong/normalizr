@@ -50,6 +50,37 @@ describe('normalize', () => {
     expect(normalize(input, article)).toMatchSnapshot();
   });
 
+  it('normalizes recursive payloads', () => {
+    const user = new schema.Entity('users', {
+      comments: [comment],
+    });
+
+    const comment = new schema.Entity('comments', {
+      user: user,
+    });
+
+    const userList = [user];
+
+    const input = [
+      {
+        id: '123',
+        name: 'paul',
+        comments: [
+          {
+            id: '456',
+            text: 'Test comment',
+            user: {
+              id: '123',
+              name: 'paul',
+            },
+          }
+        ],
+      },
+    ];
+
+    expect(normalize(input, userList)).toMatchSnapshot();
+  });
+
   it('does not modify the original input', () => {
     const user = new schema.Entity('users');
     const article = new schema.Entity('articles', { author: user });
