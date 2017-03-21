@@ -187,6 +187,75 @@ describe('denormalize', () => {
     expect(denormalize('123', article, entities)).toMatchSnapshot();
   });
 
+  it('denormalizes arrays of entities normalized using Union schemas)', () => {
+    const admin = {
+      type: 'admin',
+      id: 1,
+      name: 'Mr. Admin'
+    };
+    const visitor = {
+      type: 'visitor',
+      id: 2,
+      name: 'Ms Visitor'
+    };
+    const adminSchema = new schema.Entity('admin');
+    const visitorSchema = new schema.Entity('visitor');
+    const userSchema = new schema.Union({
+      admin: adminSchema,
+      visitor: visitorSchema
+    }, 'type');
+    const data = [ admin, visitor ];
+    const { result, entities } = normalize(data, new schema.Array(userSchema));
+
+    // example when schema for denormalization is created using a javascript array
+    const denormalizedData1 = denormalize(result, [ userSchema ], entities);
+    // example when schema for denormalization is created using schema.Array constructor
+    const denormalizedData2 = denormalize(result, new schema.Array(userSchema), entities);
+
+    expect(denormalizedData1).toEqual(data); // this works
+    expect(denormalizedData2).toEqual(data); // this doesn’t work, and fails the test
+  });
+
+  it('denormalizes schemas containing array schemas)', () => {
+    const adminSchema = new schema.Entity('admin');
+    const visitorSchema = new schema.Entity('visitor');
+    const userSchema = new schema.Union({
+      admin: adminSchema,
+      visitor: visitorSchema
+    }, 'type');
+    const recordSchema1 = new schema.Entity('record');
+    const recordSchema2 = new schema.Entity('record');
+    recordSchema1.define({
+      users: [ userSchema ]
+    });
+    recordSchema2.define({
+      users: new schema.Array(userSchema)
+    });
+    const admin = {
+      type: 'admin',
+      id: 1,
+      name: 'Mr. Admin'
+    };
+    const visitor = {
+      type: 'visitor',
+      id: 2,
+      name: 'Ms Visitor'
+    };
+    const record = {
+      id: 1,
+      users: [ admin, visitor ]
+    };
+
+    const { result: result1, entities: entities1 } = normalize(record, recordSchema1);
+    const { result: result2, entities: entities2 } = normalize(record, recordSchema2);
+
+    const denormalizedData1 = denormalize(result1, recordSchema1, entities1);
+    expect(denormalizedData1).toEqual(record); // this works
+
+    const denormalizedData2 = denormalize(result2, recordSchema2, entities2);
+    expect(denormalizedData2).toEqual(record); // this does not work, and fails the test
+  });
+
   it('does not modify the original entities', () => {
     const user = new schema.Entity('users');
     const article = new schema.Entity('articles', { author: user });
