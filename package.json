@@ -60,7 +60,7 @@
     "rimraf": "^2.5.4",
     "rollup": "^0.37.0",
     "rollup-plugin-babel": "^2.7.1",
-    "rollup-plugin-filesize": "^1.0.1",
+    "rollup-plugin-filesize": "^1.2.1",
     "rollup-plugin-uglify": "^1.0.1",
     "typescript": "^2.1.4",
     "typescript-definition-tester": "0.0.5"
