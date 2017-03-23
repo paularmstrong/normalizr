@@ -27,7 +27,7 @@
   "main": "dist/src/index.js",
   "typings": "index.d.ts",
   "scripts": {
-    "build": "npm run clean && mkdirp dist && npm-run-all --parallel build:development build:production build:node",
+    "build": "npm run clean && mkdirp dist && npm run build:node && npm-run-all --parallel build:development build:production",
     "build:development": "NODE_ENV=development rollup -c",
     "build:production": "NODE_ENV=production rollup -c",
     "build:node": "babel src/*.js -d dist && babel src/schemas/*.js -d dist",
