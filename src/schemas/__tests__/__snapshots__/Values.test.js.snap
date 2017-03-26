@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`ValuesSchema denormalization denormalizes the values of an object with the given schema 1`] = `
 Object {
   "fido": Object {

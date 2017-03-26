@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`UnionSchema denormalization denormalizes an array of multiple entities using a function to infer the schemaAttribute 1`] = `
 Object {
   "id": 1,

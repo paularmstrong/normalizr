@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`EntitySchema denormalization can denormalize already partially denormalized data 1`] = `
 Object {
   "food": Object {
