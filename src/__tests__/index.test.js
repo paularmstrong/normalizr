@@ -122,6 +122,32 @@ describe('normalize', () => {
 
     expect(normalize({ id: '123', title: 'normalizr is great!', author: 1 }, articleEntity)).toMatchSnapshot();
   });
+
+  it('normalizes polymorphic collections of entities', () => {
+    // schemas
+    const adminSchema = new schema.Entity('admins');
+    const visitorSchema = new schema.Entity('visitors');
+    // a polymorphic collection schema
+    const usersSchema = new schema.Array({
+      admins: adminSchema,
+      visitors: visitorSchema
+    }, (input) => `${input.type}s`);
+
+    // data
+    const admin = {
+      type: 'admin',
+      id: 1,
+      name: 'Mr. Admin'
+    };
+    const visitor = {
+      type: 'visitor',
+      id: 2,
+      name: 'Ms Visitor'
+    };
+    const data = [ admin, visitor ];
+
+    expect(normalize(data, usersSchema)).toMatchSnapshot();
+  });
 });
 
 describe('denormalize', () => {
@@ -187,7 +213,17 @@ describe('denormalize', () => {
     expect(denormalize('123', article, entities)).toMatchSnapshot();
   });
 
-  it('denormalizes arrays of entities normalized using Union schemas)', () => {
+  it('denormalizes polymorphic collections of entities', () => {
+    // schemas
+    const adminSchema = new schema.Entity('admins');
+    const visitorSchema = new schema.Entity('visitors');
+    // a polymorphic collection schema
+    const usersSchema = new schema.Array({
+      admins: adminSchema,
+      visitors: visitorSchema
+    }, (input) => `${input.type}s`);
+
+    // data
     const admin = {
       type: 'admin',
       id: 1,
@@ -198,39 +234,30 @@ describe('denormalize', () => {
       id: 2,
       name: 'Ms Visitor'
     };
-    const adminSchema = new schema.Entity('admin');
-    const visitorSchema = new schema.Entity('visitor');
-    const userSchema = new schema.Union({
-      admin: adminSchema,
-      visitor: visitorSchema
-    }, 'type');
     const data = [ admin, visitor ];
-    const { result, entities } = normalize(data, new schema.Array(userSchema));
 
-    // example when schema for denormalization is created using a javascript array
-    const denormalizedData1 = denormalize(result, [ userSchema ], entities);
-    // example when schema for denormalization is created using schema.Array constructor
-    const denormalizedData2 = denormalize(result, new schema.Array(userSchema), entities);
+    const { result, entities } = normalize(data, usersSchema);
+    const denormalizedData = denormalize(result, usersSchema, entities);
 
-    expect(denormalizedData1).toEqual(data); // this works
-    expect(denormalizedData2).toEqual(data); // this doesn’t work, and fails the test
+    expect(denormalizedData).toEqual(data); // this works
   });
 
-  it('denormalizes schemas containing array schemas)', () => {
-    const adminSchema = new schema.Entity('admin');
-    const visitorSchema = new schema.Entity('visitor');
-    const userSchema = new schema.Union({
-      admin: adminSchema,
-      visitor: visitorSchema
-    }, 'type');
-    const recordSchema1 = new schema.Entity('record');
-    const recordSchema2 = new schema.Entity('record');
-    recordSchema1.define({
-      users: [ userSchema ]
+  it('denormalizes entities created using nested polymorphic schemas', () => {
+    // schemas
+    const adminSchema = new schema.Entity('admins');
+    const visitorSchema = new schema.Entity('visitors');
+    // let’s create a polymorphic collection of schemas
+    const usersSchema = new schema.Array({
+      admins: adminSchema,
+      visitors: visitorSchema
+    }, (input) => `${input.type}s`);
+    // and let’s nest this polymorpic collection inside another schema
+    const recordSchema = new schema.Entity('records');
+    recordSchema.define({
+      users: usersSchema
     });
-    recordSchema2.define({
-      users: new schema.Array(userSchema)
-    });
+
+    // sample data
     const admin = {
       type: 'admin',
       id: 1,
@@ -243,17 +270,16 @@ describe('denormalize', () => {
     };
     const record = {
       id: 1,
-      users: [ admin, visitor ]
+      users: [ admin, visitor ] // <- polymorphic collection of entities
     };
 
-    const { result: result1, entities: entities1 } = normalize(record, recordSchema1);
-    const { result: result2, entities: entities2 } = normalize(record, recordSchema2);
+    // so now let’s test an array of entities created using schemas containing nested polymorphic schemas
+    const data = [ record ];
 
-    const denormalizedData1 = denormalize(result1, recordSchema1, entities1);
-    expect(denormalizedData1).toEqual(record); // this works
+    const { result, entities } = normalize(data, new schema.Array(recordSchema));
+    const denormalizedData = denormalize(result, new schema.Array(recordSchema), entities);
 
-    const denormalizedData2 = denormalize(result2, recordSchema2, entities2);
-    expect(denormalizedData2).toEqual(record); // this does not work, and fails the test
+    expect(denormalizedData).toEqual(data);
   });
 
   it('does not modify the original entities', () => {

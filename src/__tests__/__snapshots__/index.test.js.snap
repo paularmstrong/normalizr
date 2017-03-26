@@ -143,6 +143,37 @@ Object {
 }
 `;
 
+exports[`normalize normalizes polymorphic collections of entities 1`] = `
+Object {
+  "entities": Object {
+    "admins": Object {
+      "1": Object {
+        "id": 1,
+        "name": "Mr. Admin",
+        "type": "admin",
+      },
+    },
+    "visitors": Object {
+      "2": Object {
+        "id": 2,
+        "name": "Ms Visitor",
+        "type": "visitor",
+      },
+    },
+  },
+  "result": Array [
+    Object {
+      "id": 1,
+      "schema": "admins",
+    },
+    Object {
+      "id": 2,
+      "schema": "visitors",
+    },
+  ],
+}
+`;
+
 exports[`normalize passes over pre-normalized values 1`] = `
 Object {
   "entities": Object {
