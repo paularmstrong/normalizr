@@ -43,11 +43,12 @@ export default class PolymorphicSchema {
   }
 
   denormalizeValue(value, unvisit) {
-    const mutableValue = isImmutable(value) ? value.toJS() : value;
-    if (!this.isSingleSchema && !mutableValue.schema) {
+    const schemaKey = isImmutable(value) ? value.get('schema') : value.schema;
+    if (!this.isSingleSchema && !schemaKey) {
       return value;
     }
-    const schema = this.isSingleSchema ? this.schema : this.schema[mutableValue.schema];
-    return unvisit(mutableValue.id || value, schema);
+    const id = isImmutable(value) ? value.get('id') : value.id;
+    const schema = this.isSingleSchema ? this.schema : this.schema[schemaKey];
+    return unvisit(id || value, schema);
   }
 }
