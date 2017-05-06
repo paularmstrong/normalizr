@@ -98,6 +98,42 @@ describe(`${schema.Entity.name} normalization`, () => {
       expect(normalize({ message: { id: '123', data: { attachment: { id: '456' } } } }, myEntity)).toMatchSnapshot();
     });
   });
+
+  describe('afterStrategy', () => {
+    it('is applied to every entity after being normalized', () => {
+      const response = {
+        id: 1,
+        title: 'parent',
+        user: {
+          id: 2,
+          name: 'child',
+          created: '01-01-2017'
+        },
+        created: '02-01-2017'
+      };
+      const Room = new Record({ id: null, title: null, user: null, created: null }, 'room');
+      const User = new Record({ id: null, name: null, created: null }, 'user');
+      const processStrategy = (value) => ({ ...value, created: new Date(value.created) });
+      const user = new schema.Entity('users', {}, {
+        processStrategy,
+        afterStrategy: (value) => new User(value)
+      });
+      const room = new schema.Entity('rooms', { user }, {
+        processStrategy,
+        afterStrategy: (value) => new Room(value)
+      });
+      const normalized = normalize(response, room);
+      const users = normalized.entities.users;
+      const rooms = normalized.entities.rooms;
+      expect(normalized).toMatchSnapshot();
+      Object.entries(users).forEach(([ _, entity ]) => {
+        expect(entity instanceof Record).toBeTruthy();
+      });
+      Object.entries(rooms).forEach(([ _, entity ]) => {
+        expect(entity instanceof Record).toBeTruthy();
+      });
+    });
+  });
 });
 
 describe(`${schema.Entity.name} denormalization`, () => {
