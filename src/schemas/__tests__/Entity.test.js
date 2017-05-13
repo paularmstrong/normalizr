@@ -93,9 +93,21 @@ describe(`${schema.Entity.name} normalization`, () => {
       // If not run before, this schema would require a parent object with key "message"
       const myEntity = new schema.Entity('entries', {
         data: { attachment: attachmentEntity }
-      }, { idAttribute: (input) => Object.values(input)[0].id, processStrategy });
+      }, { idAttribute: (input) => input.id, processStrategy });
 
       expect(normalize({ message: { id: '123', data: { attachment: { id: '456' } } } }, myEntity)).toMatchSnapshot();
+    });
+
+    it('is run before and passed to the schema normalization', () => {
+      const processStrategy = (input) => ({ ...input, compId: `${input.id}-${input.sid}` });
+      // If not run before, compId wouldn't exist
+      const myEntity = new schema.Entity('patrons', undefined,
+        { idAttribute: 'compId', processStrategy }
+      );
+
+      expect(
+        normalize([ { id: '123', sid: '456' }, { id: '123', sid: '789' } ], [ myEntity ])
+      ).toMatchSnapshot();
     });
   });
 });

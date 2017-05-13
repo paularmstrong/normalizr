@@ -58,7 +58,7 @@ export default class EntitySchema {
     });
 
     addEntity(this, processedEntity, input, parent, key);
-    return this.getId(input, parent, key);
+    return this.getId(processedEntity, parent, key);
   }
 
   denormalize(entity, unvisit) {
