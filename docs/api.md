@@ -216,37 +216,37 @@ const normalizedData = normalize(data, tweet);
 }
 ```
 
+#### `idAttribute` Usage
+
 When passing the `idAttribute` a function, it should return the IDs value. 
 
 For Example:
 
 ```js
-const myData = {
-  patrons: [
-    { id: 1, guest_id: null, name: "Esther" },
-    { id: 1, guest_id: 22, name: "Tom" },
-  ]
-};
+const data = [
+    { id: '1', guest_id: null, name: 'Esther' },
+    { id: '1', guest_id: '22', name: 'Tom' },
+];
 
 const patronsSchema = new schema.Entity('patrons', undefined, {
   // idAttribute *functions* must return the ids **value** (not key)
   idAttribute: value => value.guest_id ? `${value.id}-${value.guest_id}` : value.id,
 });
 
-normalize(myData, [patronsSchema]);
+normalize(data, [patronsSchema]);
 ```
 
 #### Output
 
 ```js
 {
-    entities: {
-      patrons: {
-        1: { ... },
-        1-22: { ... },
-      }
-    },
-    result: [1, 1-22]
+  entities: {
+    patrons: {
+      '1': { id: '1', guest_id: null, name: 'Esther' },
+      '1-22': { id: '1', guest_id: '22', name: 'Tom' },
+    }
+  },
+  result: ['1', '1-22']
 }
 ```
 
