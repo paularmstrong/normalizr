@@ -31,3 +31,5 @@ const tweet = new schema.Entity('tweets', { user: user }, {
 
 const normalizedData = normalize(data, tweet);
 const denormalizedData = denormalize(normalizedData.result, tweet, normalizedData.entities);
+
+const isTweet = tweet.key === 'tweets';
