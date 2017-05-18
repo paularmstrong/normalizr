@@ -164,7 +164,7 @@ const normalizedData = normalize(data, myArray);
 You *do not* need to define any keys in your entity other than those that hold nested entities. All other values will be copied to the normalized entity's output.
 * `options`:
     - `idAttribute`: The attribute where unique IDs for each of this entity type can be found.  
-    Accepts either a string key or a function. Defaults to `id`.  
+    Accepts either a string `key` or a function that returns the IDs `value`. Defaults to `'id'`.  
     As a function, accepts the following arguments, in order: 
       * `value`: The input value of the entity.
       * `parent`: The parent object of the input array.
@@ -215,6 +215,41 @@ const normalizedData = normalize(data, tweet);
   result: '123'
 }
 ```
+
+#### `idAttribute` Usage
+
+When passing the `idAttribute` a function, it should return the IDs value. 
+
+For Example:
+
+```js
+const data = [
+    { id: '1', guest_id: null, name: 'Esther' },
+    { id: '1', guest_id: '22', name: 'Tom' },
+];
+
+const patronsSchema = new schema.Entity('patrons', undefined, {
+  // idAttribute *functions* must return the ids **value** (not key)
+  idAttribute: value => value.guest_id ? `${value.id}-${value.guest_id}` : value.id,
+});
+
+normalize(data, [patronsSchema]);
+```
+
+#### Output
+
+```js
+{
+  entities: {
+    patrons: {
+      '1': { id: '1', guest_id: null, name: 'Esther' },
+      '1-22': { id: '1', guest_id: '22', name: 'Tom' },
+    }
+  },
+  result: ['1', '1-22']
+}
+```
+
 
 ### `Object(definition)`
 
