@@ -112,9 +112,9 @@ describe(`${schema.Entity.name} normalization`, () => {
         user: {
           id: 2,
           name: 'child',
-          created: '01-01-2017'
+          created: '2017-05-07T22:31:28.307185'
         },
-        created: '02-01-2017'
+        created: '2017-05-07T22:31:28.307185'
       };
       const Room = new Record({ id: null, title: null, user: null, created: null }, 'room');
       const User = new Record({ id: null, name: null, created: null }, 'user');
