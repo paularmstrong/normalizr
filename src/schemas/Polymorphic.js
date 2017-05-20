@@ -1,3 +1,5 @@
+import { isImmutable } from './ImmutableUtils';
+
 export default class PolymorphicSchema {
   constructor(definition, schemaAttribute) {
     if (schemaAttribute) {
@@ -41,10 +43,12 @@ export default class PolymorphicSchema {
   }
 
   denormalizeValue(value, unvisit) {
-    if (!this.isSingleSchema && !value.schema) {
+    const schemaKey = isImmutable(value) ? value.get('schema') : value.schema;
+    if (!this.isSingleSchema && !schemaKey) {
       return value;
     }
-    const schema = this.isSingleSchema ? this.schema : this.schema[value.schema];
-    return unvisit(value.id || value, schema);
+    const id = isImmutable(value) ? value.get('id') : value.id;
+    const schema = this.isSingleSchema ? this.schema : this.schema[schemaKey];
+    return unvisit(id || value, schema);
   }
 }

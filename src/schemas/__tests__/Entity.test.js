@@ -16,6 +16,11 @@ describe(`${schema.Entity.name} normalization`, () => {
     it('key name must be a string', () => {
       expect(() => new schema.Entity(42)).toThrow();
     });
+
+    it('key getter should return key passed to constructor', () => {
+      const user = new schema.Entity('users');
+      expect(user.key === 'users');
+    });
   });
 
   describe('idAttribute', () => {

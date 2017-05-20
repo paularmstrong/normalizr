@@ -8,3 +8,4 @@
     - [denormalize](/docs/api.md#denormalizeinput-schema-entities)
     - [schema](/docs/api.md#schema)
 * [Frequently Asked Questions](/docs/faqs.md)
+* [Using with JSONAPI](/docs/jsonapi.md)
