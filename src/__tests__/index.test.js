@@ -122,6 +122,23 @@ describe('normalize', () => {
 
     expect(normalize({ id: '123', title: 'normalizr is great!', author: 1 }, articleEntity)).toMatchSnapshot();
   });
+
+  it('can normalize object without proper object prototype inheritance', () => {
+    const test = { id: 1, elements: [] };
+    test.elements.push(Object.assign(
+      Object.create(null),
+      {
+        id: 18,
+        name: 'test'
+      }
+    ));
+
+    const testEntity = new schema.Entity('test', {
+      elements: [ new schema.Entity('elements') ]
+    });
+
+    expect(() => normalize(test, testEntity)).not.toThrow();
+  });
 });
 
 describe('denormalize', () => {

@@ -12,8 +12,8 @@
  */
 export function isImmutable(object) {
   return !!(object && (
-    object.hasOwnProperty('__ownerID') || // Immutable.Map
-    (object._map && object._map.hasOwnProperty('__ownerID')) // Immutable.Record
+    (object.hasOwnProperty && object.hasOwnProperty('__ownerID')) || // Immutable.Map
+    (object._map && object._map.hasOwnProperty && object._map.hasOwnProperty('__ownerID')) // Immutable.Record
   ));
 }
 
