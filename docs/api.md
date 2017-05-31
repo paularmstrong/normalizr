@@ -180,6 +180,9 @@ You *do not* need to define any keys in your entity other than those that hold n
 #### Instance Methods
 
 * `define(definition)`: When used, the `definition` passed in will be merged with the original definition passed to the `Entity` constructor. This method tends to be useful for creating circular references in schema.
+
+#### Instance Attributes
+
 * `key`: Returns the key provided to the constructor.
 * `idAttribute`: Returns the idAttribute provided to the constructor in options.
 
