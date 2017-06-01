@@ -370,3 +370,26 @@ Object {
   "result": "123",
 }
 `;
+
+exports[`EntitySchema normalization processStrategy is run before and passed to the schema normalization 2`] = `
+Object {
+  "entities": Object {
+    "patrons": Object {
+      "123-456": Object {
+        "compId": "123-456",
+        "id": "123",
+        "sid": "456",
+      },
+      "123-789": Object {
+        "compId": "123-789",
+        "id": "123",
+        "sid": "789",
+      },
+    },
+  },
+  "result": Array [
+    "123-456",
+    "123-789",
+  ],
+}
+`;
