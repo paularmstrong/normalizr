@@ -122,6 +122,32 @@ describe('normalize', () => {
 
     expect(normalize({ id: '123', title: 'normalizr is great!', author: 1 }, articleEntity)).toMatchSnapshot();
   });
+
+  it('normalizes polymorphic collections of entities', () => {
+    // schemas
+    const adminSchema = new schema.Entity('admins');
+    const visitorSchema = new schema.Entity('visitors');
+    // a polymorphic collection schema
+    const usersSchema = new schema.Array({
+      admins: adminSchema,
+      visitors: visitorSchema
+    }, (input) => `${input.type}s`);
+
+    // data
+    const admin = {
+      type: 'admin',
+      id: 1,
+      name: 'Mr. Admin'
+    };
+    const visitor = {
+      type: 'visitor',
+      id: 2,
+      name: 'Ms Visitor'
+    };
+    const data = [ admin, visitor ];
+
+    expect(normalize(data, usersSchema)).toMatchSnapshot();
+  });
 });
 
 describe('denormalize', () => {
@@ -185,6 +211,75 @@ describe('denormalize', () => {
       }
     };
     expect(denormalize('123', article, entities)).toMatchSnapshot();
+  });
+
+  it('denormalizes polymorphic collections of entities', () => {
+    // schemas
+    const adminSchema = new schema.Entity('admins');
+    const visitorSchema = new schema.Entity('visitors');
+    // a polymorphic collection schema
+    const usersSchema = new schema.Array({
+      admins: adminSchema,
+      visitors: visitorSchema
+    }, (input) => `${input.type}s`);
+
+    // data
+    const admin = {
+      type: 'admin',
+      id: 1,
+      name: 'Mr. Admin'
+    };
+    const visitor = {
+      type: 'visitor',
+      id: 2,
+      name: 'Ms Visitor'
+    };
+    const data = [ admin, visitor ];
+
+    const { result, entities } = normalize(data, usersSchema);
+    const denormalizedData = denormalize(result, usersSchema, entities);
+
+    expect(denormalizedData).toEqual(data); // this works
+  });
+
+  it('denormalizes entities created using nested polymorphic schemas', () => {
+    // schemas
+    const adminSchema = new schema.Entity('admins');
+    const visitorSchema = new schema.Entity('visitors');
+    // let’s create a polymorphic collection of schemas
+    const usersSchema = new schema.Array({
+      admins: adminSchema,
+      visitors: visitorSchema
+    }, (input) => `${input.type}s`);
+    // and let’s nest this polymorpic collection inside another schema
+    const recordSchema = new schema.Entity('records');
+    recordSchema.define({
+      users: usersSchema
+    });
+
+    // sample data
+    const admin = {
+      type: 'admin',
+      id: 1,
+      name: 'Mr. Admin'
+    };
+    const visitor = {
+      type: 'visitor',
+      id: 2,
+      name: 'Ms Visitor'
+    };
+    const record = {
+      id: 1,
+      users: [ admin, visitor ] // <- polymorphic collection of entities
+    };
+
+    // so now let’s test an array of entities created using schemas containing nested polymorphic schemas
+    const data = [ record ];
+
+    const { result, entities } = normalize(data, new schema.Array(recordSchema));
+    const denormalizedData = denormalize(result, new schema.Array(recordSchema), entities);
+
+    expect(denormalizedData).toEqual(data);
   });
 
   it('does not modify the original entities', () => {
