@@ -4,7 +4,7 @@ import uglify from 'rollup-plugin-uglify';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-const destBase = 'dist/normalizr'
+const destBase = 'dist/normalizr';
 const destExtension = `${isProduction ? '.min' : ''}.js`;
 
 export default {
@@ -19,7 +19,7 @@ export default {
   plugins: [
     babel({ babelrc: false, presets: [ 'es2015-rollup', 'stage-1' ] }),
     isProduction && uglify(),
-    filesize(),
+    filesize()
   ].filter((plugin) => !!plugin)
 };
 
