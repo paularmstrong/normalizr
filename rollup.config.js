@@ -13,7 +13,8 @@ export default {
   targets: [
     { dest: `${destBase}${destExtension}`, format: 'cjs' },
     { dest: `${destBase}.umd${destExtension}`, format: 'umd' },
-    { dest: `${destBase}.amd${destExtension}`, format: 'amd' }
+    { dest: `${destBase}.amd${destExtension}`, format: 'amd' },
+    { dest: `${destBase}.browser${destExtension}`, format: 'iife' }
   ],
   plugins: [
     babel({ babelrc: false, presets: [ 'es2015-rollup', 'stage-1' ] }),
