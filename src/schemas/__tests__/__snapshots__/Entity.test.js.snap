@@ -206,6 +206,29 @@ exports[`EntitySchema denormalization denormalizes to undefined for missing data
 
 exports[`EntitySchema denormalization denormalizes to undefined for missing data 4`] = `undefined`;
 
+exports[`EntitySchema normalization afterStrategy is applied to every entity after being normalized 1`] = `
+Object {
+  "entities": Object {
+    "rooms": Object {
+      "1": Object {
+        "created": "2017-05-07T22:31:28.307Z",
+        "id": 1,
+        "title": "parent",
+        "user": 2,
+      },
+    },
+    "users": Object {
+      "2": Object {
+        "created": "2017-05-07T22:31:28.307Z",
+        "id": 2,
+        "name": "child",
+      },
+    },
+  },
+  "result": 1,
+}
+`;
+
 exports[`EntitySchema normalization idAttribute can build the entity's ID from the parent object 1`] = `
 Object {
   "entities": Object {
