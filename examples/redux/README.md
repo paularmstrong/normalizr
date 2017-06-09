@@ -9,7 +9,9 @@ This is a simple example of using Normalizr with Redux and Redux-Thunk. The comm
 From this directory, run the following and follow the on-screen options:
 
 ```sh
-# install dependencies
+# from the root directory:
+yarn # or npm install
+# from this directory:
 yarn # or npm install
 npm run start
 ```
