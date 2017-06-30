@@ -1,6 +1,6 @@
 {
-  "name": "normalizr",
-  "version": "3.2.3",
+  "name": "normalizr-with-record",
+  "version": "0.0.1",
   "description": "Normalizes and denormalizes JSON according to schema for Redux and Flux applications",
   "bugs": {
     "url": "https://github.com/paularmstrong/normalizr/issues"

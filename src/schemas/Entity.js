@@ -1,5 +1,13 @@
 import * as ImmutableUtils from './ImmutableUtils';
 
+const defaultMergeStrategy = (entityA, entityB) => {
+  return { ...entityA, ...entityB };
+};
+
+const defaultMergeStrategyWithRecord = (entityA, entityB) => {
+  return entityA.merge(entityB);
+};
+
 const getDefaultGetId = (idAttribute) => (input) =>
   ImmutableUtils.isImmutable(input) ? input.get(idAttribute) : input[idAttribute];
 
@@ -11,17 +19,18 @@ export default class EntitySchema {
 
     const {
       idAttribute = 'id',
-      mergeStrategy = (entityA, entityB) => {
-        return { ...entityA, ...entityB };
-      },
-      processStrategy = (input) => ({ ...input })
+      record = null,
+      mergeStrategy = (record) ? defaultMergeStrategyWithRecord : defaultMergeStrategy,
+      processStrategy = (input) => ({ ...input }),
     } = options;
 
     this._key = key;
     this._getId = typeof idAttribute === 'function' ? idAttribute : getDefaultGetId(idAttribute);
     this._idAttribute = idAttribute;
+    this._record = record;
     this._mergeStrategy = mergeStrategy;
     this._processStrategy = processStrategy;
+    this._postProcessStrategy = (this._record) ? this.recordify : (entity) => (entity);
     this.define(definition);
   }
 
@@ -31,6 +40,10 @@ export default class EntitySchema {
 
   get idAttribute() {
     return this._idAttribute;
+  }
+
+  recordify(entity) {
+    return new this._record(entity);
   }
 
   define(definition) {
@@ -56,8 +69,9 @@ export default class EntitySchema {
         processedEntity[key] = visit(processedEntity[key], processedEntity, key, schema, addEntity);
       }
     });
+    const postProcessedEntity = this._postProcessStrategy(processedEntity);
 
-    addEntity(this, processedEntity, input, parent, key);
+    addEntity(this, postProcessedEntity, input, parent, key);
     return this.getId(input, parent, key);
   }
 
