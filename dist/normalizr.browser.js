@@ -198,6 +198,14 @@ var set = function set(object, property, value, receiver) {
   return value;
 };
 
+var defaultMergeStrategy = function defaultMergeStrategy(entityA, entityB) {
+  return _extends({}, entityA, entityB);
+};
+
+var defaultMergeStrategyWithRecord = function defaultMergeStrategyWithRecord(entityA, entityB) {
+  return entityA.merge(entityB);
+};
+
 var getDefaultGetId = function getDefaultGetId(idAttribute) {
   return function (input) {
     return isImmutable(input) ? input.get(idAttribute) : input[idAttribute];
@@ -216,10 +224,10 @@ var EntitySchema = function () {
 
     var _options$idAttribute = options.idAttribute,
         idAttribute = _options$idAttribute === undefined ? 'id' : _options$idAttribute,
+        _options$record = options.record,
+        record = _options$record === undefined ? null : _options$record,
         _options$mergeStrateg = options.mergeStrategy,
-        mergeStrategy = _options$mergeStrateg === undefined ? function (entityA, entityB) {
-      return _extends({}, entityA, entityB);
-    } : _options$mergeStrateg,
+        mergeStrategy = _options$mergeStrateg === undefined ? record ? defaultMergeStrategyWithRecord : defaultMergeStrategy : _options$mergeStrateg,
         _options$processStrat = options.processStrategy,
         processStrategy = _options$processStrat === undefined ? function (input) {
       return _extends({}, input);
@@ -229,12 +237,21 @@ var EntitySchema = function () {
     this._key = key;
     this._getId = typeof idAttribute === 'function' ? idAttribute : getDefaultGetId(idAttribute);
     this._idAttribute = idAttribute;
+    this._record = record;
     this._mergeStrategy = mergeStrategy;
     this._processStrategy = processStrategy;
+    this._postProcessStrategy = this._record ? this.recordify : function (entity) {
+      return entity;
+    };
     this.define(definition);
   }
 
   createClass(EntitySchema, [{
+    key: 'recordify',
+    value: function recordify(entity) {
+      return new this._record(entity);
+    }
+  }, {
     key: 'define',
     value: function define(definition) {
       this.schema = Object.keys(definition).reduce(function (entitySchema, key) {
@@ -264,8 +281,9 @@ var EntitySchema = function () {
           processedEntity[key] = visit(processedEntity[key], processedEntity, key, schema, addEntity);
         }
       });
+      var postProcessedEntity = this._postProcessStrategy(processedEntity);
 
-      addEntity(this, processedEntity, input, parent, key);
+      addEntity(this, postProcessedEntity, input, parent, key);
       return this.getId(input, parent, key);
     }
   }, {

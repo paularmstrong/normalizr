@@ -6,9 +6,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _ImmutableUtils = require('./ImmutableUtils');
 
@@ -19,6 +19,14 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var defaultMergeStrategy = function defaultMergeStrategy(entityA, entityB) {
+  return _extends({}, entityA, entityB);
+};
+
+var defaultMergeStrategyWithRecord = function defaultMergeStrategyWithRecord(entityA, entityB) {
+  return entityA.merge(entityB);
+};
 
 var getDefaultGetId = function getDefaultGetId(idAttribute) {
   return function (input) {
@@ -39,10 +47,10 @@ var EntitySchema = function () {
 
     var _options$idAttribute = options.idAttribute,
         idAttribute = _options$idAttribute === undefined ? 'id' : _options$idAttribute,
+        _options$record = options.record,
+        record = _options$record === undefined ? null : _options$record,
         _options$mergeStrateg = options.mergeStrategy,
-        mergeStrategy = _options$mergeStrateg === undefined ? function (entityA, entityB) {
-      return _extends({}, entityA, entityB);
-    } : _options$mergeStrateg,
+        mergeStrategy = _options$mergeStrateg === undefined ? record ? defaultMergeStrategyWithRecord : defaultMergeStrategy : _options$mergeStrateg,
         _options$processStrat = options.processStrategy,
         processStrategy = _options$processStrat === undefined ? function (input) {
       return _extends({}, input);
@@ -52,12 +60,21 @@ var EntitySchema = function () {
     this._key = key;
     this._getId = typeof idAttribute === 'function' ? idAttribute : getDefaultGetId(idAttribute);
     this._idAttribute = idAttribute;
+    this._record = record;
     this._mergeStrategy = mergeStrategy;
     this._processStrategy = processStrategy;
+    this._postProcessStrategy = this._record ? this.recordify : function (entity) {
+      return entity;
+    };
     this.define(definition);
   }
 
   _createClass(EntitySchema, [{
+    key: 'recordify',
+    value: function recordify(entity) {
+      return new this._record(entity);
+    }
+  }, {
     key: 'define',
     value: function define(definition) {
       this.schema = Object.keys(definition).reduce(function (entitySchema, key) {
@@ -87,8 +104,9 @@ var EntitySchema = function () {
           processedEntity[key] = visit(processedEntity[key], processedEntity, key, schema, addEntity);
         }
       });
+      var postProcessedEntity = this._postProcessStrategy(processedEntity);
 
-      addEntity(this, processedEntity, input, parent, key);
+      addEntity(this, postProcessedEntity, input, parent, key);
       return this.getId(input, parent, key);
     }
   }, {
