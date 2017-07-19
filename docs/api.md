@@ -284,7 +284,7 @@ const normalizedData = normalize(data, responseSchema);
 ```js
 {
   entities: {
-    users: { '123': { id_str: '123', name: 'Beth' } }
+    users: { '123': { id: '123', name: 'Beth' } }
   },
   result: { users: [ '123' ] }
 }
