@@ -146,8 +146,8 @@ describe('denormalize', () => {
     expect(() => denormalize({})).toThrow();
   });
 
-  it('returns the input if falsy', () => {
-    expect(denormalize(false, {}, {})).toBe(false);
+  it('returns the input if undefined', () => {
+    expect(denormalize(undefined, {}, {})).toBeUndefined();
   });
 
   it('denormalizes entities', () => {

@@ -117,9 +117,7 @@ const getEntities = (entities) => {
 };
 
 export const denormalize = (input, schema, entities) => {
-  if (!input) {
-    return input;
+  if (typeof input !== 'undefined') {
+    return getUnvisit(entities)(input, schema);
   }
-
-  return getUnvisit(entities)(input, schema);
 };
