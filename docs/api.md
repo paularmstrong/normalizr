@@ -137,7 +137,7 @@ const adminSchema = new schema.Entity('admins');
 const myArray = new schema.Array({
   admins: adminSchema,
   users: userSchema
-}, (input, parent, key) => `${input.type}s`);
+}, (input, parent, key) => `${input.type}`);
 
 const normalizedData = normalize(data, myArray);
 ```
