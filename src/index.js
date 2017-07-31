@@ -1,6 +1,7 @@
 import EntitySchema from './schemas/Entity';
 import UnionSchema from './schemas/Union';
 import ValuesSchema from './schemas/Values';
+import MapSchema from './schemas/Map';
 import ArraySchema, * as ArrayUtils from './schemas/Array';
 import ObjectSchema, * as ObjectUtils from './schemas/Object';
 import * as ImmutableUtils from './schemas/ImmutableUtils';
@@ -38,7 +39,8 @@ export const schema = {
   Entity: EntitySchema,
   Object: ObjectSchema,
   Union: UnionSchema,
-  Values: ValuesSchema
+  Values: ValuesSchema,
+  Map: MapSchema
 };
 
 export const normalize = (input, schema) => {

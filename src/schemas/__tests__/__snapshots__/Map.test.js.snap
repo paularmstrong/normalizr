@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MapSchema denormalization denormalizes the values of an object with the given schema 1`] = `
+Array [
+  Object {
+    "id": 1,
+    "name": "fido",
+  },
+  Object {
+    "id": 2,
+    "type": "oliver",
+  },
+]
+`;
+
+exports[`MapSchema normalization normalizes the values of an object with the given schema 1`] = `
+Object {
+  "entities": Object {
+    "dogs": Object {
+      "1": Object {
+        "id": 1,
+        "name": "fido",
+      },
+      "2": Object {
+        "id": 2,
+        "type": "oliver",
+      },
+    },
+  },
+  "result": Object {
+    "1": 1,
+    "2": 2,
+  },
+}
+`;

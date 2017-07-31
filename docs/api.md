@@ -8,6 +8,7 @@
   - [Object](#objectdefinition)
   - [Union](#uniondefinition-schemaattribute)
   - [Values](#valuesdefinition-schemaattribute)
+  - [Map](#mapdefinition-schemaattribute)
 
 ## `normalize(data, schema)`
 
@@ -404,5 +405,42 @@ const normalizedData = normalize(data, valuesSchema);
     '1': { id: 1, schema: 'admins' },
     '2': { id: 2, schema: 'users' }
   }
+}
+```
+
+### `Map(definition, schemaAttribute)`
+
+Describes an array of objects whose values follow the given schema. Used for extracting an array-of-objects into a map-of-ids.
+
+* `definition`: **required** A singular schema that this array contains *or* a mapping of schema to attribute values.
+* `schemaAttribute`: *optional* (required if `definition` is not a singular schema) The attribute on each entity found that defines what schema, per the definition mapping, to use when normalizing.  
+Can be a string or a function. If given a function, accepts the following arguments:  
+  * `value`: The input value of the entity.
+  * `parent`: The parent object of the input array.
+  * `key`: The key at which the input array appears on the parent object.
+
+#### Instance Methods
+
+* `define(definition)`: When used, the `definition` passed in will be merged with the original definition passed to the `Map` constructor. This method tends to be useful for creating circular references in schema.
+
+#### Usage
+
+```js
+const data = [ { id: 1, name: 'oliver' }, { id: 2, name: 'waldo' } ];
+
+const pet = new schema.Entity('pets');
+const mapSchema = new schema.Map(pet);
+
+const normalizedData = normalize(data, mapSchema);
+```
+
+#### Output
+
+```js
+{
+  entities: {
+    pets: { '1': { id: 1, name: 'oliver' }, '2': { id: 2, name: 'waldo' } }
+  },
+  result: { '1': 1, '2': 2 }
 }
 ```
