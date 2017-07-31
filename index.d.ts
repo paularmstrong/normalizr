@@ -34,6 +34,8 @@ declare namespace schema {
     constructor(definition: Schema, schemaAttribute?: string | SchemaFunction)
     define(definition: Schema): void
   }
+
+  export class Map extends Values {}
 }
 
 export type Schema =
@@ -42,11 +44,13 @@ export type Schema =
   schema.Object |
   schema.Union |
   schema.Values |
+  schema.Map |
   schema.Array[] |
   schema.Entity[] |
   schema.Object[] |
   schema.Union[] |
   schema.Values[] |
+  schema.Map[] |
   {[key: string]: Schema};
 
 export function normalize(
