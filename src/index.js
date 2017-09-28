@@ -53,13 +53,11 @@ export const normalize = (input, schema) => {
   return { entities, result };
 };
 
-const unvisitEntity = (input, schema, unvisit, getEntity, cache) => {
-  const entity = getEntity(input, schema);
+const unvisitEntity = (id, schema, unvisit, getEntity, cache) => {
+  const entity = getEntity(id, schema);
   if (typeof entity !== 'object' || entity === null) {
     return entity;
   }
-
-  const id = schema.getId(entity);
 
   if (!cache[schema.key]) {
     cache[schema.key] = {};

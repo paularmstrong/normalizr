@@ -224,4 +224,27 @@ describe('denormalize', () => {
     });
     expect(() => denormalize('123', article, entities)).not.toThrow();
   });
+
+  it('denormalizes with function as idAttribute', () => {
+    const normalizedData = {
+      'entities': {
+        'patrons': {
+          '1': { 'id': '1', 'guest': null, 'name': 'Esther' },
+          '2': { 'id': '2', 'guest': 'guest-2-1', 'name': 'Tom' }
+        },
+        'guests': { 'guest-2-1': { 'guest_id': 1 } }
+      },
+      'result': [ '1', '2' ]
+    };
+
+    const guestSchema = new schema.Entity('guests', {}, {
+      idAttribute: (value, parent, key) => `${key}-${parent.id}-${value.guest_id}`
+    });
+
+    const patronsSchema = new schema.Entity('patrons', {
+      guest: guestSchema
+    });
+
+    expect(denormalize(normalizedData.result, [ patronsSchema ], normalizedData.entities)).toMatchSnapshot();
+  });
 });
