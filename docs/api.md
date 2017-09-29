@@ -49,9 +49,9 @@ Denormalizes an input based on schema and provided entities from a plain object 
 
 If your schema and data have recursive references, only the first instance of an entity will be given. Subsequent references will be returned as the `id` provided.
 
-* `input`: **required** The normalized result that should be *de-normalized*. Usually the same value that was given in the `result` key of the output of `normalize`.
+* `input`: **required** An object, keyed by entity schema names that may appear in the denormalized output. Also accepts an object with Immutable data.
 * `schema`: **required** A schema definition that was used to get the value for `input`.
-* `entities`: **required** An object, keyed by entity schema names that may appear in the denormalized output. Also accepts an object with Immutable data.
+* `entities`: **required** The normalized result that should be *de-normalized*. Usually the same value that was given in the `result` key of the output of `normalize`.
 
 ### Usage
 
