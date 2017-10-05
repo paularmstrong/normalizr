@@ -99,7 +99,7 @@ Object {
   "draftedBy": Object {
     "id": "456",
     "reports": Array [
-      [Circular],
+      "123",
     ],
     "role": "manager",
   },
@@ -107,7 +107,7 @@ Object {
   "publishedBy": Object {
     "id": "456",
     "reports": Array [
-      [Circular],
+      "123",
     ],
     "role": "manager",
   },
@@ -120,12 +120,7 @@ Object {
   "draftedBy": Object {
     "id": "456",
     "reports": Array [
-      Object {
-        "draftedBy": "456",
-        "id": "123",
-        "publishedBy": "456",
-        "title": "Weekly report",
-      },
+      "123",
     ],
     "role": "manager",
   },
@@ -133,12 +128,7 @@ Object {
   "publishedBy": Object {
     "id": "456",
     "reports": Array [
-      Object {
-        "draftedBy": "456",
-        "id": "123",
-        "publishedBy": "456",
-        "title": "Weekly report",
-      },
+      "123",
     ],
     "role": "manager",
   },
@@ -151,9 +141,9 @@ Object {
   "id": "456",
   "reports": Array [
     Object {
-      "draftedBy": [Circular],
+      "draftedBy": "456",
       "id": "123",
-      "publishedBy": [Circular],
+      "publishedBy": "456",
       "title": "Weekly report",
     },
   ],
@@ -166,21 +156,9 @@ Object {
   "id": "456",
   "reports": Array [
     Object {
-      "draftedBy": Object {
-        "id": "456",
-        "reports": Array [
-          "123",
-        ],
-        "role": "manager",
-      },
+      "draftedBy": "456",
       "id": "123",
-      "publishedBy": Object {
-        "id": "456",
-        "reports": Array [
-          "123",
-        ],
-        "role": "manager",
-      },
+      "publishedBy": "456",
       "title": "Weekly report",
     },
   ],

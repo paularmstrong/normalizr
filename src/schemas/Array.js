@@ -21,10 +21,12 @@ export const normalize = (schema, input, parent, key, visit, addEntity) => {
   return values.map((value, index) => visit(value, parent, key, schema, addEntity));
 };
 
-export const denormalize = (schema, input, unvisit) => {
+export const denormalize = (schema, input, unvisit, cache) => {
   schema = validateSchema(schema);
   return (input && input.map) ?
-    input.map((entityOrId) => unvisit(entityOrId, schema)) :
+    input.map((entityOrId) => {
+      return unvisit(entityOrId, schema, cache);
+    }) :
     input;
 };
 

@@ -61,15 +61,15 @@ export default class EntitySchema {
     return this.getId(input, parent, key);
   }
 
-  denormalize(entity, unvisit) {
+  denormalize(entity, unvisit, cache) {
     if (ImmutableUtils.isImmutable(entity)) {
-      return ImmutableUtils.denormalizeImmutable(this.schema, entity, unvisit);
+      return ImmutableUtils.denormalizeImmutable(this.schema, entity, unvisit, cache);
     }
 
     Object.keys(this.schema).forEach((key) => {
       if (entity.hasOwnProperty(key)) {
         const schema = this.schema[key];
-        entity[key] = unvisit(entity[key], schema);
+        entity[key] = unvisit(entity[key], schema, cache);
       }
     });
     return entity;
