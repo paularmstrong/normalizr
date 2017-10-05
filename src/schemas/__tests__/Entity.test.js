@@ -243,42 +243,37 @@ describe(`${schema.Entity.name} denormalization`, () => {
     expect(denormalize('456', user, fromJS(entities))).toMatchSnapshot();
   });
 
-  it('denormalizes entities with referential equality', () => {
-    const user = new schema.Entity('users');
-    const report = new schema.Entity('reports');
-
-    user.define({
-      reports: [ report ]
-    });
-    report.define({
-      draftedBy: user,
-      publishedBy: user
+  it('denormalizes recursive dependencies per subtree', () => {
+    // test from issue https://github.com/paularmstrong/normalizr/issues/233
+    const mentor = new schema.Entity('mentors');
+    const user = new schema.Entity('users', {
+      mentor: mentor
     });
 
+    const objectSchema = { users: [ user ] };
     const entities = {
-      reports: {
-        '123': {
-          id: '123',
-          title: 'Weekly report',
-          draftedBy: '456',
-          publishedBy: '456'
+      users: {
+        '1': {
+          id: 1,
+          mentor: 3
+        },
+        '2': {
+          id: 2,
+          mentor: 3
         }
       },
-      users: {
-        '456': {
-          id: '456',
-          role: 'manager',
-          reports: [ '123' ]
+      mentors: {
+        '3': {
+          id: 3,
+          name: 'John'
         }
       }
     };
-
-    const denormalizedReport = denormalize('123', report, entities);
-
-    expect(denormalizedReport).toBe(denormalizedReport.draftedBy.reports[0]);
-    expect(denormalizedReport.publishedBy).toBe(denormalizedReport.draftedBy);
-
-    // NOTE: Given how immutable data works, referential equality can't be
-    // maintained with nested denormalization.
+    expect(denormalize({ users: [ 1, 2 ] }, objectSchema, entities)).toEqual({ 
+      users: [
+        { id: 1, mentor: { id: 3, name: 'John' } },
+        { id: 2, mentor: { id: 3, name: 'John' } }
+      ]
+    });
   });
 });

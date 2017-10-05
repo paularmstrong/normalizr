@@ -54,38 +54,32 @@ export const normalize = (input, schema) => {
 };
 
 const unvisitEntity = (input, schema, unvisit, getEntity, cache) => {
+  if (cache[schema.key] && cache[schema.key].includes(input)) {
+    return input;
+  }
   const entity = getEntity(input, schema);
   if (typeof entity !== 'object' || entity === null) {
     return entity;
   }
 
   const id = schema.getId(entity);
-
-  if (!cache[schema.key]) {
-    cache[schema.key] = {};
-  }
-
-  if (!cache[schema.key][id]) {
-    // Ensure we don't mutate it non-immutable objects
-    const entityCopy = ImmutableUtils.isImmutable(entity) ? entity : { ...entity };
-
-    // Need to set this first so that if it is referenced further within the
-    // denormalization the reference will already exist.
-    cache[schema.key][id] = entityCopy;
-    cache[schema.key][id] = schema.denormalize(entityCopy, unvisit);
-  }
-
-  return cache[schema.key][id];
+  const entityCopy = ImmutableUtils.isImmutable(entity) ? entity : { ...entity };
+  return schema.denormalize(entityCopy, unvisit, {
+    // create a new cache for this subtree to insure that any entity is only
+    // expanded once per subtree
+    ...cache,
+    // add id of entity to cache
+    [schema.key]: [ ...(cache[schema.key] || []), id ]
+  });
 };
 
 const getUnvisit = (entities) => {
-  const cache = {};
   const getEntity = getEntities(entities);
 
-  return function unvisit(input, schema) {
+  return function unvisit(input, schema, cache = {}) {
     if (typeof schema === 'object' && (!schema.denormalize || typeof schema.denormalize !== 'function')) {
       const method = Array.isArray(schema) ? ArrayUtils.denormalize : ObjectUtils.denormalize;
-      return method(schema, input, unvisit);
+      return method(schema, input, unvisit, cache);
     }
 
     if (input === undefined || input === null) {
@@ -95,8 +89,7 @@ const getUnvisit = (entities) => {
     if (schema instanceof EntitySchema) {
       return unvisitEntity(input, schema, unvisit, getEntity, cache);
     }
-
-    return schema.denormalize(input, unvisit);
+    return schema.denormalize(input, unvisit, cache);
   };
 };
 
