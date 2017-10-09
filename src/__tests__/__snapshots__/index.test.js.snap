@@ -35,6 +35,23 @@ Object {
 }
 `;
 
+exports[`denormalize denormalizes with function as idAttribute 1`] = `
+Array [
+  Object {
+    "guest": null,
+    "id": "1",
+    "name": "Esther",
+  },
+  Object {
+    "guest": Object {
+      "guest_id": 1,
+    },
+    "id": "2",
+    "name": "Tom",
+  },
+]
+`;
+
 exports[`normalize can use fully custom entity classes 1`] = `
 Object {
   "entities": Object {
