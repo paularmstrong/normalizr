@@ -2,6 +2,7 @@
 
 * [normalize](#normalizedata-schema)
 * [denormalize](#denormalizeinput-schema-entities)
+* [normalize/denormalize example](#normalize-denormalize-round-trip)
 * [schema](#schema)
   - [Array](#arraydefinition-schemaattribute)
   - [Entity](#entitykey-definition---options--)
@@ -72,6 +73,88 @@ const denormalizedData = denormalize({ users: [ 1, 2 ] }, mySchema, entities);
     { id: 1 },
     { id: 2 }
   ]
+}
+```
+
+## `normalize() denormalize()` round trip
+
+This example combines the above two snippets with distinct names to show what matters where.
+
+To run this, save to a file called `normy.ts` in a Typescript project
+and run the commands appearing in the first line.
+
+### `normy.ts`
+
+```js
+// $(npm bin)/tsc normy.ts && node normy.js | python -c "import sys,json;print(json.dumps(json.load(sys.stdin),sort_keys=True,indent=2))"
+
+import { normalize, denormalize, schema } from 'normalizr';
+
+// Note: We use 'usersA' and 'usersB' to show which symbol strings end
+// up going where.  In practice, all occurences of these symbol
+// strings would be 'users'.
+
+const myData = { usersA: [ { id: 1, name: 'foo' }, { id: 2, name: 'bar' } ] };
+
+const userEntity = new schema.Entity('usersB');
+const mySchema = { usersA: [ userEntity ] }
+
+const normalizedData = normalize(myData, mySchema);
+const { result, entities } = normalizedData;
+
+const denormalizedData = denormalize(result, mySchema, entities);
+
+console.log(JSON.stringify({myData, normalizedData, denormalizedData}));
+```
+
+### Output
+
+```js
+{
+  "denormalizedData": {
+    "usersA": [
+      {
+        "id": 1,
+        "name": "foo"
+      },
+      {
+        "id": 2,
+        "name": "bar"
+      }
+    ]
+  },
+  "myData": {
+    "usersA": [
+      {
+        "id": 1,
+        "name": "foo"
+      },
+      {
+        "id": 2,
+        "name": "bar"
+      }
+    ]
+  },
+  "normalizedData": {
+    "entities": {
+      "usersB": {
+        "1": {
+          "id": 1,
+          "name": "foo"
+        },
+        "2": {
+          "id": 2,
+          "name": "bar"
+        }
+      }
+    },
+    "result": {
+      "usersA": [
+        1,
+        2
+      ]
+    }
+  }
 }
 ```
 
