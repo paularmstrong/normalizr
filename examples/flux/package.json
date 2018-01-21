@@ -13,8 +13,10 @@
     "babel-cli": "^6.18.0",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-stage-1": "^6.16.0",
+    "events": "^1.1.1",
     "flux": "^3.1.3",
     "github": "^7.1.0",
-    "inquirer": "^2.0.0"
+    "inquirer": "^2.0.0",
+    "object-assign": "^4.1.1"
   }
 }
