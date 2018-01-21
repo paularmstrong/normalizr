@@ -3,28 +3,28 @@ import AppDispatcher from '../dispatchers';
 import store from '../store';
 import api from '../../api';
 import { denormalize, normalize } from '../../../../../src';
-import { commit } from '../../api/schema';
+import { issue } from '../../api/schema';
 
-export function receiveCommits(payload) {
+export function receiveIssues(payload) {
   AppDispatcher.handleServerAction({
-    actionType: Constants.GET_COMMITS_RESPONSE,
-    response: payload.commits
+    actionType: Constants.GET_ISSUES_RESPONSE,
+    response: payload.issues
   });
 }
 
-export function getCommits() {
+export function getIssues() {
   AppDispatcher.handleViewAction({
-    actionType: Constants.GET_COMMITS
+    actionType: Constants.GET_ISSUES
   });
 
   // read from the store
   const state = store.getState();
 
-  api.repos
-    .getCommits(state.repo)
+  api.issues
+    .getForRepo(state.repo)
     .then((response) => {
-      const data = normalize(response, [ commit ]);
-      receiveCommits(data.entities);
+      const data = normalize(response, [ issue ]);
+      receiveIssues(data.entities);
     })
     .catch((error) => {
       console.error(error);

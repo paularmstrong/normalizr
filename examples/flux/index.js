@@ -184,9 +184,9 @@ const pull = () => {
         case 'commits':
           Action.getCommits();
           return pull();
-        // return store.dispatch(Action.getCommits()).then(pull);
-        // case 'issues':
-        //   return store.dispatch(Action.getIssues()).then(pull);
+        case 'issues':
+          Action.getIssues();
+          return pull();
         // case 'labels':
         //   return store.dispatch(Action.getLabels()).then(pull);
         // case 'milestones':
