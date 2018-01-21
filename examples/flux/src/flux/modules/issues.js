@@ -2,7 +2,7 @@ import * as Constants from '../constants';
 import AppDispatcher from '../dispatchers';
 import store from '../store';
 import api from '../../api';
-import { denormalize, normalize } from '../../../../../src';
+import { normalize } from '../../../../../src';
 import { issue } from '../../api/schema';
 
 export function receiveIssues(payload) {
