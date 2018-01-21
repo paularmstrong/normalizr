@@ -1,3 +1,4 @@
-export const NEW_ITEM = "NEW_ITEM";
-export const SAVE_ITEM = "SAVE_ITEM";
-export const REMOVE_ITEM = "REMOVE_ITEM";
+export const GET_COMMITS = 'GET_COMMITS';
+export const GET_COMMITS_RESPONSE = 'GET_COMMITS_RESPONSE';
+
+export const SET_REPO = 'SET_REPO';

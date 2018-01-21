@@ -2,7 +2,7 @@
 //
 // Requiring the Dispatcher, Constants, and
 // event emitter dependencies
-import { NEW_ITEM, SAVE_ITEM, REMOVE_ITEM } from './constants';
+import { GET_COMMITS_RESPONSE, SET_REPO } from './constants';
 import AppDispatcher from './dispatchers';
 import { EventEmitter } from 'events';
 
@@ -10,8 +10,8 @@ const CHANGE_EVENT = 'change';
 
 // Define the store as an empty array
 const _store = {
-  list: [],
-  editing: false
+  commits: {},
+  repo: {}
 };
 
 // Define the public event listeners and getters that
@@ -26,7 +26,7 @@ const TodoStore = Object.assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, cb);
   },
 
-  getList: function () {
+  getState: function () {
     return _store;
   }
 });
@@ -38,25 +38,12 @@ AppDispatcher.register(function (payload) {
   const action = payload.action;
 
   switch (action.actionType) {
-    case NEW_ITEM:
-      // Add the data defined in the TodoActions
-      // which the View will pass as a payload
-      _store.editing = true;
+    case SET_REPO:
+      _store.repo = action.response;
       TodoStore.emit(CHANGE_EVENT);
       break;
-
-    case SAVE_ITEM:
-      // Add the data defined in the TodoActions
-      // which the View will pass as a payload
-      _store.list.push(action.text);
-      _store.editing = false;
-      TodoStore.emit(CHANGE_EVENT);
-      break;
-
-    case REMOVE_ITEM:
-      // View should pass the text's index that
-      // needs to be removed from the store
-      _store.list.splice(action.index, 1);
+    case GET_COMMITS_RESPONSE:
+      _store.commits = action.response;
       TodoStore.emit(CHANGE_EVENT);
       break;
 

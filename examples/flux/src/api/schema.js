@@ -1,6 +1,15 @@
-import { schema } from '../../src';
+import { schema } from '../../../../src';
 
 export const user = new schema.Entity('users');
+
+export const commit = new schema.Entity(
+  'commits',
+  {
+    author: user,
+    committer: user
+  },
+  { idAttribute: 'sha' }
+);
 
 export const label = new schema.Entity('labels');
 
@@ -11,7 +20,7 @@ export const milestone = new schema.Entity('milestones', {
 export const issue = new schema.Entity('issues', {
   assignee: user,
   assignees: [ user ],
-  labels: label,
+  labels: [ label ],
   milestone,
   user
 });
@@ -19,7 +28,7 @@ export const issue = new schema.Entity('issues', {
 export const pullRequest = new schema.Entity('pullRequests', {
   assignee: user,
   assignees: [ user ],
-  labels: label,
+  labels: [ label ],
   milestone,
   user
 });

@@ -17,6 +17,7 @@
     "flux": "^3.1.3",
     "github": "^7.1.0",
     "inquirer": "^2.0.0",
+    "node-fetch": "^1.7.3",
     "object-assign": "^4.1.1"
   }
 }
