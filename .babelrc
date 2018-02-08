@@ -1,7 +1,1 @@
-{
-  "presets": [ [ "env", { "loose": true } ] ],
-  "plugins": [
-    "babel-plugin-transform-object-rest-spread",
-    "babel-plugin-transform-class-properties"
-  ]
-}
+{ "presets": ["./.babelrc.js"] }
