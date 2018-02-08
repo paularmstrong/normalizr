@@ -36,7 +36,8 @@
     "flow": "flow src; test $? -eq 0 -o $? -eq 2",
     "lint": "eslint ./ --fix",
     "prebuild": "npm run clean",
-    "prepublish": "npm run build",
+    "precommit": "flow check && lint-staged",
+    "prepublishOnly": "npm run build",
     "test": "jest",
     "test:coverage": "npm run test -- --coverage && cat ./coverage/lcov.info | coveralls"
   },
@@ -54,10 +55,13 @@
     "babel-preset-env": "^1.6.1",
     "coveralls": "^2.11.15",
     "eslint": "^3.12.2",
-    "flow-bin": "^0.37.1",
+    "flow-bin": "^0.65.0",
+    "husky": "^0.14.3",
     "immutable": "^3.8.1",
     "jest": "19.0.2",
+    "lint-staged": "^6.1.0",
     "npm-run-all": "^3.1.2",
+    "prettier": "^1.10.2",
     "rimraf": "^2.5.4",
     "rollup": "^0.54.1",
     "rollup-plugin-babel": "^3.0.3",
@@ -67,5 +71,9 @@
     "typescript-definition-tester": "0.0.5",
     "uglify-es": "^3.3.8"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "lint-staged": {
+    "src/**/*.js": ["test", "git add"],
+    "*.{js,json,css,md}": ["prettier --write", "git add"]
+  }
 }

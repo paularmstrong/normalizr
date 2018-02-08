@@ -9,7 +9,7 @@ const validateSchema = (definition) => {
   return definition[0];
 };
 
-const getValues = (input) => Array.isArray(input) ? input : Object.keys(input).map((key) => input[key]);
+const getValues = (input) => (Array.isArray(input) ? input : Object.keys(input).map((key) => input[key]));
 
 export const normalize = (schema, input, parent, key, visit, addEntity) => {
   schema = validateSchema(schema);
@@ -23,22 +23,19 @@ export const normalize = (schema, input, parent, key, visit, addEntity) => {
 
 export const denormalize = (schema, input, unvisit) => {
   schema = validateSchema(schema);
-  return (input && input.map) ?
-    input.map((entityOrId) => unvisit(entityOrId, schema)) :
-    input;
+  return input && input.map ? input.map((entityOrId) => unvisit(entityOrId, schema)) : input;
 };
 
 export default class ArraySchema extends PolymorphicSchema {
   normalize(input, parent, key, visit, addEntity) {
     const values = getValues(input);
 
-    return values.map((value, index) => this.normalizeValue(value, parent, key, visit, addEntity))
+    return values
+      .map((value, index) => this.normalizeValue(value, parent, key, visit, addEntity))
       .filter((value) => value !== undefined && value !== null);
   }
 
   denormalize(input, unvisit) {
-    return (input && input.map) ?
-      input.map((value) => this.denormalizeValue(value, unvisit)) :
-      input;
+    return input && input.map ? input.map((value) => this.denormalizeValue(value, unvisit)) : input;
   }
 }

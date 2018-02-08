@@ -10,7 +10,7 @@ export const milestone = new schema.Entity('milestones', {
 
 export const issue = new schema.Entity('issues', {
   assignee: user,
-  assignees: [ user ],
+  assignees: [user],
   labels: label,
   milestone,
   user
@@ -18,13 +18,16 @@ export const issue = new schema.Entity('issues', {
 
 export const pullRequest = new schema.Entity('pullRequests', {
   assignee: user,
-  assignees: [ user ],
+  assignees: [user],
   labels: label,
   milestone,
   user
 });
 
-export const issueOrPullRequest = new schema.Array({
-  issues: issue,
-  pullRequests: pullRequest
-}, (entity) => entity.pull_request ? 'pullRequests' : 'issues');
+export const issueOrPullRequest = new schema.Array(
+  {
+    issues: issue,
+    pullRequests: pullRequest
+  },
+  (entity) => (entity.pull_request ? 'pullRequests' : 'issues')
+);

@@ -28,4 +28,3 @@ export default {
     filesize()
   ].filter(Boolean)
 };
-

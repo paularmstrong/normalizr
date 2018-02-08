@@ -2,7 +2,7 @@
 import { denormalize, normalize, schema } from '../';
 
 describe('normalize', () => {
-  [ 42, null, undefined, '42', () => {} ].forEach((input) => {
+  [42, null, undefined, '42', () => {}].forEach((input) => {
     it(`cannot normalize input that == ${input}`, () => {
       expect(() => normalize(input, new schema.Entity('test'))).toThrow();
     });
@@ -15,7 +15,7 @@ describe('normalize', () => {
   it('normalizes entities', () => {
     const mySchema = new schema.Entity('tacos');
 
-    expect(normalize([ { id: 1, type: 'foo' }, { id: 2, type: 'bar' } ], [ mySchema ])).toMatchSnapshot();
+    expect(normalize([{ id: 1, type: 'foo' }, { id: 2, type: 'bar' }], [mySchema])).toMatchSnapshot();
   });
 
   it('normalizes nested entities', () => {
@@ -25,7 +25,7 @@ describe('normalize', () => {
     });
     const article = new schema.Entity('articles', {
       author: user,
-      comments: [ comment ]
+      comments: [comment]
     });
 
     const input = {
@@ -66,15 +66,15 @@ describe('normalize', () => {
 
   it('ignores null values', () => {
     const myEntity = new schema.Entity('myentities');
-    expect(normalize([ null ], [ myEntity ])).toMatchSnapshot();
-    expect(normalize([ undefined ], [ myEntity ])).toMatchSnapshot();
-    expect(normalize([ false ], [ myEntity ])).toMatchSnapshot();
+    expect(normalize([null], [myEntity])).toMatchSnapshot();
+    expect(normalize([undefined], [myEntity])).toMatchSnapshot();
+    expect(normalize([false], [myEntity])).toMatchSnapshot();
   });
 
   it('can use fully custom entity classes', () => {
     class MyEntity extends schema.Entity {
       schema = {
-        children: [ new schema.Entity('children') ]
+        children: [new schema.Entity('children')]
       };
 
       getId(entity, parent, key) {
@@ -96,21 +96,28 @@ describe('normalize', () => {
     }
 
     const mySchema = new MyEntity('food');
-    expect(normalize({
-      uuid: '1234',
-      name: 'tacos',
-      children: [
-        { id: 4, name: 'lettuce' }
-      ]
-    }, mySchema)).toMatchSnapshot();
+    expect(
+      normalize(
+        {
+          uuid: '1234',
+          name: 'tacos',
+          children: [{ id: 4, name: 'lettuce' }]
+        },
+        mySchema
+      )
+    ).toMatchSnapshot();
   });
 
   it('uses the non-normalized input when getting the ID for an entity', () => {
     const userEntity = new schema.Entity('users');
     const idAttributeFn = jest.fn((nonNormalized, parent, key) => nonNormalized.user.id);
-    const recommendation = new schema.Entity('recommendations', { user: userEntity }, {
-      idAttribute: idAttributeFn
-    });
+    const recommendation = new schema.Entity(
+      'recommendations',
+      { user: userEntity },
+      {
+        idAttribute: idAttributeFn
+      }
+    );
     expect(normalize({ user: { id: '456' } }, recommendation)).toMatchSnapshot();
     expect(idAttributeFn.mock.calls).toMatchSnapshot();
     expect(recommendation.idAttribute).toBe(idAttributeFn);
@@ -125,16 +132,15 @@ describe('normalize', () => {
 
   it('can normalize object without proper object prototype inheritance', () => {
     const test = { id: 1, elements: [] };
-    test.elements.push(Object.assign(
-      Object.create(null),
-      {
+    test.elements.push(
+      Object.assign(Object.create(null), {
         id: 18,
         name: 'test'
-      }
-    ));
+      })
+    );
 
     const testEntity = new schema.Entity('test', {
-      elements: [ new schema.Entity('elements') ]
+      elements: [new schema.Entity('elements')]
     });
 
     expect(() => normalize(test, testEntity)).not.toThrow();
@@ -158,7 +164,7 @@ describe('denormalize', () => {
         2: { id: 2, type: 'bar' }
       }
     };
-    expect(denormalize([ 1, 2 ], [ mySchema ], entities)).toMatchSnapshot();
+    expect(denormalize([1, 2], [mySchema], entities)).toMatchSnapshot();
   });
 
   it('denormalizes nested entities', () => {
@@ -168,7 +174,7 @@ describe('denormalize', () => {
     });
     const article = new schema.Entity('articles', {
       author: user,
-      comments: [ comment ]
+      comments: [comment]
     });
 
     const entities = {
@@ -176,9 +182,7 @@ describe('denormalize', () => {
         '123': {
           author: '8472',
           body: 'This article is great.',
-          comments: [
-            'comment-123-4738'
-          ],
+          comments: ['comment-123-4738'],
           id: '123',
           title: 'A Great Article'
         }
@@ -227,24 +231,28 @@ describe('denormalize', () => {
 
   it('denormalizes with function as idAttribute', () => {
     const normalizedData = {
-      'entities': {
-        'patrons': {
-          '1': { 'id': '1', 'guest': null, 'name': 'Esther' },
-          '2': { 'id': '2', 'guest': 'guest-2-1', 'name': 'Tom' }
+      entities: {
+        patrons: {
+          '1': { id: '1', guest: null, name: 'Esther' },
+          '2': { id: '2', guest: 'guest-2-1', name: 'Tom' }
         },
-        'guests': { 'guest-2-1': { 'guest_id': 1 } }
+        guests: { 'guest-2-1': { guest_id: 1 } }
       },
-      'result': [ '1', '2' ]
+      result: ['1', '2']
     };
 
-    const guestSchema = new schema.Entity('guests', {}, {
-      idAttribute: (value, parent, key) => `${key}-${parent.id}-${value.guest_id}`
-    });
+    const guestSchema = new schema.Entity(
+      'guests',
+      {},
+      {
+        idAttribute: (value, parent, key) => `${key}-${parent.id}-${value.guest_id}`
+      }
+    );
 
     const patronsSchema = new schema.Entity('patrons', {
       guest: guestSchema
     });
 
-    expect(denormalize(normalizedData.result, [ patronsSchema ], normalizedData.entities)).toMatchSnapshot();
+    expect(denormalize(normalizedData.result, [patronsSchema], normalizedData.entities)).toMatchSnapshot();
   });
 });
