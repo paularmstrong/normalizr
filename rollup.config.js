@@ -21,8 +21,8 @@ export default {
   plugins: [
     babel({
       babelrc: false,
-      presets: [ [ 'env', { modules: false, loose: true } ], 'stage-1' ],
-      plugins: [ 'external-helpers' ]
+      presets: [ [ 'env', { modules: false, loose: true } ] ],
+      plugins: [ 'external-helpers', 'babel-plugin-transform-object-rest-spread' ]
     }),
     isProduction && uglify({}, minify),
     filesize()
