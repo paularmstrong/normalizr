@@ -2,6 +2,8 @@
 import { fromJS, Record } from 'immutable';
 import { denormalize, normalize, schema } from '../../';
 
+const values = (obj) => Object.keys(obj).map((key) => obj[key]);
+
 describe(`${schema.Entity.name} normalization`, () => {
   it('normalizes an entity', () => {
     const entity = new schema.Entity('item');
@@ -93,12 +95,12 @@ describe(`${schema.Entity.name} normalization`, () => {
     });
 
     it('is run before and passed to the schema normalization', () => {
-      const processStrategy = (input) => ({ ...Object.values(input)[0], type: Object.keys(input)[0] });
+      const processStrategy = (input) => ({ ...values(input)[0], type: Object.keys(input)[0] });
       const attachmentEntity = new schema.Entity('attachments');
       // If not run before, this schema would require a parent object with key "message"
       const myEntity = new schema.Entity('entries', {
         data: { attachment: attachmentEntity }
-      }, { idAttribute: (input) => Object.values(input)[0].id, processStrategy });
+      }, { idAttribute: (input) => values(input)[0].id, processStrategy });
 
       expect(normalize({ message: { id: '123', data: { attachment: { id: '456' } } } }, myEntity)).toMatchSnapshot();
     });

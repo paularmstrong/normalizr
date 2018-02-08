@@ -1,3 +1,7 @@
 {
-  "presets": ["es2015", "stage-1"]
+  "presets": [ [ "env", { "loose": true } ] ],
+  "plugins": [
+    "babel-plugin-transform-object-rest-spread",
+    "babel-plugin-transform-class-properties"
+  ]
 }
