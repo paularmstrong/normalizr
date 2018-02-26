@@ -1,6 +1,8 @@
 import babel from 'rollup-plugin-babel';
 import filesize from 'rollup-plugin-filesize';
 import uglify from 'rollup-plugin-uglify';
+import { minify } from 'uglify-es';
+import { name } from './package.json';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -8,18 +10,19 @@ const destBase = 'dist/normalizr';
 const destExtension = `${isProduction ? '.min' : ''}.js`;
 
 export default {
-  entry: 'src/index.js',
-  moduleName: 'normalizr',
-  targets: [
-    { dest: `${destBase}${destExtension}`, format: 'cjs' },
-    { dest: `${destBase}.umd${destExtension}`, format: 'umd' },
-    { dest: `${destBase}.amd${destExtension}`, format: 'amd' },
-    { dest: `${destBase}.browser${destExtension}`, format: 'iife' }
+  input: 'src/index.js',
+  output: [
+    { file: `${destBase}${destExtension}`, format: 'cjs' },
+    { file: `${destBase}.es${destExtension}`, format: 'es' },
+    { file: `${destBase}.umd${destExtension}`, format: 'umd', name },
+    { file: `${destBase}.amd${destExtension}`, format: 'amd', name },
+    { file: `${destBase}.browser${destExtension}`, format: 'iife', name }
   ],
   plugins: [
-    babel({ babelrc: false, presets: [ 'es2015-rollup', 'stage-1' ] }),
-    isProduction && uglify(),
+    babel({
+      plugins: ['external-helpers']
+    }),
+    isProduction && uglify({}, minify),
     filesize()
-  ].filter((plugin) => !!plugin)
+  ].filter(Boolean)
 };
-
