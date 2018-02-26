@@ -1,0 +1,7 @@
+export const GET_COMMITS = 'GET_COMMITS';
+export const GET_COMMITS_RESPONSE = 'GET_COMMITS_RESPONSE';
+
+export const GET_ISSUES = 'GET_ISSUES';
+export const GET_ISSUES_RESPONSE = 'GET_ISSUES_RESPONSE';
+
+export const SET_REPO = 'SET_REPO';

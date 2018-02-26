@@ -24,6 +24,7 @@ Normalizr is a small, but powerful utility for taking JSON with a schema definit
 * [Normalizing GitHub Issues](/examples/github)
 * [Relational Data](/examples/relationships)
 * [Interactive Redux](/examples/redux)
+* [Interactive Flux](/examples/flux)
 
 ## Quick Start
 
