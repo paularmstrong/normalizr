@@ -201,10 +201,10 @@ const tweet = new schema.Entity('tweets', { user: user }, {
       favorites: entityA.favorites
     }),
     processStrategy: (entity) => ({
-        // Remove the URL and name field from the entity
-        ...omit(entity, ['url', 'name']),
-        // Add name back as firstName (rename)
-        firstName: entity.name,
+        // Remove the URL and user field from the entity
+        ...omit(entity, ['url', 'user']),
+        // Add user back as details (rename)
+        details: entity.user,
     })
 });
 
