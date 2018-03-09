@@ -200,8 +200,12 @@ const tweet = new schema.Entity('tweets', { user: user }, {
       ...entityB,
       favorites: entityA.favorites
     }),
-    // Remove the URL field from the entity
-    processStrategy: (entity) => omit(entity, 'url')
+    processStrategy: (entity) => ({
+        // Remove the URL and name field from the entity
+        ...omit(entity, ['url', 'name']),
+        // Add name back as firstName (rename)
+        firstName: entity.name,
+    })
 });
 
 const normalizedData = normalize(data, tweet);
