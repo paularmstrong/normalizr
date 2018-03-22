@@ -100,6 +100,12 @@ Now, `normalizedData` will be:
 
 None.
 
+## Install
+
+```shell
+$ npm install normalizr
+```
+
 ## Credits
 
 Normalizr was originally created by [Dan Abramov](http://github.com/gaearon) and inspired by a conversation with [Jing Chen](https://twitter.com/jingc). Since v3, it was completely rewritten and maintained by [Paul Armstrong](https://twitter.com/paularmstrong). It has also received much help, enthusiasm, and contributions from [community members](https://github.com/paularmstrong/normalizr/graphs/contributors).
