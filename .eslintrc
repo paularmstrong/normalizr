@@ -10,10 +10,13 @@
     "sourceType": "module"
   },
   "extends": [
+    "plugin:flowtype/recommended",
     "plugin:jest/recommended",
-    "prettier"
+    "prettier",
+    "prettier/flowtype"
   ],
   "plugins": [
+    "flowtype",
     "prettier"
   ],
   "env": {
