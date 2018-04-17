@@ -1,5 +1,17 @@
 # normalizr [![build status](https://img.shields.io/travis/paularmstrong/normalizr/master.svg?style=flat-square)](https://travis-ci.org/paularmstrong/normalizr) [![Coverage Status](https://img.shields.io/coveralls/paularmstrong/normalizr/master.svg?style=flat-square)](https://coveralls.io/github/paularmstrong/normalizr?branch=master) [![npm version](https://img.shields.io/npm/v/normalizr.svg?style=flat-square)](https://www.npmjs.com/package/normalizr) [![npm downloads](https://img.shields.io/npm/dm/normalizr.svg?style=flat-square)](https://www.npmjs.com/package/normalizr)
 
+## Install
+
+Install from the NPM repository using yarn or npm:
+
+```shell
+yarn add normalizr
+```
+
+```shell
+npm install normalizr
+```
+
 ## Motivation
 
 Many APIs, public or not, return JSON data that has deeply nested objects. Using data in this kind of structure is often [very difficult](https://groups.google.com/forum/#!topic/reactjs/jbh50-GJxpg) for JavaScript applications, especially those using [Flux](http://facebook.github.io/flux/) or [Redux](http://redux.js.org/).
@@ -11,12 +23,12 @@ Normalizr is a small, but powerful utility for taking JSON with a schema definit
 ## Documentation
 
 * [Introduction](/docs/introduction.md)
-  - [Build Files](/docs/introduction.md#build-files)
+  * [Build Files](/docs/introduction.md#build-files)
 * [Quick Start](/docs/quickstart.md)
 * [API](/docs/api.md)
-    - [normalize](/docs/api.md#normalizedata-schema)
-    - [denormalize](/docs/api.md#denormalizeinput-schema-entities)
-    - [schema](/docs/api.md#schema)
+  * [normalize](/docs/api.md#normalizedata-schema)
+  * [denormalize](/docs/api.md#denormalizeinput-schema-entities)
+  * [schema](/docs/api.md#schema)
 * [Using with JSONAPI](/docs/jsonapi.md)
 
 ## Examples
@@ -62,10 +74,10 @@ const comment = new schema.Entity('comments', {
   commenter: user
 });
 
-// Define your article 
-const article = new schema.Entity('articles', { 
+// Define your article
+const article = new schema.Entity('articles', {
   author: user,
-  comments: [ comment ]
+  comments: [comment]
 });
 
 const normalizedData = normalize(originalData, article);
@@ -77,8 +89,8 @@ Now, `normalizedData` will be:
 {
   result: "123",
   entities: {
-    "articles": { 
-      "123": { 
+    "articles": {
+      "123": {
         id: "123",
         author: "1",
         title: "My awesome blog post",
