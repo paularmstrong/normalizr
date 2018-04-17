@@ -47,7 +47,7 @@ export type Schema =
   schema.Object[] |
   schema.Union[] |
   schema.Values[] |
-  {[key: string]: Schema};
+  {[key: string]: Schema | Schema[]};
 
 export function normalize(
   data: any,
