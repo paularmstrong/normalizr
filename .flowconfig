@@ -1,0 +1,15 @@
+[ignore]
+.*/node_modules/immutable/dist/immutable.js.flow
+
+[include]
+
+[libs]
+flow-typed
+
+[lints]
+
+[options]
+all=false
+emoji=true
+
+[strict]

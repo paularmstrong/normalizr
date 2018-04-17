@@ -1,3 +1,4 @@
+// @flow
 // eslint-env jest
 import { fromJS } from 'immutable';
 import { denormalize, normalize, schema } from '../../';
@@ -95,8 +96,8 @@ describe(`${schema.Array.name} denormalization`, () => {
       const cats = new schema.Entity('cats');
       const entities = {
         cats: {
-          1: { id: 1, name: 'Milo' },
-          2: { id: 2, name: 'Jake' }
+          '1': { id: 1, name: 'Milo' },
+          '2': { id: 2, name: 'Jake' }
         }
       };
       expect(denormalize([1, 2], [cats], entities)).toMatchSnapshot();
@@ -125,8 +126,8 @@ describe(`${schema.Array.name} denormalization`, () => {
       const cats = new schema.Entity('cats');
       const entities = {
         cats: {
-          1: { id: 1, name: 'Milo' },
-          2: { id: 2, name: 'Jake' }
+          '1': { id: 1, name: 'Milo' },
+          '2': { id: 2, name: 'Jake' }
         }
       };
       const catList = new schema.Array(cats);

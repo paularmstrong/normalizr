@@ -1,0 +1,9 @@
+declare module 'normalizr' {
+  declare export type schema = {
+    Array: ArraySchema,
+    Entity: EntitySchema,
+    Object: ObjectSchema,
+    Union: UnionSchema,
+    Values: ValuesSchema
+  }
+}

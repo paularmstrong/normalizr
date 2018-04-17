@@ -1,4 +1,8 @@
+// @flow
 import PolymorphicSchema from './Polymorphic';
+import type { AddEntity, Schema, Unvisitor, Visitor } from './types';
+
+type ArrayInput = Array<*> | Object;
 
 const validateSchema = (definition) => {
   const isArray = Array.isArray(definition);
@@ -9,9 +13,23 @@ const validateSchema = (definition) => {
   return definition[0];
 };
 
-const getValues = (input) => (Array.isArray(input) ? input : Object.keys(input).map((key) => input[key]));
+const getValues = (input: ArrayInput): Array<*> => {
+  if (Array.isArray(input)) {
+    return input;
+  } else {
+    // $FlowFixMe we know this is an object now
+    return Object.keys(input).map((key) => input[key]);
+  }
+};
 
-export const normalize = (schema, input, parent, key, visit, addEntity) => {
+export const normalize = (
+  schema: Schema,
+  input: ArrayInput,
+  parent: mixed,
+  key: string,
+  visit: Visitor,
+  addEntity: AddEntity
+): Array<*> => {
   schema = validateSchema(schema);
 
   const values = getValues(input);
@@ -21,13 +39,13 @@ export const normalize = (schema, input, parent, key, visit, addEntity) => {
   return values.map((value, index) => visit(value, parent, key, schema, addEntity));
 };
 
-export const denormalize = (schema, input, unvisit) => {
+export const denormalize = (schema: Schema, input: ?Array<*>, unvisit: Unvisitor): ?Array<*> => {
   schema = validateSchema(schema);
   return input && input.map ? input.map((entityOrId) => unvisit(entityOrId, schema)) : input;
 };
 
 export default class ArraySchema extends PolymorphicSchema {
-  normalize(input, parent, key, visit, addEntity) {
+  normalize(input: ArrayInput, parent: Object, key: string, visit: Visitor, addEntity: AddEntity): Array<*> {
     const values = getValues(input);
 
     return values
@@ -35,7 +53,7 @@ export default class ArraySchema extends PolymorphicSchema {
       .filter((value) => value !== undefined && value !== null);
   }
 
-  denormalize(input, unvisit) {
+  denormalize(input: ?Array<*>, unvisit: Unvisitor): ?Array<*> {
     return input && input.map ? input.map((value) => this.denormalizeValue(value, unvisit)) : input;
   }
 }

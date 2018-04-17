@@ -8,6 +8,7 @@ module.exports = {
     cjs && 'transform-es2015-modules-commonjs',
     'transform-object-rest-spread',
     // TODO: use 'loose' mode for this after upgrading to babel@7
-    'transform-class-properties'
+    'transform-class-properties',
+    'transform-flow-strip-types'
   ].filter(Boolean)
 };

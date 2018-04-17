@@ -1,3 +1,4 @@
+// @flow
 // eslint-env jest
 import { denormalize, normalize, schema } from '../../';
 import { fromJS, Record } from 'immutable';
@@ -12,10 +13,12 @@ describe(`${schema.Entity.name} normalization`, () => {
 
   describe('key', () => {
     test('must be created with a key name', () => {
+      // $FlowFixMe expected to fail
       expect(() => new schema.Entity()).toThrow();
     });
 
     test('key name must be a string', () => {
+      // $FlowFixMe expected to fail
       expect(() => new schema.Entity(42)).toThrow();
     });
 
@@ -35,7 +38,7 @@ describe(`${schema.Entity.name} normalization`, () => {
       const user = new schema.Entity('users', {}, { idAttribute: (entity, parent, key) => key });
       const inputSchema = new schema.Values({ users: user }, () => 'users');
 
-      expect(normalize({ 4: { name: 'taco' }, 56: { name: 'burrito' } }, inputSchema)).toMatchSnapshot();
+      expect(normalize({ '4': { name: 'taco' }, '56': { name: 'burrito' } }, inputSchema)).toMatchSnapshot();
     });
 
     test("can build the entity's ID from the parent object", () => {
@@ -121,7 +124,7 @@ describe(`${schema.Entity.name} denormalization`, () => {
     const mySchema = new schema.Entity('tacos');
     const entities = {
       tacos: {
-        1: { id: 1, type: 'foo' }
+        '1': { id: 1, type: 'foo' }
       }
     };
     expect(denormalize(1, mySchema, entities)).toMatchSnapshot();
@@ -136,11 +139,11 @@ describe(`${schema.Entity.name} denormalization`, () => {
 
     const entities = {
       menus: {
-        1: { id: 1, food: 1 },
-        2: { id: 2 }
+        '1': { id: 1, food: 1 },
+        '2': { id: 2 }
       },
       foods: {
-        1: { id: 1 }
+        '1': { id: 1 }
       }
     };
 
@@ -159,10 +162,10 @@ describe(`${schema.Entity.name} denormalization`, () => {
 
     const entities = {
       menus: {
-        1: { id: 1, food: 2 }
+        '1': { id: 1, food: 2 }
       },
       foods: {
-        1: { id: 1 }
+        '1': { id: 1 }
       }
     };
 
@@ -184,11 +187,11 @@ describe(`${schema.Entity.name} denormalization`, () => {
 
     const entities = {
       menus: {
-        1: new Menu({ id: 1, food: 1 }),
-        2: new Menu({ id: 2 })
+        '1': new Menu({ id: 1, food: 1 }),
+        '2': new Menu({ id: 2 })
       },
       foods: {
-        1: new Food({ id: 1 })
+        '1': new Food({ id: 1 })
       }
     };
 
@@ -207,10 +210,10 @@ describe(`${schema.Entity.name} denormalization`, () => {
 
     const entities = {
       menus: {
-        1: { id: 1, food: { id: 1 } }
+        '1': { id: 1, food: { id: 1 } }
       },
       foods: {
-        1: { id: 1 }
+        '1': { id: 1 }
       }
     };
 
@@ -285,6 +288,9 @@ describe(`${schema.Entity.name} denormalization`, () => {
     };
 
     const denormalizedReport = denormalize('123', report, entities);
+    if (!denormalizedReport) {
+      throw new Error('denormalize returned non-object');
+    }
 
     expect(denormalizedReport).toBe(denormalizedReport.draftedBy.reports[0]);
     expect(denormalizedReport.publishedBy).toBe(denormalizedReport.draftedBy);

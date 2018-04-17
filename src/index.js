@@ -1,11 +1,14 @@
+// @flow
 import * as ImmutableUtils from './schemas/ImmutableUtils';
 import EntitySchema from './schemas/Entity';
 import UnionSchema from './schemas/Union';
 import ValuesSchema from './schemas/Values';
 import ArraySchema, * as ArrayUtils from './schemas/Array';
 import ObjectSchema, * as ObjectUtils from './schemas/Object';
+import type { AddEntity, Unvisitor, Visitor } from './types';
+import type { Schema } from './schemas/types';
 
-const visit = (value, parent, key, schema, addEntity) => {
+const visit: Visitor = (value, parent, key, schema, addEntity) => {
   if (typeof value !== 'object' || !value) {
     return value;
   }
@@ -18,7 +21,7 @@ const visit = (value, parent, key, schema, addEntity) => {
   return schema.normalize(value, parent, key, visit, addEntity);
 };
 
-const addEntities = (entities) => (schema, processedEntity, value, parent, key) => {
+const addEntities = (entities): AddEntity => (schema, processedEntity, value, parent, key) => {
   const schemaKey = schema.key;
   const id = schema.getId(value, parent, key);
   if (!(schemaKey in entities)) {
@@ -41,7 +44,7 @@ export const schema = {
   Values: ValuesSchema
 };
 
-export const normalize = (input, schema) => {
+export const normalize = (input: mixed, schema: Schema) => {
   if (!input || typeof input !== 'object') {
     throw new Error(`Unexpected input given to normalize. Expected type to be "object", found "${typeof input}".`);
   }
@@ -80,7 +83,7 @@ const getUnvisit = (entities) => {
   const cache = {};
   const getEntity = getEntities(entities);
 
-  return function unvisit(input, schema) {
+  const unvisit: Unvisitor = (input, schema) => {
     if (typeof schema === 'object' && (!schema.denormalize || typeof schema.denormalize !== 'function')) {
       const method = Array.isArray(schema) ? ArrayUtils.denormalize : ObjectUtils.denormalize;
       return method(schema, input, unvisit);
@@ -96,6 +99,7 @@ const getUnvisit = (entities) => {
 
     return schema.denormalize(input, unvisit);
   };
+  return unvisit;
 };
 
 const getEntities = (entities) => {
@@ -112,7 +116,7 @@ const getEntities = (entities) => {
   };
 };
 
-export const denormalize = (input, schema, entities) => {
+export const denormalize = (input: mixed, schema: Schema, entities: Object) => {
   if (typeof input !== 'undefined') {
     return getUnvisit(entities)(input, schema);
   }
