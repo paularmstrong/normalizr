@@ -7,7 +7,7 @@ export const STATE_KEY = 'users';
 export default function reducer(state = {}, action) {
   switch (action.type) {
     case ADD_ENTITIES:
-      return Object.entries(action.payload.users).reduce((mergedUsers, [ id, user ]) => {
+      return Object.entries(action.payload.users).reduce((mergedUsers, [id, user]) => {
         return {
           ...mergedUsers,
           [id]: {

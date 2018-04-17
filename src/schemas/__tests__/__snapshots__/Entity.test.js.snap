@@ -10,11 +10,11 @@ Object {
 `;
 
 exports[`EntitySchema denormalization can denormalize already partially denormalized data 2`] = `
-Object {
-  "food": Object {
+Immutable.Map {
+  "id": 1,
+  "food": Immutable.Map {
     "id": 1,
   },
-  "id": 1,
 }
 `;
 
@@ -26,7 +26,7 @@ Object {
 `;
 
 exports[`EntitySchema denormalization denormalizes an entity 2`] = `
-Object {
+Immutable.Map {
   "id": 1,
   "type": "foo",
 }
@@ -42,11 +42,11 @@ Object {
 `;
 
 exports[`EntitySchema denormalization denormalizes deep entities 2`] = `
-Object {
-  "food": Object {
+Immutable.Map {
+  "id": 1,
+  "food": Immutable.Map {
     "id": 1,
   },
-  "id": 1,
 }
 `;
 
@@ -57,40 +57,40 @@ Object {
 `;
 
 exports[`EntitySchema denormalization denormalizes deep entities 4`] = `
-Object {
+Immutable.Map {
   "id": 2,
 }
 `;
 
 exports[`EntitySchema denormalization denormalizes deep entities with records 1`] = `
-Object {
-  "food": Object {
+Immutable.Record {
+  "id": 1,
+  "food": Immutable.Record {
     "id": 1,
   },
-  "id": 1,
 }
 `;
 
 exports[`EntitySchema denormalization denormalizes deep entities with records 2`] = `
-Object {
-  "food": Object {
+Immutable.Record {
+  "id": 1,
+  "food": Immutable.Record {
     "id": 1,
   },
-  "id": 1,
 }
 `;
 
 exports[`EntitySchema denormalization denormalizes deep entities with records 3`] = `
-Object {
-  "food": null,
+Immutable.Record {
   "id": 2,
+  "food": null,
 }
 `;
 
 exports[`EntitySchema denormalization denormalizes deep entities with records 4`] = `
-Object {
-  "food": null,
+Immutable.Record {
   "id": 2,
+  "food": null,
 }
 `;
 
@@ -116,33 +116,33 @@ Object {
 `;
 
 exports[`EntitySchema denormalization denormalizes recursive dependencies 2`] = `
-Object {
-  "draftedBy": Object {
-    "id": "456",
-    "reports": Array [
-      Object {
-        "draftedBy": "456",
-        "id": "123",
-        "publishedBy": "456",
-        "title": "Weekly report",
-      },
-    ],
-    "role": "manager",
-  },
+Immutable.Map {
   "id": "123",
-  "publishedBy": Object {
+  "title": "Weekly report",
+  "draftedBy": Immutable.Map {
     "id": "456",
-    "reports": Array [
-      Object {
-        "draftedBy": "456",
+    "role": "manager",
+    "reports": Immutable.List [
+      Immutable.Map {
         "id": "123",
-        "publishedBy": "456",
         "title": "Weekly report",
+        "draftedBy": "456",
+        "publishedBy": "456",
       },
     ],
-    "role": "manager",
   },
-  "title": "Weekly report",
+  "publishedBy": Immutable.Map {
+    "id": "456",
+    "role": "manager",
+    "reports": Immutable.List [
+      Immutable.Map {
+        "id": "123",
+        "title": "Weekly report",
+        "draftedBy": "456",
+        "publishedBy": "456",
+      },
+    ],
+  },
 }
 `;
 
@@ -162,29 +162,29 @@ Object {
 `;
 
 exports[`EntitySchema denormalization denormalizes recursive dependencies 4`] = `
-Object {
+Immutable.Map {
   "id": "456",
-  "reports": Array [
-    Object {
-      "draftedBy": Object {
-        "id": "456",
-        "reports": Array [
-          "123",
-        ],
-        "role": "manager",
-      },
+  "role": "manager",
+  "reports": Immutable.List [
+    Immutable.Map {
       "id": "123",
-      "publishedBy": Object {
+      "title": "Weekly report",
+      "draftedBy": Immutable.Map {
         "id": "456",
-        "reports": Array [
+        "role": "manager",
+        "reports": Immutable.List [
           "123",
         ],
-        "role": "manager",
       },
-      "title": "Weekly report",
+      "publishedBy": Immutable.Map {
+        "id": "456",
+        "role": "manager",
+        "reports": Immutable.List [
+          "123",
+        ],
+      },
     },
   ],
-  "role": "manager",
 }
 `;
 
@@ -196,9 +196,9 @@ Object {
 `;
 
 exports[`EntitySchema denormalization denormalizes to undefined for missing data 2`] = `
-Object {
-  "food": undefined,
+Immutable.Map {
   "id": 1,
+  "food": undefined,
 }
 `;
 

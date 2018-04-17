@@ -1,7 +1,7 @@
 import * as Repo from './repos';
-import { denormalize, normalize } from '../../../../../src';
 import { pullRequest } from '../../api/schema';
 import { ADD_ENTITIES, addEntities } from '../actions';
+import { denormalize, normalize } from '../../../../../src';
 
 export const STATE_KEY = 'pullRequests';
 
@@ -22,16 +22,19 @@ export const getPullRequests = ({ page = 0 } = {}) => (dispatch, getState, { api
   const state = getState();
   const owner = Repo.selectOwner(state);
   const repo = Repo.selectRepo(state);
-  return api.pullRequests.getAll({
-    owner,
-    repo
-  }).then((response) => {
-    const data = normalize(response, [ schema.pullRequest ]);
-    dispatch(addEntities(data.entities));
-    return response;
-  }).catch((error) => {
-    console.error(error);
-  });
+  return api.pullRequests
+    .getAll({
+      owner,
+      repo
+    })
+    .then((response) => {
+      const data = normalize(response, [schema.pullRequest]);
+      dispatch(addEntities(data.entities));
+      return response;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 };
 
 export const selectHydrated = (state, id) => denormalize(id, pullRequest, state);

@@ -9,10 +9,10 @@ Object {
 `;
 
 exports[`UnionSchema denormalization denormalizes an array of multiple entities using a function to infer the schemaAttribute 2`] = `
-Object {
+Immutable.Map {
   "id": 1,
-  "type": "users",
   "username": "Janey",
+  "type": "users",
 }
 `;
 
@@ -25,9 +25,9 @@ Object {
 `;
 
 exports[`UnionSchema denormalization denormalizes an array of multiple entities using a function to infer the schemaAttribute 4`] = `
-Object {
-  "groupname": "People",
+Immutable.Map {
   "id": 2,
+  "groupname": "People",
   "type": "groups",
 }
 `;
@@ -41,10 +41,10 @@ Object {
 `;
 
 exports[`UnionSchema denormalization denormalizes an object using string schemaAttribute 2`] = `
-Object {
+Immutable.Map {
   "id": 1,
-  "type": "users",
   "username": "Janey",
+  "type": "users",
 }
 `;
 
@@ -57,9 +57,9 @@ Object {
 `;
 
 exports[`UnionSchema denormalization denormalizes an object using string schemaAttribute 4`] = `
-Object {
-  "groupname": "People",
+Immutable.Map {
   "id": 2,
+  "groupname": "People",
   "type": "groups",
 }
 `;
@@ -71,7 +71,7 @@ Object {
 `;
 
 exports[`UnionSchema denormalization returns the original value no schema is given 2`] = `
-Object {
+Immutable.Map {
   "id": 1,
 }
 `;

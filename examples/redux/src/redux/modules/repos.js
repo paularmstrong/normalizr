@@ -18,7 +18,7 @@ const Action = {
 };
 
 export const setRepo = (slug) => {
-  const [ owner, repo ] = slug.split('/');
+  const [owner, repo] = slug.split('/');
   return {
     type: Action.SET_REPO,
     payload: { owner, repo }

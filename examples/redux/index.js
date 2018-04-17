@@ -1,7 +1,7 @@
-import inquirer from 'inquirer';
-import store from './src/redux';
 import * as Action from './src/redux/actions';
 import * as Selector from './src/redux/selectors';
+import inquirer from 'inquirer';
+import store from './src/redux';
 
 const REPO = 'paularmstrong/normalizr';
 

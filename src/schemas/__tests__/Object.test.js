@@ -1,9 +1,9 @@
-/* eslint-env jest */
+// eslint-env jest
 import { fromJS } from 'immutable';
 import { denormalize, normalize, schema } from '../../';
 
 describe(`${schema.Object.name} normalization`, () => {
-  it('normalizes an object', () => {
+  test('normalizes an object', () => {
     const userSchema = new schema.Entity('user');
     const object = new schema.Object({
       user: userSchema
@@ -11,12 +11,12 @@ describe(`${schema.Object.name} normalization`, () => {
     expect(normalize({ user: { id: 1 } }, object)).toMatchSnapshot();
   });
 
-  it(`normalizes plain objects as shorthand for ${schema.Object.name}`, () => {
+  test(`normalizes plain objects as shorthand for ${schema.Object.name}`, () => {
     const userSchema = new schema.Entity('user');
     expect(normalize({ user: { id: 1 } }, { user: userSchema })).toMatchSnapshot();
   });
 
-  it('filters out undefined and null values', () => {
+  test('filters out undefined and null values', () => {
     const userSchema = new schema.Entity('user');
     const users = { foo: userSchema, bar: userSchema, baz: userSchema };
     expect(normalize({ foo: {}, bar: { id: '1' } }, users)).toMatchSnapshot();
@@ -24,7 +24,7 @@ describe(`${schema.Object.name} normalization`, () => {
 });
 
 describe(`${schema.Object.name} denormalization`, () => {
-  it('denormalizes an object', () => {
+  test('denormalizes an object', () => {
     const userSchema = new schema.Entity('user');
     const object = new schema.Object({
       user: userSchema
@@ -39,7 +39,7 @@ describe(`${schema.Object.name} denormalization`, () => {
     expect(denormalize(fromJS({ user: 1 }), object, fromJS(entities))).toMatchSnapshot();
   });
 
-  it('denormalizes plain object shorthand', () => {
+  test('denormalizes plain object shorthand', () => {
     const userSchema = new schema.Entity('user');
     const entities = {
       user: {

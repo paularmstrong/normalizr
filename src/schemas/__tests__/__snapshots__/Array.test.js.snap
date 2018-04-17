@@ -15,11 +15,11 @@ Array [
 
 exports[`ArraySchema denormalization Class denormalizes a single entity 2`] = `
 Array [
-  Object {
+  Immutable.Map {
     "id": 1,
     "name": "Milo",
   },
-  Object {
+  Immutable.Map {
     "id": 2,
     "name": "Jake",
   },
@@ -48,18 +48,18 @@ Array [
 
 exports[`ArraySchema denormalization Class denormalizes multiple entities 2`] = `
 Array [
-  Object {
+  Immutable.Map {
     "id": "123",
     "type": "cats",
   },
-  Object {
+  Immutable.Map {
     "id": "123",
     "type": "people",
   },
   Object {
     "id": "789",
   },
-  Object {
+  Immutable.Map {
     "id": "456",
     "type": "cats",
   },
@@ -74,9 +74,9 @@ Object {
 `;
 
 exports[`ArraySchema denormalization Class returns the input value if is not an array 2`] = `
-Object {
-  "fillings": Object {},
+Immutable.Map {
   "id": "123",
+  "fillings": Immutable.Map {},
 }
 `;
 
@@ -95,11 +95,11 @@ Array [
 
 exports[`ArraySchema denormalization Object denormalizes a single entity 2`] = `
 Array [
-  Object {
+  Immutable.Map {
     "id": 1,
     "name": "Milo",
   },
-  Object {
+  Immutable.Map {
     "id": 2,
     "name": "Jake",
   },
@@ -114,9 +114,9 @@ Object {
 `;
 
 exports[`ArraySchema denormalization Object returns the input value if is not an array 2`] = `
-Object {
-  "fillings": null,
+Immutable.Map {
   "id": "123",
+  "fillings": null,
 }
 `;
 

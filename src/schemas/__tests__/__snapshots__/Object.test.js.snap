@@ -11,7 +11,7 @@ Object {
 
 exports[`ObjectSchema denormalization denormalizes an object 2`] = `
 Object {
-  "user": Object {
+  "user": Immutable.Map {
     "id": 1,
     "name": "Nacho",
   },
@@ -19,8 +19,8 @@ Object {
 `;
 
 exports[`ObjectSchema denormalization denormalizes an object 3`] = `
-Object {
-  "user": Object {
+Immutable.Map {
+  "user": Immutable.Map {
     "id": 1,
     "name": "Nacho",
   },
@@ -38,7 +38,7 @@ Object {
 
 exports[`ObjectSchema denormalization denormalizes plain object shorthand 2`] = `
 Object {
-  "user": Object {
+  "user": Immutable.Map {
     "id": 1,
     "name": "Jane",
   },
@@ -46,8 +46,8 @@ Object {
 `;
 
 exports[`ObjectSchema denormalization denormalizes plain object shorthand 3`] = `
-Object {
-  "user": Object {
+Immutable.Map {
+  "user": Immutable.Map {
     "id": 1,
     "name": "Jane",
   },

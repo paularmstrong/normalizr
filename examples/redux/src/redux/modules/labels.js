@@ -1,7 +1,7 @@
 import * as Repo from './repos';
 import { label } from '../../api/schema';
-import { denormalize, normalize } from '../../../../../src';
 import { ADD_ENTITIES, addEntities } from '../actions';
+import { denormalize, normalize } from '../../../../../src';
 
 export const STATE_KEY = 'labels';
 
@@ -22,16 +22,19 @@ export const getLabels = ({ page = 0 } = {}) => (dispatch, getState, { api, sche
   const state = getState();
   const owner = Repo.selectOwner(state);
   const repo = Repo.selectRepo(state);
-  return api.issues.getLabels({
-    owner,
-    repo
-  }).then((response) => {
-    const data = normalize(response, [ schema.label ]);
-    dispatch(addEntities(data.entities));
-    return response;
-  }).catch((error) => {
-    console.error(error);
-  });
+  return api.issues
+    .getLabels({
+      owner,
+      repo
+    })
+    .then((response) => {
+      const data = normalize(response, [schema.label]);
+      dispatch(addEntities(data.entities));
+      return response;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 };
 
 export const selectHydrated = (state, id) => denormalize(id, label, state);

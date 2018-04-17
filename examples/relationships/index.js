@@ -1,5 +1,5 @@
-import input from './input.json';
 import fs from 'fs';
+import input from './input.json';
 import { normalize } from '../../src';
 import path from 'path';
 import postsSchema from './schema';

@@ -15,11 +15,11 @@ Object {
 
 exports[`ValuesSchema denormalization denormalizes the values of an object with the given schema 2`] = `
 Object {
-  "fido": Object {
+  "fido": Immutable.Map {
     "id": 1,
     "type": "dogs",
   },
-  "fluffy": Object {
+  "fluffy": Immutable.Map {
     "id": 1,
     "type": "cats",
   },
