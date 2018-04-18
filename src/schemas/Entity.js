@@ -3,12 +3,13 @@ import * as ImmutableUtils from './ImmutableUtils';
 import type { AddEntity, Unvisitor, Visitor } from '../types';
 
 const getDefaultGetId = (idAttribute: string) => (input) =>
+  // $FlowFixMe can't understand Immutable/ImmutableUtils
   ImmutableUtils.isImmutable(input) ? input.get(idAttribute) : input[idAttribute];
 
-type GetId = (input: Object, parent: Object, key: string) => string;
+type GetId = (input: {}, parent: ?{}, key: ?string) => string;
 type IdAttribute = string;
-type MergeStrategy = (entityA: Object, entityB: Object) => Object;
-type ProcessStrategy = (input: Object, parent: Object, key: string) => Object;
+type MergeStrategy = (entityA: {}, entityB: {}) => {};
+type ProcessStrategy = (input: {}, parent: ?{}, key: ?string) => {};
 
 type Options = {
   idAttribute?: GetId | IdAttribute,
@@ -31,14 +32,12 @@ export default class EntitySchema {
   _mergeStrategy: MergeStrategy;
   _processStrategy: ProcessStrategy;
 
-  schema: Object;
+  schema: {};
 
-  constructor(key: string, definition: Object = {}, options: Options = {}) {
+  constructor(key: string, definition: {} = {}, options: Options = {}) {
     if (!key || typeof key !== 'string') {
-      throw new Error(`Expected a string key for Entity, but found ${key}.`);
+      throw new Error(`Expected a string key for Entity, but found ${key || 'undefined'}.`);
     }
-
-    const { idAttribute, mergeStrategy, processStrategy } = options;
 
     this._key = key;
     this._idAttribute = options.idAttribute || defaultOptions.idAttribute;
@@ -56,22 +55,22 @@ export default class EntitySchema {
     return this._idAttribute;
   }
 
-  define(definition: Object) {
+  define(definition: {}) {
     this.schema = Object.keys(definition).reduce((entitySchema, key) => {
       const schema = definition[key];
       return { ...entitySchema, [key]: schema };
     }, this.schema || {});
   }
 
-  getId(input: Object, parent: Object, key: string) {
+  getId(input: {}, parent: ?{}, key: ?string) {
     return this._getId(input, parent, key);
   }
 
-  merge(entityA: Object, entityB: Object) {
+  merge(entityA: {}, entityB: {}) {
     return this._mergeStrategy(entityA, entityB);
   }
 
-  normalize(input: Object, parent: Object, key: string, visit: Visitor, addEntity: AddEntity) {
+  normalize(input: {}, parent: ?{}, key: ?string, visit: Visitor, addEntity: AddEntity) {
     const processedEntity = this._processStrategy(input, parent, key);
     Object.keys(this.schema).forEach((key) => {
       if (processedEntity.hasOwnProperty(key) && typeof processedEntity[key] === 'object') {
@@ -84,7 +83,7 @@ export default class EntitySchema {
     return this.getId(input, parent, key);
   }
 
-  denormalize(entity: Object, unvisit: Unvisitor) {
+  denormalize(entity: {}, unvisit: Unvisitor) {
     if (ImmutableUtils.isImmutable(entity)) {
       return ImmutableUtils.denormalizeImmutable(this.schema, entity, unvisit);
     }

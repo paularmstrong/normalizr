@@ -1,3 +1,4 @@
+// @flow
 // eslint-env jest
 import { fromJS } from 'immutable';
 import { denormalize, normalize, schema } from '../../';
@@ -11,7 +12,8 @@ describe(`${schema.Values.name} normalization`, () => {
         dogs: dog,
         cats: cat
       },
-      (entity, key) => entity.type
+      // $FlowFixMe
+      (entity, parent, key) => entity.type
     );
 
     expect(
@@ -33,7 +35,8 @@ describe(`${schema.Values.name} normalization`, () => {
         dogs: dog,
         cats: cat
       },
-      (entity, key) => `${entity.type}s`
+      // $FlowFixMe
+      (entity, parent, key) => `${entity.type}s`
     );
 
     expect(
@@ -56,7 +59,8 @@ describe(`${schema.Values.name} normalization`, () => {
         dogs: dog,
         cats: cat
       },
-      (entity, key) => entity.type
+      // $FlowFixMe
+      (entity, parent, key) => entity.type
     );
 
     expect(
@@ -81,12 +85,13 @@ describe(`${schema.Values.name} denormalization`, () => {
         dogs: dog,
         cats: cat
       },
-      (entity, key) => entity.type
+      // $FlowFixMe
+      (entity, parent, key) => entity.type
     );
 
     const entities = {
-      cats: { 1: { id: 1, type: 'cats' } },
-      dogs: { 1: { id: 1, type: 'dogs' } }
+      cats: { '1': { id: 1, type: 'cats' } },
+      dogs: { '1': { id: 1, type: 'dogs' } }
     };
 
     expect(

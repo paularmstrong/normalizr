@@ -1,24 +1,31 @@
 // @flow
 import * as ImmutableUtils from './schemas/ImmutableUtils';
 import EntitySchema from './schemas/Entity';
+import type { Schema } from './schemas/types';
 import UnionSchema from './schemas/Union';
 import ValuesSchema from './schemas/Values';
+import type { AddEntity, Unvisitor, Visitor } from './types';
 import ArraySchema, * as ArrayUtils from './schemas/Array';
 import ObjectSchema, * as ObjectUtils from './schemas/Object';
-import type { AddEntity, Unvisitor, Visitor } from './types';
-import type { Schema } from './schemas/types';
 
 const visit: Visitor = (value, parent, key, schema, addEntity) => {
   if (typeof value !== 'object' || !value) {
     return value;
   }
 
-  if (typeof schema === 'object' && (!schema.normalize || typeof schema.normalize !== 'function')) {
-    const method = Array.isArray(schema) ? ArrayUtils.normalize : ObjectUtils.normalize;
-    return method(schema, value, parent, key, visit, addEntity);
+  if (Array.isArray(schema)) {
+    return ArrayUtils.normalize(schema, value, parent, key, visit, addEntity);
   }
 
-  return schema.normalize(value, parent, key, visit, addEntity);
+  if (typeof schema === 'object' && (!schema.normalize || typeof schema.normalize !== 'function')) {
+    return ObjectUtils.normalize(schema, value, parent, key, visit, addEntity);
+  }
+
+  if (typeof schema.normalize === 'function') {
+    return schema.normalize(value, parent, key, visit, addEntity);
+  }
+
+  return value;
 };
 
 const addEntities = (entities): AddEntity => (schema, processedEntity, value, parent, key) => {
@@ -58,7 +65,7 @@ export const normalize = (input: mixed, schema: Schema) => {
 
 const unvisitEntity = (id, schema, unvisit, getEntity, cache) => {
   const entity = getEntity(id, schema);
-  if (typeof entity !== 'object' || entity === null) {
+  if (typeof entity !== 'object' || Array.isArray(entity) || entity === null) {
     return entity;
   }
 
@@ -84,9 +91,15 @@ const getUnvisit = (entities) => {
   const getEntity = getEntities(entities);
 
   const unvisit: Unvisitor = (input, schema) => {
+    if (Array.isArray(schema)) {
+      if (Array.isArray(input)) {
+        return ArrayUtils.denormalize(schema, input, unvisit);
+      }
+    }
+
     if (typeof schema === 'object' && (!schema.denormalize || typeof schema.denormalize !== 'function')) {
-      const method = Array.isArray(schema) ? ArrayUtils.denormalize : ObjectUtils.denormalize;
-      return method(schema, input, unvisit);
+      // $FlowFixMe Arrays are already filtered out from schema/input
+      return ObjectUtils.denormalize(schema, input, unvisit);
     }
 
     if (input === undefined || input === null) {
@@ -97,6 +110,7 @@ const getUnvisit = (entities) => {
       return unvisitEntity(input, schema, unvisit, getEntity, cache);
     }
 
+    // $FlowFixMe disallowed inputs already filtered out
     return schema.denormalize(input, unvisit);
   };
   return unvisit;
@@ -112,11 +126,12 @@ const getEntities = (entities) => {
       return entityOrId;
     }
 
+    // $FlowFixMe can't understand Immutable/ImmutableUtils
     return isImmutable ? entities.getIn([schemaKey, entityOrId.toString()]) : entities[schemaKey][entityOrId];
   };
 };
 
-export const denormalize = (input: mixed, schema: Schema, entities: Object) => {
+export const denormalize = (input: mixed, schema: Schema, entities: {}) => {
   if (typeof input !== 'undefined') {
     return getUnvisit(entities)(input, schema);
   }

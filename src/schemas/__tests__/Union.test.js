@@ -1,9 +1,11 @@
+// @flow
 // eslint-env jest
 import { fromJS } from 'immutable';
 import { denormalize, normalize, schema } from '../../';
 
 describe(`${schema.Union.name} normalization`, () => {
   test('throws if not given a schemaAttribute', () => {
+    // $FlowFixMe expected to throw an error
     expect(() => new schema.Union({})).toThrow();
   });
 
@@ -31,7 +33,8 @@ describe(`${schema.Union.name} normalization`, () => {
         groups: group
       },
       (input) => {
-        return input.username ? 'users' : input.groupname ? 'groups' : null;
+        // $FlowFixMe
+        return input.username ? 'users' : input.groupname ? 'groups' : 'undefined';
       }
     );
 
@@ -46,10 +49,10 @@ describe(`${schema.Union.name} denormalization`, () => {
   const group = new schema.Entity('groups');
   const entities = {
     users: {
-      1: { id: 1, username: 'Janey', type: 'users' }
+      '1': { id: 1, username: 'Janey', type: 'users' }
     },
     groups: {
-      2: { id: 2, groupname: 'People', type: 'groups' }
+      '2': { id: 2, groupname: 'People', type: 'groups' }
     }
   };
 
@@ -76,6 +79,7 @@ describe(`${schema.Union.name} denormalization`, () => {
         groups: group
       },
       (input) => {
+        // $FlowFixMe
         return input.username ? 'users' : 'groups';
       }
     );
@@ -94,6 +98,7 @@ describe(`${schema.Union.name} denormalization`, () => {
         groups: group
       },
       (input) => {
+        // $FlowFixMe
         return input.username ? 'users' : 'groups';
       }
     );

@@ -5,7 +5,7 @@ const cjs = BABEL_ENV === 'cjs' || NODE_ENV === 'test';
 module.exports = {
   presets: [['env', { modules: false, loose: true }]],
   plugins: [
-    'transform-flow-strip-types'
+    'transform-flow-strip-types',
     cjs && 'transform-es2015-modules-commonjs',
     'transform-object-rest-spread',
     // TODO: use 'loose' mode for this after upgrading to babel@7

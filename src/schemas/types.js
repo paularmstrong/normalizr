@@ -1,7 +1,8 @@
-import typeof ArraySchema from './Array';
-import typeof EntitySchema from './Entity';
-import typeof ObjectSchema from './Object';
-import typeof UnionSchema from './Union';
-import typeof ValuesSchema from './Values';
+// @flow
+import ArraySchema from './Array';
+import EntitySchema from './Entity';
+import ObjectSchema from './Object';
+import UnionSchema from './Union';
+import ValuesSchema from './Values';
 
-export type Schema = Array<Schema> | Object | ArraySchema | EntitySchema | ObjectSchema | UnionSchema | ValuesSchema;
+export type Schema = Array<Schema> | {} | ArraySchema | EntitySchema | ObjectSchema | UnionSchema | ValuesSchema;

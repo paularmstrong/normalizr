@@ -35,7 +35,7 @@ describe(`${schema.Entity.name} normalization`, () => {
     });
 
     test('can normalize entity IDs based on their object key', () => {
-      const user = new schema.Entity('users', {}, { idAttribute: (entity, parent, key) => key });
+      const user = new schema.Entity('users', {}, { idAttribute: (entity, parent, key) => key || '' });
       const inputSchema = new schema.Values({ users: user }, () => 'users');
 
       expect(normalize({ '4': { name: 'taco' }, '56': { name: 'burrito' } }, inputSchema)).toMatchSnapshot();
@@ -46,7 +46,8 @@ describe(`${schema.Entity.name} normalization`, () => {
         'users',
         {},
         {
-          idAttribute: (entity, parent, key) => `${parent.name}-${key}-${entity.id}`
+          // $FlowFixMe
+          idAttribute: (entity, parent, key) => `${parent.name}-${key || ''}-${entity.id}`
         }
       );
       const inputSchema = new schema.Object({ user });
@@ -63,6 +64,7 @@ describe(`${schema.Entity.name} normalization`, () => {
 
     test('can use a custom merging strategy', () => {
       const mergeStrategy = (entityA, entityB) => {
+        // $FlowFixMe
         return { ...entityA, ...entityB, name: entityA.name };
       };
       const mySchema = new schema.Entity('tacos', {}, { mergeStrategy });
@@ -74,6 +76,7 @@ describe(`${schema.Entity.name} normalization`, () => {
   describe('processStrategy', () => {
     test('can use a custom processing strategy', () => {
       const processStrategy = (entity) => {
+        // $FlowFixMe
         return { ...entity, slug: `thing-${entity.id}` };
       };
       const mySchema = new schema.Entity('tacos', {}, { processStrategy });
@@ -83,6 +86,7 @@ describe(`${schema.Entity.name} normalization`, () => {
 
     test('can use information from the parent in the process strategy', () => {
       const processStrategy = (entity, parent, key) => {
+        // $FlowFixMe
         return { ...entity, parentId: parent.id, parentKey: key };
       };
       const childEntity = new schema.Entity('children', {}, { processStrategy });
@@ -292,7 +296,9 @@ describe(`${schema.Entity.name} denormalization`, () => {
       throw new Error('denormalize returned non-object');
     }
 
+    // $FlowFixMe
     expect(denormalizedReport).toBe(denormalizedReport.draftedBy.reports[0]);
+    // $FlowFixMe
     expect(denormalizedReport.publishedBy).toBe(denormalizedReport.draftedBy);
 
     // NOTE: Given how immutable data works, referential equality can't be

@@ -18,6 +18,7 @@ describe(`${schema.Array.name} normalization`, () => {
 
     test('passes its parent to its children when normalizing', () => {
       const processStrategy = (entity, parent, key) => {
+        // $FlowFixMe
         return { ...entity, parentId: parent.id, parentKey: key };
       };
       const childEntity = new schema.Entity('children', {}, { processStrategy });
@@ -51,6 +52,7 @@ describe(`${schema.Array.name} normalization`, () => {
     });
 
     test('normalizes multiple entities', () => {
+      // $FlowFixMe
       const inferSchemaFn = jest.fn((input, parent, key) => input.type || 'dogs');
       const catSchema = new schema.Entity('cats');
       const peopleSchema = new schema.Entity('person');
@@ -144,6 +146,7 @@ describe(`${schema.Array.name} denormalization`, () => {
           dogs: {},
           people: peopleSchema
         },
+        // $FlowFixMe
         (input, parent, key) => input.type || 'dogs'
       );
 

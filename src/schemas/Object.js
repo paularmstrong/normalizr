@@ -1,6 +1,18 @@
+// @flow
 import * as ImmutableUtils from './ImmutableUtils';
+import type { AddEntity, Unvisitor, Visitor } from '../types';
 
-export const normalize = (schema, input, parent, key, visit, addEntity) => {
+type ObjectInput = {};
+type SchemaDefinition = {};
+
+export const normalize = (
+  schema: SchemaDefinition,
+  input: ObjectInput,
+  parent: ?{},
+  key: ?string,
+  visit: Visitor,
+  addEntity: AddEntity
+): {} => {
   const object = { ...input };
   Object.keys(schema).forEach((key) => {
     const localSchema = schema[key];
@@ -14,9 +26,13 @@ export const normalize = (schema, input, parent, key, visit, addEntity) => {
   return object;
 };
 
-export const denormalize = (schema, input, unvisit) => {
+export const denormalize = <T: mixed>(schema: {}, input: T, unvisit: Unvisitor): {} | T => {
   if (ImmutableUtils.isImmutable(input)) {
     return ImmutableUtils.denormalizeImmutable(schema, input, unvisit);
+  }
+
+  if (typeof input !== 'object') {
+    return input;
   }
 
   const object = { ...input };
@@ -29,22 +45,24 @@ export const denormalize = (schema, input, unvisit) => {
 };
 
 export default class ObjectSchema {
-  constructor(definition) {
+  schema: SchemaDefinition;
+
+  constructor(definition: SchemaDefinition) {
     this.define(definition);
   }
 
-  define(definition) {
+  define(definition: {}) {
     this.schema = Object.keys(definition).reduce((entitySchema, key) => {
       const schema = definition[key];
       return { ...entitySchema, [key]: schema };
     }, this.schema || {});
   }
 
-  normalize(...args) {
+  normalize(...args: *) {
     return normalize(this.schema, ...args);
   }
 
-  denormalize(...args) {
+  denormalize(...args: *) {
     return denormalize(this.schema, ...args);
   }
 }
