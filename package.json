@@ -46,6 +46,7 @@
     "coveralls": "^2.11.15",
     "eslint": "^4.19.1",
     "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-flowtype": "^2.46.2",
     "eslint-plugin-jest": "^21.15.0",
     "eslint-plugin-prettier": "^2.6.0",
     "flow-bin": "^0.70.0",
@@ -64,9 +65,6 @@
     "typescript": "^2.1.4",
     "typescript-definition-tester": "0.0.5",
     "uglify-es": "^3.3.8"
-  },
-  "dependencies": {
-    "eslint-plugin-flowtype": "^2.46.2"
   },
   "lint-staged": {
     "src/**/*.js": ["test --passWithNoTests", "git add"],
