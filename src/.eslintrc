@@ -1,5 +1,5 @@
 {
   "rules": {
-    "flowtype/require-valid-file-annotation": "error"
+    "flowtype/require-valid-file-annotation": ["error", "always", { "annotationStyle": "line" }]
   }
 }

@@ -6,10 +6,10 @@ const getDefaultGetId = (idAttribute: string) => (input) =>
   // $FlowFixMe can't understand Immutable/ImmutableUtils
   ImmutableUtils.isImmutable(input) ? input.get(idAttribute) : input[idAttribute];
 
-type GetId = (input: {}, parent: ?{}, key: ?string) => string;
+type GetId = (input: Object, parent: ?Object, key: ?string) => string;
 type IdAttribute = string;
-type MergeStrategy = (entityA: {}, entityB: {}) => {};
-type ProcessStrategy = (input: {}, parent: ?{}, key: ?string) => {};
+type MergeStrategy = (entityA: Object, entityB: Object) => Object;
+type ProcessStrategy = (input: Object, parent: ?Object, key: ?string) => Object;
 
 type Options = {
   idAttribute?: GetId | IdAttribute,
@@ -32,7 +32,7 @@ export default class EntitySchema {
   _mergeStrategy: MergeStrategy;
   _processStrategy: ProcessStrategy;
 
-  schema: {};
+  schema: Object;
 
   constructor(key: string, definition: {} = {}, options: Options = {}) {
     if (!key || typeof key !== 'string') {

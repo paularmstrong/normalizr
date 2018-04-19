@@ -1,3 +1,4 @@
+// @flow
 // eslint-env jest
 import * as path from 'path';
 import { compileDirectory } from 'typescript-definition-tester';

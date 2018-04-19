@@ -1,14 +1,16 @@
+// @flow
 // eslint-env jest
 import { denormalize, normalize, schema } from '../';
 
 describe('normalize', () => {
   [42, null, undefined, '42', () => {}].forEach((input) => {
-    test(`cannot normalize input that == ${input}`, () => {
+    test(`cannot normalize input that == ${(input: any)}`, () => {
       expect(() => normalize(input, new schema.Entity('test'))).toThrow();
     });
   });
 
   test('cannot normalize without a schema', () => {
+    // $FlowFixMe expected to throw
     expect(() => normalize({})).toThrow();
   });
 
@@ -72,12 +74,17 @@ describe('normalize', () => {
   });
 
   test('can use fully custom entity classes', () => {
+    type MyEntitySchema = {
+      children: Array<schema.Entity>
+    };
+
     class MyEntity extends schema.Entity {
-      schema = {
+      schema: MyEntitySchema = {
         children: [new schema.Entity('children')]
       };
 
       getId(entity, parent, key) {
+        // $FlowFixMe
         return entity.uuid;
       }
 
@@ -85,9 +92,10 @@ describe('normalize', () => {
         const entity = { ...input };
         Object.keys(this.schema).forEach((key) => {
           const schema = this.schema[key];
+          // $FlowFixMe
           entity[key] = visit(input[key], input, key, schema, addEntity);
         });
-        addEntity(this, entity, parent, key);
+        addEntity(this, entity, input, parent, key);
         return {
           uuid: this.getId(entity),
           schema: this.key
@@ -149,6 +157,7 @@ describe('normalize', () => {
 
 describe('denormalize', () => {
   test('cannot denormalize without a schema', () => {
+    // $FlowFixMe expected to throw
     expect(() => denormalize({})).toThrow();
   });
 
@@ -160,8 +169,8 @@ describe('denormalize', () => {
     const mySchema = new schema.Entity('tacos');
     const entities = {
       tacos: {
-        1: { id: 1, type: 'foo' },
-        2: { id: 2, type: 'bar' }
+        '1': { id: 1, type: 'foo' },
+        '2': { id: 2, type: 'bar' }
       }
     };
     expect(denormalize([1, 2], [mySchema], entities)).toMatchSnapshot();
@@ -245,6 +254,7 @@ describe('denormalize', () => {
       'guests',
       {},
       {
+        // $FlowFixMe
         idAttribute: (value, parent, key) => `${key}-${parent.id}-${value.guest_id}`
       }
     );
