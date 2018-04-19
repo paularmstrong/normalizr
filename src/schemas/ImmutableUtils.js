@@ -1,6 +1,7 @@
 // @flow
 import type { Unvisitor } from '../types';
 import type { Map, Record } from 'immutable';
+
 /**
  * Helpers to enable Immutable compatibility *without* bringing in
  * the 'immutable' package as a dependency.
@@ -15,15 +16,6 @@ export function isImmutable(object: any): boolean {
   ); // Immutable.Record
 }
 
-/**
- * Denormalize an immutable entity.
- *
- * @param  {Schema} schemaDefinition
- * @param  {Immutable.Map|Immutable.Record} input
- * @param  {function} unvisit
- * @param  {function} getDenormalizedEntity
- * @return {Immutable.Map|Immutable.Record}
- */
 export function denormalizeImmutable(schemaDefinition: {}, input: Map | Record, unvisit: Unvisitor) {
   return Object.keys(schemaDefinition).reduce((object, key) => {
     // Immutable maps cast keys to strings on write so we need to ensure
