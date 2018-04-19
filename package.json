@@ -20,6 +20,7 @@
     "build": "npm run clean && npm-run-all --parallel build:*",
     "build:development": "NODE_ENV=development rollup -c",
     "build:production": "NODE_ENV=production rollup -c",
+    "build:types": "flow gen-flow-files src/index.js > dist/normalizr.js.flow",
     "clean": "rimraf dist",
     "flow": "flow",
     "lint": "eslint --fix .",
