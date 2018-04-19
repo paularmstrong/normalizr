@@ -1,7 +1,6 @@
 // @flow
 import PolymorphicSchema from './Polymorphic';
-import type { Schema } from './types';
-import type { AddEntity, Unvisitor, Visitor } from '../types';
+import type { AddEntity, Schema, Unvisitor, Visitor } from '../types';
 
 type ArrayInput = Array<*> | {};
 

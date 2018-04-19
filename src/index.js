@@ -1,10 +1,9 @@
 // @flow
 import * as ImmutableUtils from './schemas/ImmutableUtils';
 import EntitySchema from './schemas/Entity';
-import type { Schema } from './schemas/types';
 import UnionSchema from './schemas/Union';
 import ValuesSchema from './schemas/Values';
-import type { AddEntity, Unvisitor, Visitor } from './types';
+import type { AddEntity, Schema, Unvisitor, Visitor } from './types';
 import ArraySchema, * as ArrayUtils from './schemas/Array';
 import ObjectSchema, * as ObjectUtils from './schemas/Object';
 
