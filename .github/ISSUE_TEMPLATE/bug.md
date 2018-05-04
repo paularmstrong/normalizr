@@ -1,6 +1,7 @@
-<!--
-If you're looking for help implementing something with normalizr or dealing with data after it's been normalized, you're more likely to get a quick response from somewhere like StackOverflow: http://stackoverflow.com/questions/tagged/normalizr
--->
+---
+name: 🐛 Bug Report
+about: If something isn't working as expected 🤔.
+---
 
 # Problem
 
@@ -30,7 +31,7 @@ Here's what I expect to see when I run the above:
 }
 ```
 
-Here's what I *actually* see when I run the above:
+Here's what I _actually_ see when I run the above:
 
 ```js
 {
