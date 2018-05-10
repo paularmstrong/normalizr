@@ -5,17 +5,17 @@ import ValuesSchema from './schemas/Values';
 import ArraySchema, * as ArrayUtils from './schemas/Array';
 import ObjectSchema, * as ObjectUtils from './schemas/Object';
 
-const visit = (value, parent, key, schema, addEntity) => {
+const visit = (value, parent, key, schema, addEntity, visitedEntities) => {
   if (typeof value !== 'object' || !value) {
     return value;
   }
 
   if (typeof schema === 'object' && (!schema.normalize || typeof schema.normalize !== 'function')) {
     const method = Array.isArray(schema) ? ArrayUtils.normalize : ObjectUtils.normalize;
-    return method(schema, value, parent, key, visit, addEntity);
+    return method(schema, value, parent, key, visit, addEntity, visitedEntities);
   }
 
-  return schema.normalize(value, parent, key, visit, addEntity);
+  return schema.normalize(value, parent, key, visit, addEntity, visitedEntities);
 };
 
 const addEntities = (entities) => (schema, processedEntity, value, parent, key) => {
@@ -48,8 +48,9 @@ export const normalize = (input, schema) => {
 
   const entities = {};
   const addEntity = addEntities(entities);
+  const visitedEntities = {};
 
-  const result = visit(input, input, null, schema, addEntity);
+  const result = visit(input, input, null, schema, addEntity, visitedEntities);
   return { entities, result };
 };
 
