@@ -22,7 +22,7 @@ const addEntities = (entities) => (schema, processedEntity, value, parent, key) 
   const schemaKey = schema.key;
   const id = schema.getId(value, parent, key);
   if (!(schemaKey in entities)) {
-    entities[schemaKey] = {};
+    entities[schemaKey] = schema.constructEntity();
   }
 
   const existingEntity = entities[schemaKey][id];
