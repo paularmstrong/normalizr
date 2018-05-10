@@ -14,7 +14,8 @@ export default class EntitySchema {
       mergeStrategy = (entityA, entityB) => {
         return { ...entityA, ...entityB };
       },
-      processStrategy = (input) => ({ ...input })
+      processStrategy = (input) => ({ ...input }),
+      entityClass
     } = options;
 
     this._key = key;
@@ -22,6 +23,7 @@ export default class EntitySchema {
     this._idAttribute = idAttribute;
     this._mergeStrategy = mergeStrategy;
     this._processStrategy = processStrategy;
+    this._entityClass = entityClass;
     this.define(definition);
   }
 
@@ -46,6 +48,14 @@ export default class EntitySchema {
 
   merge(entityA, entityB) {
     return this._mergeStrategy(entityA, entityB);
+  }
+
+  constructEntity() {
+    if (!this._entityClass || typeof this._entityClass !== 'function') {
+      return {};
+    }
+
+    return new this._entityClass();
   }
 
   normalize(input, parent, key, visit, addEntity) {
