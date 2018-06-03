@@ -33,31 +33,6 @@ export default class EntitySchema {
     return this._idAttribute;
   }
 
-  stringifySafe(input) {
-    function replacer() {
-      const stack = [];
-      const keys = [];
-
-      return (key, value) => {
-        if (stack.length > 0) {
-          const thisPos = stack.indexOf(this);
-          ~thisPos ? stack.splice(thisPos + 1) : stack.push(this);
-          ~thisPos ? keys.splice(thisPos, Infinity, key) : keys.push(key);
-          if (~stack.indexOf(value)) {
-            value =
-              stack[0] === value ? '[Circular ~]' : `[Circular ~.${keys.slice(0, stack.indexOf(value)).join('.')}]`;
-          }
-        } else {
-          stack.push(value);
-        }
-
-        return value;
-      };
-    }
-
-    return JSON.stringify(input, replacer());
-  }
-
   define(definition) {
     this.schema = Object.keys(definition).reduce((entitySchema, key) => {
       const schema = definition[key];
@@ -74,11 +49,10 @@ export default class EntitySchema {
   }
 
   normalize(input, parent, key, visit, addEntity, visitedEntities) {
-    const stringifiedInput = this.stringifySafe(input);
-    if (visitedEntities[stringifiedInput]) {
+    if (visitedEntities.some((entity) => entity === input)) {
       return this.getId(input, parent, key);
     }
-    visitedEntities[stringifiedInput] = true;
+    visitedEntities.push(input);
 
     const processedEntity = this._processStrategy(input, parent, key);
     Object.keys(this.schema).forEach((key) => {
