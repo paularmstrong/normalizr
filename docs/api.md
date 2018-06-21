@@ -167,15 +167,15 @@ You *do not* need to define any keys in your entity other than those that hold n
     Accepts either a string `key` or a function that returns the IDs `value`. Defaults to `'id'`.  
     As a function, accepts the following arguments, in order: 
       * `value`: The input value of the entity.
-      * `parent`: The parent object of the input array.
-      * `key`: The key at which the input array appears on the parent object.
+      * `parent`: The parent object of the input entity.
+      * `key`: The key at which the input entity appears on the parent object.
     - `mergeStrategy(entityA, entityB)`: Strategy to use when merging two entities with the same `id` value. Defaults to merge the more recently found entity onto the previous.
     - `processStrategy(value, parent, key)`: Strategy to use when pre-processing the entity. Use this method to add extra data, defaults, and/or completely change the entity before normalization is complete. Defaults to returning a shallow copy of the input entity.  
     *Note: It is recommended to always return a copy of your input and not modify the original.*  
     The function accepts the following arguments, in order: 
       * `value`: The input value of the entity.
-      * `parent`: The parent object of the input array.
-      * `key`: The key at which the input array appears on the parent object.
+      * `parent`: The parent object of the input entity.
+      * `key`: The key at which the input entity appears on the parent object.
 
 #### Instance Methods
 
@@ -298,8 +298,8 @@ Describe a schema which is a union of multiple schemas. This is useful if you ne
 * `schemaAttribute`: **required** The attribute on each entity found that defines what schema, per the definition mapping, to use when normalizing.  
 Can be a string or a function. If given a function, accepts the following arguments:  
   * `value`: The input value of the entity.
-  * `parent`: The parent object of the input array.
-  * `key`: The key at which the input array appears on the parent object.
+  * `parent`: The parent object of the input object.
+  * `key`: The key at which the input object appears on the parent object.
 
 #### Instance Methods
 
@@ -341,8 +341,8 @@ Describes a map whose values follow the given schema.
 * `schemaAttribute`: *optional* (required if `definition` is not a singular schema) The attribute on each entity found that defines what schema, per the definition mapping, to use when normalizing.  
 Can be a string or a function. If given a function, accepts the following arguments:  
   * `value`: The input value of the entity.
-  * `parent`: The parent object of the input array.
-  * `key`: The key at which the input array appears on the parent object.
+  * `parent`: The parent object of the input object.
+  * `key`: The key at which the input object appears on the parent object.
 
 #### Instance Methods
 
