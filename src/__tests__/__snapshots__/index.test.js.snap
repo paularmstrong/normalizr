@@ -209,6 +209,9 @@ Array [
       },
     },
     null,
+    Object {
+      "user": "456",
+    },
   ],
   Array [
     Object {
@@ -222,6 +225,64 @@ Array [
       },
     },
     null,
+    Object {
+      "user": "456",
+    },
+  ],
+]
+`;
+
+exports[`normalize uses the normalized input when getting the ID for an entity 1`] = `
+Object {
+  "entities": Object {
+    "recommendations": Object {
+      "undefined": Object {
+        "user": "456",
+      },
+    },
+    "users": Object {
+      "456": Object {
+        "id": 0,
+      },
+    },
+  },
+  "result": undefined,
+}
+`;
+
+exports[`normalize uses the normalized input when getting the ID for an entity 2`] = `
+Array [
+  Array [
+    Object {
+      "user": Object {
+        "id": "456",
+      },
+    },
+    Object {
+      "user": Object {
+        "id": "456",
+      },
+    },
+    null,
+    Object {
+      "user": "456",
+    },
+  ],
+  Array [
+    Object {
+      "user": Object {
+        "id": "456",
+      },
+    },
+    Object {
+      "user": Object {
+        "id": "456",
+      },
+    },
+    null,
+    Object {
+      "user": "456",
+    },
   ],
 ]
 `;
