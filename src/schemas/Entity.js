@@ -40,8 +40,8 @@ export default class EntitySchema {
     }, this.schema || {});
   }
 
-  getId(input, parent, key) {
-    return this._getId(input, parent, key);
+  getId(input, parent, key, processedEntity) {
+    return this._getId(input, parent, key, processedEntity);
   }
 
   merge(entityA, entityB) {
@@ -58,7 +58,7 @@ export default class EntitySchema {
     });
 
     addEntity(this, processedEntity, input, parent, key);
-    return this.getId(input, parent, key);
+    return this.getId(input, parent, key, processedEntity);
   }
 
   denormalize(entity, unvisit) {
