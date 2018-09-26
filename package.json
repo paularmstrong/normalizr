@@ -86,8 +86,5 @@
       "prettier --write",
       "git add"
     ]
-  },
-  "jest": {
-    "testEnvironment": "node"
   }
 }
