@@ -105,6 +105,127 @@ Object {
 }
 `;
 
+exports[`normalize normalize nested entities with reverse collection 1`] = `
+Object {
+  "entities": Object {
+    "articles": Object {
+      "5babc5365e6d2226fe913114": Object {
+        "comments": Array [
+          "5babc53690c5ceb9a68202ab",
+          "5babc536e7328d4644146380",
+        ],
+        "id": "5babc5365e6d2226fe913114",
+        "title": "ullamco nostrud qui commodo",
+      },
+      "5babc5366d3b194bcbc44d99": Object {
+        "comments": Array [
+          "5babc536e76daeae9679b9f4",
+          "5babc53610db83685f7dfa9b",
+        ],
+        "id": "5babc5366d3b194bcbc44d99",
+        "title": "non sint aliquip occaecat",
+      },
+      "5babc536db8b35e0b41eb31e": Object {
+        "comments": Array [
+          "5babc536fef224500c9bc7ed",
+          "5babc53659a9c68762271187",
+        ],
+        "id": "5babc536db8b35e0b41eb31e",
+        "title": "laborum cupidatat ex tempor",
+      },
+    },
+    "comments": Object {
+      "5babc53610db83685f7dfa9b": Object {
+        "article": "5babc5366d3b194bcbc44d99",
+        "id": "5babc53610db83685f7dfa9b",
+        "msg": "qui qui adipisicing sit",
+        "user": "5babc536446cf6183079f908",
+      },
+      "5babc53659a9c68762271187": Object {
+        "article": "5babc536db8b35e0b41eb31e",
+        "id": "5babc53659a9c68762271187",
+        "msg": "exercitation sunt et est",
+        "user": "5babc5368a8f537cfcdf5294",
+      },
+      "5babc53690c5ceb9a68202ab": Object {
+        "article": "5babc5365e6d2226fe913114",
+        "id": "5babc53690c5ceb9a68202ab",
+        "msg": "anim duis irure ad",
+        "user": "5babc536446cf6183079f908",
+      },
+      "5babc536e7328d4644146380": Object {
+        "article": "5babc5365e6d2226fe913114",
+        "id": "5babc536e7328d4644146380",
+        "msg": "anim Lorem irure sit",
+        "user": "5babc5368a8f537cfcdf5294",
+      },
+      "5babc536e76daeae9679b9f4": Object {
+        "article": "5babc5366d3b194bcbc44d99",
+        "id": "5babc536e76daeae9679b9f4",
+        "msg": "dolore id nostrud aliqua",
+        "user": "5babc536f8519e7bfeaaa2fd",
+      },
+      "5babc536fef224500c9bc7ed": Object {
+        "article": "5babc536db8b35e0b41eb31e",
+        "id": "5babc536fef224500c9bc7ed",
+        "msg": "dolore do proident ullamco",
+        "user": "5babc536f8519e7bfeaaa2fd",
+      },
+    },
+    "users": Object {
+      "5babc536446cf6183079f908": Object {
+        "articles": Array [
+          "5babc536db8b35e0b41eb31e",
+        ],
+        "comments": Array [
+          "5babc53690c5ceb9a68202ab",
+          "5babc53610db83685f7dfa9b",
+        ],
+        "id": "5babc536446cf6183079f908",
+        "name": "Amparo Lambert",
+      },
+      "5babc5368a8f537cfcdf5294": Object {
+        "articles": Array [
+          "5babc5366d3b194bcbc44d99",
+        ],
+        "comments": Array [
+          "5babc536e7328d4644146380",
+          "5babc53659a9c68762271187",
+        ],
+        "id": "5babc5368a8f537cfcdf5294",
+        "name": "Kent Foster",
+      },
+      "5babc536f8519e7bfeaaa2fd": Object {
+        "articles": Array [
+          "5babc5365e6d2226fe913114",
+        ],
+        "comments": Array [
+          "5babc536fef224500c9bc7ed",
+          "5babc536e76daeae9679b9f4",
+        ],
+        "id": "5babc536f8519e7bfeaaa2fd",
+        "name": "Klein Mitchell",
+      },
+    },
+  },
+  "result": Object {
+    "comments": Array [
+      "5babc53690c5ceb9a68202ab",
+      "5babc536e7328d4644146380",
+      "5babc536fef224500c9bc7ed",
+      "5babc53659a9c68762271187",
+      "5babc536e76daeae9679b9f4",
+      "5babc53610db83685f7dfa9b",
+    ],
+    "users": Array [
+      "5babc536f8519e7bfeaaa2fd",
+      "5babc536446cf6183079f908",
+      "5babc5368a8f537cfcdf5294",
+    ],
+  },
+}
+`;
+
 exports[`normalize normalizes entities 1`] = `
 Object {
   "entities": Object {

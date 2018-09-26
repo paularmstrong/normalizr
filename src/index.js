@@ -5,7 +5,7 @@ import ValuesSchema from './schemas/Values';
 import ArraySchema, * as ArrayUtils from './schemas/Array';
 import ObjectSchema, * as ObjectUtils from './schemas/Object';
 
-const visit = (value, parent, key, schema, addEntity) => {
+const visit = (value, parent, key, schema, addEntity, outerSchema) => {
   if (typeof value !== 'object' || !value) {
     return value;
   }
@@ -15,21 +15,50 @@ const visit = (value, parent, key, schema, addEntity) => {
     return method(schema, value, parent, key, visit, addEntity);
   }
 
-  return schema.normalize(value, parent, key, visit, addEntity);
+  return schema.normalize(value, parent, key, visit, addEntity, outerSchema);
 };
 
-const addEntities = (entities) => (schema, processedEntity, value, parent, key) => {
+const schemaRelation = (localSchema, outerSchema) => {
+  if (!outerSchema) return null;
+  for (let key in localSchema.schema) {
+    if (localSchema.schema.hasOwnProperty(key)) {
+      if (Array.isArray(localSchema.schema[key])) {
+        if (localSchema.schema[key][0].key === outerSchema.key) return [key];
+      } else {
+        if (localSchema.schema[key].key === outerSchema.key) return key;
+      }
+    }
+  }
+
+  return null;
+};
+
+const addEntities = (entities) => (schema, processedEntity, value, parent, key, outerSchema) => {
   const schemaKey = schema.key;
   const id = schema.getId(value, parent, key);
   if (!(schemaKey in entities)) {
     entities[schemaKey] = {};
   }
+  const relation = schemaRelation(schema, outerSchema);
 
   const existingEntity = entities[schemaKey][id];
   if (existingEntity) {
     entities[schemaKey][id] = schema.merge(existingEntity, processedEntity);
   } else {
     entities[schemaKey][id] = processedEntity;
+  }
+
+  if (relation) {
+    const parentId = outerSchema.getId(parent);
+
+    const completeEntity = schema.merge(existingEntity, processedEntity);
+    if (Array.isArray(relation)) {
+      completeEntity[relation] = completeEntity[relation] || [];
+      completeEntity[relation].push(parentId);
+    } else {
+      completeEntity[relation] = parentId;
+    }
+    entities[schemaKey][id] = completeEntity;
   }
 };
 

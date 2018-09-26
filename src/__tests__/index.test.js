@@ -50,6 +50,127 @@ describe('normalize', () => {
     expect(normalize(input, article)).toMatchSnapshot();
   });
 
+  test('normalize nested entities with reverse collection', () => {
+    const user = new schema.Entity('users');
+    const comment = new schema.Entity('comments');
+    const article = new schema.Entity('articles');
+
+    user.define({ comments: [comment], articles: [article] });
+    comment.define({ user: user, article: article });
+    article.define({ user: user, comments: [comment] });
+
+    const input = {
+      comments: [
+        {
+          id: '5babc53690c5ceb9a68202ab',
+          msg: 'anim duis irure ad',
+          user: {
+            id: '5babc536446cf6183079f908',
+            name: 'Amparo Lambert'
+          },
+          article: {
+            id: '5babc5365e6d2226fe913114',
+            title: 'ullamco nostrud qui commodo'
+          }
+        },
+        {
+          id: '5babc536e7328d4644146380',
+          msg: 'anim Lorem irure sit',
+          user: {
+            id: '5babc5368a8f537cfcdf5294',
+            name: 'Kent Foster'
+          },
+          article: {
+            id: '5babc5365e6d2226fe913114',
+            title: 'ullamco nostrud qui commodo'
+          }
+        },
+        {
+          id: '5babc536fef224500c9bc7ed',
+          msg: 'dolore do proident ullamco',
+          user: {
+            id: '5babc536f8519e7bfeaaa2fd',
+            name: 'Klein Mitchell'
+          },
+          article: {
+            id: '5babc536db8b35e0b41eb31e',
+            title: 'laborum cupidatat ex tempor'
+          }
+        },
+        {
+          id: '5babc53659a9c68762271187',
+          msg: 'exercitation sunt et est',
+          user: {
+            id: '5babc5368a8f537cfcdf5294',
+            name: 'Kent Foster'
+          },
+          article: {
+            id: '5babc536db8b35e0b41eb31e',
+            title: 'laborum cupidatat ex tempor'
+          }
+        },
+        {
+          id: '5babc536e76daeae9679b9f4',
+          msg: 'dolore id nostrud aliqua',
+          user: {
+            id: '5babc536f8519e7bfeaaa2fd',
+            name: 'Klein Mitchell'
+          },
+          article: {
+            id: '5babc5366d3b194bcbc44d99',
+            title: 'non sint aliquip occaecat'
+          }
+        },
+        {
+          id: '5babc53610db83685f7dfa9b',
+          msg: 'qui qui adipisicing sit',
+          user: {
+            id: '5babc536446cf6183079f908',
+            name: 'Amparo Lambert'
+          },
+          article: {
+            id: '5babc5366d3b194bcbc44d99',
+            title: 'non sint aliquip occaecat'
+          }
+        }
+      ],
+      users: [
+        {
+          id: '5babc536f8519e7bfeaaa2fd',
+          name: 'Klein Mitchell',
+          articles: [
+            {
+              id: '5babc5365e6d2226fe913114',
+              title: 'ullamco nostrud qui commodo'
+            }
+          ]
+        },
+        {
+          id: '5babc536446cf6183079f908',
+          name: 'Amparo Lambert',
+          articles: [
+            {
+              id: '5babc536db8b35e0b41eb31e',
+              title: 'laborum cupidatat ex tempor'
+            }
+          ]
+        },
+        {
+          id: '5babc5368a8f537cfcdf5294',
+          name: 'Kent Foster',
+          articles: [
+            {
+              id: '5babc5366d3b194bcbc44d99',
+              title: 'non sint aliquip occaecat'
+            }
+          ]
+        }
+      ]
+    };
+
+    expect(normalize(input, { users: [user], comments: [comment] })).toMatchSnapshot();
+  });
+
   test('does not modify the original input', () => {
     const user = new schema.Entity('users');
     const article = new schema.Entity('articles', { author: user });

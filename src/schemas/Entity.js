@@ -48,16 +48,16 @@ export default class EntitySchema {
     return this._mergeStrategy(entityA, entityB);
   }
 
-  normalize(input, parent, key, visit, addEntity) {
+  normalize(input, parent, key, visit, addEntity, outerSchema) {
     const processedEntity = this._processStrategy(input, parent, key);
     Object.keys(this.schema).forEach((key) => {
       if (processedEntity.hasOwnProperty(key) && typeof processedEntity[key] === 'object') {
         const schema = this.schema[key];
-        processedEntity[key] = visit(processedEntity[key], processedEntity, key, schema, addEntity);
+        processedEntity[key] = visit(processedEntity[key], processedEntity, key, schema, addEntity, this);
       }
     });
 
-    addEntity(this, processedEntity, input, parent, key);
+    addEntity(this, processedEntity, input, parent, key, outerSchema);
     return this.getId(input, parent, key);
   }
 
