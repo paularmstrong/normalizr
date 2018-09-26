@@ -109,118 +109,121 @@ exports[`normalize normalize nested entities with reverse collection 1`] = `
 Object {
   "entities": Object {
     "articles": Object {
-      "5babc5365e6d2226fe913114": Object {
+      "1": Object {
+        "author": "1",
         "comments": Array [
-          "5babc53690c5ceb9a68202ab",
-          "5babc536e7328d4644146380",
+          "3",
+          "5",
         ],
-        "id": "5babc5365e6d2226fe913114",
-        "title": "ullamco nostrud qui commodo",
-      },
-      "5babc5366d3b194bcbc44d99": Object {
-        "comments": Array [
-          "5babc536e76daeae9679b9f4",
-          "5babc53610db83685f7dfa9b",
-        ],
-        "id": "5babc5366d3b194bcbc44d99",
+        "id": "1",
         "title": "non sint aliquip occaecat",
       },
-      "5babc536db8b35e0b41eb31e": Object {
+      "2": Object {
+        "author": "2",
         "comments": Array [
-          "5babc536fef224500c9bc7ed",
-          "5babc53659a9c68762271187",
+          "1",
+          "6",
         ],
-        "id": "5babc536db8b35e0b41eb31e",
+        "id": "2",
+        "title": "non sint aliquip occaecat",
+      },
+      "3": Object {
+        "author": "3",
+        "comments": Array [
+          "2",
+          "4",
+        ],
+        "id": "3",
         "title": "laborum cupidatat ex tempor",
       },
     },
     "comments": Object {
-      "5babc53610db83685f7dfa9b": Object {
-        "article": "5babc5366d3b194bcbc44d99",
-        "id": "5babc53610db83685f7dfa9b",
-        "msg": "qui qui adipisicing sit",
-        "user": "5babc536446cf6183079f908",
-      },
-      "5babc53659a9c68762271187": Object {
-        "article": "5babc536db8b35e0b41eb31e",
-        "id": "5babc53659a9c68762271187",
-        "msg": "exercitation sunt et est",
-        "user": "5babc5368a8f537cfcdf5294",
-      },
-      "5babc53690c5ceb9a68202ab": Object {
-        "article": "5babc5365e6d2226fe913114",
-        "id": "5babc53690c5ceb9a68202ab",
+      "1": Object {
+        "article": "2",
+        "id": "1",
         "msg": "anim duis irure ad",
-        "user": "5babc536446cf6183079f908",
+        "user": "1",
       },
-      "5babc536e7328d4644146380": Object {
-        "article": "5babc5365e6d2226fe913114",
-        "id": "5babc536e7328d4644146380",
+      "2": Object {
+        "article": "3",
+        "id": "2",
         "msg": "anim Lorem irure sit",
-        "user": "5babc5368a8f537cfcdf5294",
+        "user": "1",
       },
-      "5babc536e76daeae9679b9f4": Object {
-        "article": "5babc5366d3b194bcbc44d99",
-        "id": "5babc536e76daeae9679b9f4",
-        "msg": "dolore id nostrud aliqua",
-        "user": "5babc536f8519e7bfeaaa2fd",
-      },
-      "5babc536fef224500c9bc7ed": Object {
-        "article": "5babc536db8b35e0b41eb31e",
-        "id": "5babc536fef224500c9bc7ed",
+      "3": Object {
+        "article": "1",
+        "id": "3",
         "msg": "dolore do proident ullamco",
-        "user": "5babc536f8519e7bfeaaa2fd",
+        "user": "2",
+      },
+      "4": Object {
+        "article": "3",
+        "id": "4",
+        "msg": "exercitation sunt et est",
+        "user": "2",
+      },
+      "5": Object {
+        "article": "1",
+        "id": "5",
+        "msg": "dolore id nostrud aliqua",
+        "user": "3",
+      },
+      "6": Object {
+        "article": "2",
+        "id": "6",
+        "msg": "qui qui adipisicing sit",
+        "user": "3",
       },
     },
     "users": Object {
-      "5babc536446cf6183079f908": Object {
+      "1": Object {
         "articles": Array [
-          "5babc536db8b35e0b41eb31e",
+          "1",
         ],
         "comments": Array [
-          "5babc53690c5ceb9a68202ab",
-          "5babc53610db83685f7dfa9b",
+          "1",
+          "2",
         ],
-        "id": "5babc536446cf6183079f908",
-        "name": "Amparo Lambert",
-      },
-      "5babc5368a8f537cfcdf5294": Object {
-        "articles": Array [
-          "5babc5366d3b194bcbc44d99",
-        ],
-        "comments": Array [
-          "5babc536e7328d4644146380",
-          "5babc53659a9c68762271187",
-        ],
-        "id": "5babc5368a8f537cfcdf5294",
+        "id": "1",
         "name": "Kent Foster",
       },
-      "5babc536f8519e7bfeaaa2fd": Object {
+      "2": Object {
         "articles": Array [
-          "5babc5365e6d2226fe913114",
+          "2",
         ],
         "comments": Array [
-          "5babc536fef224500c9bc7ed",
-          "5babc536e76daeae9679b9f4",
+          "3",
+          "4",
         ],
-        "id": "5babc536f8519e7bfeaaa2fd",
-        "name": "Klein Mitchell",
+        "id": "2",
+        "name": "Kent Foster",
+      },
+      "3": Object {
+        "articles": Array [
+          "3",
+        ],
+        "comments": Array [
+          "5",
+          "6",
+        ],
+        "id": "3",
+        "name": "Amparo Lambert",
       },
     },
   },
   "result": Object {
     "comments": Array [
-      "5babc53690c5ceb9a68202ab",
-      "5babc536e7328d4644146380",
-      "5babc536fef224500c9bc7ed",
-      "5babc53659a9c68762271187",
-      "5babc536e76daeae9679b9f4",
-      "5babc53610db83685f7dfa9b",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
     ],
     "users": Array [
-      "5babc536f8519e7bfeaaa2fd",
-      "5babc536446cf6183079f908",
-      "5babc5368a8f537cfcdf5294",
+      "1",
+      "2",
+      "3",
     ],
   },
 }

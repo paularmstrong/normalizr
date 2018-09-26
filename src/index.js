@@ -12,7 +12,7 @@ const visit = (value, parent, key, schema, addEntity, outerSchema) => {
 
   if (typeof schema === 'object' && (!schema.normalize || typeof schema.normalize !== 'function')) {
     const method = Array.isArray(schema) ? ArrayUtils.normalize : ObjectUtils.normalize;
-    return method(schema, value, parent, key, visit, addEntity);
+    return method(schema, value, parent, key, visit, addEntity, outerSchema);
   }
 
   return schema.normalize(value, parent, key, visit, addEntity, outerSchema);

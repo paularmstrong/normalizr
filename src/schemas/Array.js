@@ -11,14 +11,14 @@ const validateSchema = (definition) => {
 
 const getValues = (input) => (Array.isArray(input) ? input : Object.keys(input).map((key) => input[key]));
 
-export const normalize = (schema, input, parent, key, visit, addEntity) => {
+export const normalize = (schema, input, parent, key, visit, addEntity, outerSchema) => {
   schema = validateSchema(schema);
 
   const values = getValues(input);
 
   // Special case: Arrays pass *their* parent on to their children, since there
   // is not any special information that can be gathered from themselves directly
-  return values.map((value, index) => visit(value, parent, key, schema, addEntity));
+  return values.map((value, index) => visit(value, parent, key, schema, addEntity, outerSchema));
 };
 
 export const denormalize = (schema, input, unvisit) => {

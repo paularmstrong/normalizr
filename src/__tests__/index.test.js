@@ -57,110 +57,110 @@ describe('normalize', () => {
 
     user.define({ comments: [comment], articles: [article] });
     comment.define({ user: user, article: article });
-    article.define({ user: user, comments: [comment] });
+    article.define({ author: user, comments: [comment] });
 
     const input = {
       comments: [
         {
-          id: '5babc53690c5ceb9a68202ab',
+          id: '1',
           msg: 'anim duis irure ad',
           user: {
-            id: '5babc536446cf6183079f908',
+            id: '1',
             name: 'Amparo Lambert'
           },
           article: {
-            id: '5babc5365e6d2226fe913114',
+            id: '2',
             title: 'ullamco nostrud qui commodo'
           }
         },
         {
-          id: '5babc536e7328d4644146380',
+          id: '2',
           msg: 'anim Lorem irure sit',
           user: {
-            id: '5babc5368a8f537cfcdf5294',
+            id: '1',
             name: 'Kent Foster'
           },
           article: {
-            id: '5babc5365e6d2226fe913114',
+            id: '3',
             title: 'ullamco nostrud qui commodo'
           }
         },
         {
-          id: '5babc536fef224500c9bc7ed',
+          id: '3',
           msg: 'dolore do proident ullamco',
           user: {
-            id: '5babc536f8519e7bfeaaa2fd',
+            id: '2',
             name: 'Klein Mitchell'
           },
           article: {
-            id: '5babc536db8b35e0b41eb31e',
+            id: '1',
             title: 'laborum cupidatat ex tempor'
           }
         },
         {
-          id: '5babc53659a9c68762271187',
+          id: '4',
           msg: 'exercitation sunt et est',
           user: {
-            id: '5babc5368a8f537cfcdf5294',
+            id: '2',
             name: 'Kent Foster'
           },
           article: {
-            id: '5babc536db8b35e0b41eb31e',
+            id: '3',
             title: 'laborum cupidatat ex tempor'
           }
         },
         {
-          id: '5babc536e76daeae9679b9f4',
+          id: '5',
           msg: 'dolore id nostrud aliqua',
           user: {
-            id: '5babc536f8519e7bfeaaa2fd',
+            id: '3',
             name: 'Klein Mitchell'
           },
           article: {
-            id: '5babc5366d3b194bcbc44d99',
+            id: '1',
             title: 'non sint aliquip occaecat'
           }
         },
         {
-          id: '5babc53610db83685f7dfa9b',
+          id: '6',
           msg: 'qui qui adipisicing sit',
           user: {
-            id: '5babc536446cf6183079f908',
+            id: '3',
             name: 'Amparo Lambert'
           },
           article: {
-            id: '5babc5366d3b194bcbc44d99',
+            id: '2',
             title: 'non sint aliquip occaecat'
           }
         }
       ],
       users: [
         {
-          id: '5babc536f8519e7bfeaaa2fd',
+          id: '1',
           name: 'Klein Mitchell',
           articles: [
             {
-              id: '5babc5365e6d2226fe913114',
+              id: '1',
               title: 'ullamco nostrud qui commodo'
             }
           ]
         },
         {
-          id: '5babc536446cf6183079f908',
+          id: '2',
           name: 'Amparo Lambert',
           articles: [
             {
-              id: '5babc536db8b35e0b41eb31e',
+              id: '2',
               title: 'laborum cupidatat ex tempor'
             }
           ]
         },
         {
-          id: '5babc5368a8f537cfcdf5294',
+          id: '3',
           name: 'Kent Foster',
           articles: [
             {
-              id: '5babc5366d3b194bcbc44d99',
+              id: '3',
               title: 'non sint aliquip occaecat'
             }
           ]
