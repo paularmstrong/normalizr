@@ -1,3 +1,8 @@
+# v3.3.0
+
+* **Added** ES Module builds
+* **Fixed** type error with typescript on array+object shorthand (gh-322)
+
 # v3.2.0
 
 * **Added** Support denormalizing from Immutable entities (gh-228)
@@ -18,8 +23,8 @@ The entire normalizr package has been rewritten from v2.x for this version. Plea
 ## Added
 
 * `schema.Entity`
-    * `processStrategy` for modifying `Entity` objects before they're moved to the `entities` stack.
-    * `mergeStrategy` for merging with multiple entities with the same ID.
+  * `processStrategy` for modifying `Entity` objects before they're moved to the `entities` stack.
+  * `mergeStrategy` for merging with multiple entities with the same ID.
 * Added `schema.Object`, with a shorthand of `{}`
 * Added `schema.Array`, with a shorthand of `[ schema ]`
 
