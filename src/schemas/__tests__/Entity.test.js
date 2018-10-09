@@ -113,6 +113,28 @@ describe(`${schema.Entity.name} normalization`, () => {
 
       expect(normalize({ message: { id: '123', data: { attachment: { id: '456' } } } }, myEntity)).toMatchSnapshot();
     });
+
+    test('has a shared context', () => {
+      let lastContext;
+      const processStrategy = (input, parent, key, context) => {
+        if (lastContext) {
+          expect(lastContext).toBe(context);
+        }
+        lastContext = context;
+        return { ...input };
+      };
+      const attachmentEntity = new schema.Entity('attachments', {}, { processStrategy });
+      // If not run before, this schema would require a parent object with key "message"
+      const myEntity = new schema.Entity(
+        'entries',
+        {
+          data: { attachment: attachmentEntity }
+        },
+        { idAttribute: (input) => values(input)[0].id, processStrategy }
+      );
+
+      normalize({ message: { id: '123', data: { attachment: { id: '456' } } } }, { message: myEntity });
+    });
   });
 });
 

@@ -1,10 +1,10 @@
 import * as ImmutableUtils from './ImmutableUtils';
 
-export const normalize = (schema, input, parent, key, visit, addEntity) => {
+export const normalize = (schema, input, parent, key, visit, addEntity, context) => {
   const object = { ...input };
   Object.keys(schema).forEach((key) => {
     const localSchema = schema[key];
-    const value = visit(input[key], input, key, localSchema, addEntity);
+    const value = visit(input[key], input, key, localSchema, addEntity, context);
     if (value === undefined || value === null) {
       delete object[key];
     } else {
