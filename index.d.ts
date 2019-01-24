@@ -49,7 +49,7 @@ export type Schema =
   schema.Values[] |
   {[key: string]: Schema | Schema[]};
 
-export interface NormalizedSchema<E, R> = { entities: E, result: R };
+export type NormalizedSchema<E, R> = { entities: E, result: R };
 
 export function normalize<E = any, R = any>(
   data: any,
