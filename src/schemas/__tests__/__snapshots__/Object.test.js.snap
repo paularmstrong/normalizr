@@ -27,6 +27,33 @@ Immutable.Map {
 }
 `;
 
+exports[`ObjectSchema denormalization denormalizes an object that contains a property representing a an object with an id of zero 1`] = `
+Object {
+  "user": Object {
+    "id": 0,
+    "name": "Chancho",
+  },
+}
+`;
+
+exports[`ObjectSchema denormalization denormalizes an object that contains a property representing a an object with an id of zero 2`] = `
+Object {
+  "user": Immutable.Map {
+    "id": 0,
+    "name": "Chancho",
+  },
+}
+`;
+
+exports[`ObjectSchema denormalization denormalizes an object that contains a property representing a an object with an id of zero 3`] = `
+Immutable.Map {
+  "user": Immutable.Map {
+    "id": 0,
+    "name": "Chancho",
+  },
+}
+`;
+
 exports[`ObjectSchema denormalization denormalizes plain object shorthand 1`] = `
 Object {
   "user": Object {
