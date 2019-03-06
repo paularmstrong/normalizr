@@ -18,6 +18,18 @@ describe('normalize', () => {
     expect(normalize([{ id: 1, type: 'foo' }, { id: 2, type: 'bar' }], [mySchema])).toMatchSnapshot();
   });
 
+  test('normalizes entities with circular references', () => {
+    const user = new schema.Entity('users');
+    user.define({
+      friends: [user]
+    });
+
+    const input = { id: 123, friends: [] };
+    input.friends.push(input);
+
+    expect(normalize(input, user)).toMatchSnapshot();
+  });
+
   test('normalizes nested entities', () => {
     const user = new schema.Entity('users');
     const comment = new schema.Entity('comments', {
@@ -81,11 +93,11 @@ describe('normalize', () => {
         return entity.uuid;
       }
 
-      normalize(input, parent, key, visit, addEntity) {
+      normalize(input, parent, key, visit, addEntity, visitedEntities) {
         const entity = { ...input };
         Object.keys(this.schema).forEach((key) => {
           const schema = this.schema[key];
-          entity[key] = visit(input[key], input, key, schema, addEntity);
+          entity[key] = visit(input[key], input, key, schema, addEntity, visitedEntities);
         });
         addEntity(this, entity, parent, key);
         return {

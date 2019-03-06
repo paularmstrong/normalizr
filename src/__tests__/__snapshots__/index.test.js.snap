@@ -126,6 +126,22 @@ Object {
 }
 `;
 
+exports[`normalize normalizes entities with circular references 1`] = `
+Object {
+  "entities": Object {
+    "users": Object {
+      "123": Object {
+        "friends": Array [
+          123,
+        ],
+        "id": 123,
+      },
+    },
+  },
+  "result": 123,
+}
+`;
+
 exports[`normalize normalizes nested entities 1`] = `
 Object {
   "entities": Object {
