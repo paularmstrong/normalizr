@@ -50,4 +50,19 @@ describe(`${schema.Object.name} denormalization`, () => {
     expect(denormalize({ user: 1 }, { user: userSchema, tacos: {} }, fromJS(entities))).toMatchSnapshot();
     expect(denormalize(fromJS({ user: 1 }), { user: userSchema, tacos: {} }, fromJS(entities))).toMatchSnapshot();
   });
+
+  test('denormalizes an object that contains a property representing a an object with an id of zero', () => {
+    const userSchema = new schema.Entity('user');
+    const object = new schema.Object({
+      user: userSchema
+    });
+    const entities = {
+      user: {
+        0: { id: 0, name: 'Chancho' }
+      }
+    };
+    expect(denormalize({ user: 0 }, object, entities)).toMatchSnapshot();
+    expect(denormalize({ user: 0 }, object, fromJS(entities))).toMatchSnapshot();
+    expect(denormalize(fromJS({ user: 0 }), object, fromJS(entities))).toMatchSnapshot();
+  });
 });
