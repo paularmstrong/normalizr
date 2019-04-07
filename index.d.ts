@@ -15,7 +15,7 @@ declare namespace schema {
   }
 
   export class Entity {
-    constructor(key: string, definition?: Schema, options?: EntityOptions)
+    constructor(key: string | symbol, definition?: Schema, options?: EntityOptions)
     define(definition: Schema): void
     key: string
   }
