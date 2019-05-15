@@ -3,7 +3,7 @@ declare namespace schema {
   export type SchemaFunction = (value: any, parent: any, key: string) => string;
   export type MergeFunction = (entityA: any, entityB: any) => any;
 
-  export class Array {
+  export class Array extends BaseSchema {
     constructor(definition: Schema, schemaAttribute?: string | SchemaFunction)
     define(definition: Schema): void
   }
@@ -14,23 +14,27 @@ declare namespace schema {
     processStrategy?: StrategyFunction
   }
 
-  export class Entity {
+  export interface BaseSchema {
+    schema: Schema;
+  }
+
+  export class Entity extends BaseSchema {
     constructor(key: string, definition?: Schema, options?: EntityOptions)
     define(definition: Schema): void
     key: string
   }
 
-  export class Object {
+  export class Object extends BaseSchema {
     constructor(definition: {[key: string]: Schema})
     define(definition: Schema): void
   }
 
-  export class Union {
+  export class Union extends BaseSchema {
     constructor(definition: Schema, schemaAttribute?: string | SchemaFunction)
     define(definition: Schema): void
   }
 
-  export class Values {
+  export class Values extends BaseSchema {
     constructor(definition: Schema, schemaAttribute?: string | SchemaFunction)
     define(definition: Schema): void
   }

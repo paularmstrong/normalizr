@@ -1,9 +1,10 @@
 import * as ImmutableUtils from './ImmutableUtils';
+import BaseSchema from './BaseSchema';
 
 const getDefaultGetId = (idAttribute) => (input) =>
   ImmutableUtils.isImmutable(input) ? input.get(idAttribute) : input[idAttribute];
 
-export default class EntitySchema {
+export default class EntitySchema extends BaseSchema {
   constructor(key, definition = {}, options = {}) {
     if (!key || typeof key !== 'string') {
       throw new Error(`Expected a string key for Entity, but found ${key}.`);

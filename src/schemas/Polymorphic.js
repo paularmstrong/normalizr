@@ -1,6 +1,7 @@
 import { isImmutable } from './ImmutableUtils';
+import BaseSchema from './BaseSchema';
 
-export default class PolymorphicSchema {
+export default class PolymorphicSchema extends BaseSchema {
   constructor(definition, schemaAttribute) {
     if (schemaAttribute) {
       this._schemaAttribute = typeof schemaAttribute === 'string' ? (input) => input[schemaAttribute] : schemaAttribute;

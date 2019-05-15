@@ -1,4 +1,5 @@
 import * as ImmutableUtils from './ImmutableUtils';
+import BaseSchema from './BaseSchema';
 
 export const normalize = (schema, input, parent, key, visit, addEntity, visitedEntities) => {
   const object = { ...input };
@@ -28,7 +29,7 @@ export const denormalize = (schema, input, unvisit) => {
   return object;
 };
 
-export default class ObjectSchema {
+export default class ObjectSchema extends BaseSchema {
   constructor(definition) {
     this.define(definition);
   }
