@@ -1,5 +1,5 @@
-import { isImmutable } from './ImmutableUtils';
 import BaseSchema from './BaseSchema';
+import { isImmutable } from './ImmutableUtils';
 
 export default class PolymorphicSchema extends BaseSchema {
   constructor(definition, schemaAttribute) {
