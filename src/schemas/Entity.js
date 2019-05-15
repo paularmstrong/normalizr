@@ -6,6 +6,7 @@ const getDefaultGetId = (idAttribute) => (input) =>
 
 export default class EntitySchema extends BaseSchema {
   constructor(key, definition = {}, options = {}) {
+    super();
     if (!key || typeof key !== 'string') {
       throw new Error(`Expected a string key for Entity, but found ${key}.`);
     }

@@ -3,6 +3,7 @@ import BaseSchema from './BaseSchema';
 
 export default class PolymorphicSchema extends BaseSchema {
   constructor(definition, schemaAttribute) {
+    super();
     if (schemaAttribute) {
       this._schemaAttribute = typeof schemaAttribute === 'string' ? (input) => input[schemaAttribute] : schemaAttribute;
     }

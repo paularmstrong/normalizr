@@ -31,6 +31,7 @@ export const denormalize = (schema, input, unvisit) => {
 
 export default class ObjectSchema extends BaseSchema {
   constructor(definition) {
+    super();
     this.define(definition);
   }
 
