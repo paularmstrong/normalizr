@@ -6,6 +6,7 @@ declare namespace schema {
   export class Array implements BaseSchema {
     constructor(definition: Schema, schemaAttribute?: string | SchemaFunction);
     define(definition: Schema): void;
+    schema: Schema;
   }
 
   export interface EntityOptions {
@@ -22,21 +23,25 @@ declare namespace schema {
     constructor(key: string, definition?: Schema, options?: EntityOptions);
     define(definition: Schema): void;
     key: string;
+    schema: Schema;
   }
 
   export class Object implements BaseSchema {
     constructor(definition: { [key: string]: Schema });
     define(definition: Schema): void;
+    schema: Schema;
   }
 
   export class Union implements BaseSchema {
     constructor(definition: Schema, schemaAttribute?: string | SchemaFunction);
     define(definition: Schema): void;
+    schema: Schema;
   }
 
   export class Values implements BaseSchema {
     constructor(definition: Schema, schemaAttribute?: string | SchemaFunction);
     define(definition: Schema): void;
+    schema: Schema;
   }
 }
 
