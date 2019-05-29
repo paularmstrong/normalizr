@@ -1,8 +1,7 @@
 import babel from 'rollup-plugin-babel';
 import filesize from 'rollup-plugin-filesize';
-import { minify } from 'uglify-es';
 import { name } from './package.json';
-import uglify from 'rollup-plugin-uglify';
+import { terser } from 'rollup-plugin-terser';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -18,11 +17,5 @@ export default {
     { file: `${destBase}.amd${destExtension}`, format: 'amd', name },
     { file: `${destBase}.browser${destExtension}`, format: 'iife', name }
   ],
-  plugins: [
-    babel({
-      plugins: ['@babel/plugin-external-helpers']
-    }),
-    isProduction && uglify({}, minify),
-    filesize()
-  ].filter(Boolean)
+  plugins: [babel({}), isProduction && terser(), filesize()].filter(Boolean)
 };
