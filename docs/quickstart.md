@@ -50,8 +50,8 @@ Now, `normalizedData` will be:
 {
   result: "123",
   entities: {
-    "articles": { 
-      "123": { 
+    "articles": {
+      "123": {
         id: "123",
         author: "1",
         title: "My awesome blog post",

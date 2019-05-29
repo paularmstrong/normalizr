@@ -65,14 +65,14 @@ Can be normalized to:
 
 Normalizr is built for various environments
 
-* `src/*`
+- `src/*`
   - CommonJS, unpacked files. These are the recommended files for use with your own package bundler and are the default in-point as defined by this modules `package.json`.
-* `normalizr.js`, `normalizr.min.js`
+- `normalizr.js`, `normalizr.min.js`
   - [CommonJS](http://davidbcalhoun.com/2014/what-is-amd-commonjs-and-umd/)
-* `normalizr.amd.js`, `normalizr.amd.min.js`
+- `normalizr.amd.js`, `normalizr.amd.min.js`
   - [Asynchronous Module Definition](http://davidbcalhoun.com/2014/what-is-amd-commonjs-and-umd/)
-* `normalizr.umd.js`, `normalizr.umn.min.js`
+- `normalizr.umd.js`, `normalizr.umn.min.js`
   - [Universal Module Definition](http://davidbcalhoun.com/2014/what-is-amd-commonjs-and-umd/)
-* `normalizr.browser.js`, `normalizr.browser.min.js`
+- `normalizr.browser.js`, `normalizr.browser.min.js`
   - [IIFE](http://benalman.com/news/2010/11/immediately-invoked-function-expression/) / Immediately-Invoked Function Expression, suitable for use as a standalone script import in the browser.
   - Note: It is not recommended to use packages like Normalizr with direct browser `<script src="normalizr.js"></script>` tags. Consider a package bundler like [webpack](https://webpack.github.io/), [rollup](https://rollupjs.org/), or [browserify](http://browserify.org/) instead.
