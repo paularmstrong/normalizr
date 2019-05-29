@@ -58,7 +58,7 @@
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.4.2",
-    "coveralls": "^2.11.15",
+    "coveralls": "^3.0.3",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.3.0",
     "eslint-plugin-jest": "^22.6.4",
