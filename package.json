@@ -10,8 +10,20 @@
     "url": "https://github.com/paularmstrong/normalizr.git",
     "type": "git"
   },
-  "keywords": ["flux", "redux", "normalize", "denormalize", "api", "json"],
-  "files": ["dist/", "index.d.ts", "LICENSE", "README.md"],
+  "keywords": [
+    "flux",
+    "redux",
+    "normalize",
+    "denormalize",
+    "api",
+    "json"
+  ],
+  "files": [
+    "dist/",
+    "index.d.ts",
+    "LICENSE",
+    "README.md"
+  ],
   "main": "dist/normalizr.js",
   "module": "dist/normalizr.es.js",
   "typings": "index.d.ts",
@@ -32,7 +44,9 @@
     "test:coverage": "npm run test -- --coverage && cat ./coverage/lcov.info | coveralls"
   },
   "author": "Paul Armstrong",
-  "contributors": ["Dan Abramov"],
+  "contributors": [
+    "Dan Abramov"
+  ],
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.0.0",
@@ -67,7 +81,13 @@
   },
   "dependencies": {},
   "lint-staged": {
-    "src/**/*.js": ["test", "git add"],
-    "*.{js,json,css,md}": ["prettier --write", "git add"]
+    "src/**/*.js": [
+      "test",
+      "git add"
+    ],
+    "*.{js,json,css,md}": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }
