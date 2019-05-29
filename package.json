@@ -34,8 +34,9 @@
     "build:production": "NODE_ENV=production rollup -c",
     "clean": "rimraf dist",
     "flow": "flow",
-    "lint": "eslint --fix .",
-    "lint:ci": "eslint .",
+    "lint": "yarn lint:cmd --fix",
+    "lint:ci": "yarn lint:cmd",
+    "lint:cmd": "eslint . --ext '.js,.json,.snap' --cache",
     "prebuild": "npm run clean",
     "precommit": "flow check && lint-staged",
     "prepublishOnly": "npm run build",
@@ -56,18 +57,19 @@
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-flow": "^7.0.0",
     "babel-core": "^7.0.0-bridge.0",
-    "babel-eslint": "^9.0.0",
+    "babel-eslint": "^10.0.1",
     "babel-jest": "^23.4.2",
     "coveralls": "^2.11.15",
-    "eslint": "^4.19.1",
-    "eslint-config-prettier": "^2.9.0",
-    "eslint-plugin-jest": "^21.15.0",
-    "eslint-plugin-prettier": "^2.6.0",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-jest": "^22.6.4",
+    "eslint-plugin-json": "^1.4.0",
+    "eslint-plugin-prettier": "^3.1.0",
     "flow-bin": "^0.99.0",
-    "husky": "^0.14.3",
+    "husky": "^2.3.0",
     "immutable": "^3.8.1",
     "jest": "^22.4.3",
-    "lint-staged": "^6.1.0",
+    "lint-staged": "^8.1.7",
     "npm-run-all": "^3.1.2",
     "prettier": "^1.12.1",
     "rimraf": "^2.5.4",
@@ -79,15 +81,5 @@
     "typescript-definition-tester": "0.0.5",
     "uglify-es": "^3.3.8"
   },
-  "dependencies": {},
-  "lint-staged": {
-    "src/**/*.js": [
-      "test",
-      "git add"
-    ],
-    "*.{js,json,css,md}": [
-      "prettier --write",
-      "git add"
-    ]
-  }
+  "dependencies": {}
 }

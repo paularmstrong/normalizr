@@ -5,3 +5,4 @@ dist/*
 *.log
 coverage/*
 .coveralls.yml
+.eslintcache

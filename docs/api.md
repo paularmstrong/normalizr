@@ -21,9 +21,9 @@ Normalizes input data per the schema definition provided.
 ```js
 import { normalize, schema } from 'normalizr';
 
-const myData = { users: [ { id: 1 }, { id: 2 } ] };
+const myData = { users: [{ id: 1 }, { id: 2 }] };
 const user = new schema.Entity('users');
-const mySchema = { users: [ user ] }
+const mySchema = { users: [user] };
 const normalizedData = normalize(myData, mySchema);
 ```
 
@@ -59,19 +59,16 @@ If your schema and data have recursive references, only the first instance of an
 import { denormalize, schema } from 'normalizr';
 
 const user = new schema.Entity('users');
-const mySchema = { users: [ user ] }
+const mySchema = { users: [user] };
 const entities = { users: { '1': { id: 1 }, '2': { id: 2 } } };
-const denormalizedData = denormalize({ users: [ 1, 2 ] }, mySchema, entities);
+const denormalizedData = denormalize({ users: [1, 2] }, mySchema, entities);
 ```
 
 ### Output
 
 ```js
-{ 
-  users: [
-    { id: 1 },
-    { id: 2 }
-  ]
+{
+  users: [{ id: 1 }, { id: 2 }];
 }
 ```
 
@@ -130,14 +127,17 @@ If your input data is an array of more than one type of entity, it is necessary 
 For example:
 
 ```js
-const data = [ { id: 1, type: 'admin' }, { id: 2, type: 'user' } ];
+const data = [{ id: 1, type: 'admin' }, { id: 2, type: 'user' }];
 
 const userSchema = new schema.Entity('users');
 const adminSchema = new schema.Entity('admins');
-const myArray = new schema.Array({
-  admins: adminSchema,
-  users: userSchema
-}, (input, parent, key) => `${input.type}s`);
+const myArray = new schema.Array(
+  {
+    admins: adminSchema,
+    users: userSchema
+  },
+  (input, parent, key) => `${input.type}s`
+);
 
 const normalizedData = normalize(data, myArray);
 ```
@@ -192,7 +192,10 @@ You *do not* need to define any keys in your entity other than those that hold n
 const data = { id_str: '123', url: 'https://twitter.com', user: { id_str: '456', name: 'Jimmy' } };
 
 const user = new schema.Entity('users', {}, { idAttribute: 'id_str' });
-const tweet = new schema.Entity('tweets', { user: user }, { 
+const tweet = new schema.Entity(
+  'tweets',
+  { user: user },
+  {
     idAttribute: 'id_str',
     // Apply everything from entityB over entityA, except for "favorites"
     mergeStrategy: (entityA, entityB) => ({
@@ -202,7 +205,8 @@ const tweet = new schema.Entity('tweets', { user: user }, {
     }),
     // Remove the URL field from the entity
     processStrategy: (entity) => omit(entity, 'url')
-});
+  }
+);
 
 const normalizedData = normalize(data, tweet);
 ```
@@ -226,14 +230,11 @@ When passing the `idAttribute` a function, it should return the IDs value.
 For Example:
 
 ```js
-const data = [
-    { id: '1', guest_id: null, name: 'Esther' },
-    { id: '1', guest_id: '22', name: 'Tom' },
-];
+const data = [{ id: '1', guest_id: null, name: 'Esther' }, { id: '1', guest_id: '22', name: 'Tom' }];
 
 const patronsSchema = new schema.Entity('patrons', undefined, {
   // idAttribute *functions* must return the ids **value** (not key)
-  idAttribute: value => value.guest_id ? `${value.id}-${value.guest_id}` : value.id,
+  idAttribute: (value) => (value.guest_id ? `${value.id}-${value.guest_id}` : value.id)
 });
 
 normalize(data, [patronsSchema]);
@@ -314,10 +315,13 @@ const data = { owner: { id: 1, type: 'user', name: 'Anne' } };
 
 const user = new schema.Entity('users');
 const group = new schema.Entity('groups');
-const unionSchema = new schema.Union({
-  user: user,
-  group: group
-}, 'type');
+const unionSchema = new schema.Union(
+  {
+    user: user,
+    group: group
+  },
+  'type'
+);
 
 const normalizedData = normalize(data, { owner: unionSchema });
 ```
@@ -378,16 +382,19 @@ For example:
 
 ```js
 const data = {
-  '1': { id: 1, type: 'admin' }, 
+  '1': { id: 1, type: 'admin' },
   '2': { id: 2, type: 'user' }
 };
 
 const userSchema = new schema.Entity('users');
 const adminSchema = new schema.Entity('admins');
-const valuesSchema = new schema.Values({
-  admins: adminSchema,
-  users: userSchema
-}, (input, parent, key) => `${input.type}s`);
+const valuesSchema = new schema.Values(
+  {
+    admins: adminSchema,
+    users: userSchema
+  },
+  (input, parent, key) => `${input.type}s`
+);
 
 const normalizedData = normalize(data, valuesSchema);
 ```

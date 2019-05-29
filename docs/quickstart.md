@@ -35,10 +35,10 @@ const comment = new schema.Entity('comments', {
   commenter: user
 });
 
-// Define your article 
-const article = new schema.Entity('articles', { 
+// Define your article
+const article = new schema.Entity('articles', {
   author: user,
-  comments: [ comment ]
+  comments: [comment]
 });
 
 const normalizedData = normalize(originalData, article);

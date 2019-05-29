@@ -13,21 +13,24 @@ Normalizr is a small, but powerful utility for taking JSON with a schema definit
 The following nested object:
 
 ```js
-[{
-  id: 1,
-  title: 'Some Article',
-  author: {
+[
+  {
     id: 1,
-    name: 'Dan'
+    title: 'Some Article',
+    author: {
+      id: 1,
+      name: 'Dan'
+    }
+  },
+  {
+    id: 2,
+    title: 'Other Article',
+    author: {
+      id: 1,
+      name: 'Dan'
+    }
   }
-}, {
-  id: 2,
-  title: 'Other Article',
-  author: {
-    id: 1,
-    name: 'Dan'
-  }
-}]
+];
 ```
 
 Can be normalized to:

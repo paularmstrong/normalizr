@@ -10,7 +10,7 @@ const milestone = new schema.Entity('milestones', {
 
 const issue = new schema.Entity('issues', {
   assignee: user,
-  assignees: [ user ],
+  assignees: [user],
   labels: label,
   milestone,
   user
@@ -18,17 +18,22 @@ const issue = new schema.Entity('issues', {
 
 const pullRequest = new schema.Entity('pullRequests', {
   assignee: user,
-  assignees: [ user ],
+  assignees: [user],
   labels: label,
   milestone,
   user
 });
 
-const issueOrPullRequest = new schema.Array({
-  issues: issue,
-  pullRequests: pullRequest
-}, (entity: any) => entity.pull_request ? 'pullRequests' : 'issues');
+const issueOrPullRequest = new schema.Array(
+  {
+    issues: issue,
+    pullRequests: pullRequest
+  },
+  (entity: any) => (entity.pull_request ? 'pullRequests' : 'issues')
+);
 
-const data = {/*...*/};
+const data = {
+  /* ...*/
+};
 const normalizedData = normalize(data, issueOrPullRequest);
 console.log(normalizedData);
