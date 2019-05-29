@@ -1,0 +1,10 @@
+{
+  "groups": {
+    "default": {
+      "packages": [
+        "examples/redux/package.json",
+        "package.json"
+      ]
+    }
+  }
+}
