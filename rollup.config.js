@@ -20,7 +20,7 @@ export default {
   ],
   plugins: [
     babel({
-      plugins: ['external-helpers']
+      plugins: ['@babel/plugin-external-helpers']
     }),
     isProduction && uglify({}, minify),
     filesize()
