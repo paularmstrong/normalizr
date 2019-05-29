@@ -1,4 +1,4 @@
-import { denormalize, normalize, schema } from '../../../index';
+import { denormalize, normalize, schema } from '../index'
 
 const data = [{ id: 1, type: 'admin' }, { id: 2, type: 'user' }];
 const userSchema = new schema.Entity('users');

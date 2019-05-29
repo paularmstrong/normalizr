@@ -1,4 +1,4 @@
-import { normalize, schema } from '../../../index';
+import { normalize, schema } from '../index'
 
 const data = {
   /* ...*/

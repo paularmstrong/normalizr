@@ -3,8 +3,8 @@ node_js:
   - "8"
 script:
   - npm run lint:ci
-  - npm run flow -- check
   - npm run test:ci
   - npm run build
+  - npm run typecheck
 after_success:
   - npm run test:coverage

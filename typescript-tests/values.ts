@@ -1,4 +1,4 @@
-import { normalize, schema } from '../../../index';
+import { normalize, schema } from '../index'
 
 const data = { firstThing: { id: 1 }, secondThing: { id: 2 } };
 

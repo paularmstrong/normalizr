@@ -29,11 +29,12 @@
   "typings": "index.d.ts",
   "sideEffects": false,
   "scripts": {
-    "build": "npm run clean && npm-run-all --parallel build:*",
+    "build": "npm run clean && run-p build:*",
     "build:development": "NODE_ENV=development rollup -c",
     "build:production": "NODE_ENV=production rollup -c",
     "clean": "rimraf dist",
     "flow": "flow",
+    "flow:ci": "flow check",
     "lint": "yarn lint:cmd --fix",
     "lint:ci": "yarn lint:cmd",
     "lint:cmd": "eslint . --ext '.js,.json,.snap' --cache",
@@ -42,7 +43,9 @@
     "prepublishOnly": "npm run build",
     "test": "jest",
     "test:ci": "jest --ci",
-    "test:coverage": "npm run test -- --coverage && cat ./coverage/lcov.info | coveralls"
+    "test:coverage": "npm run test -- --coverage && cat ./coverage/lcov.info | coveralls",
+    "tsc:ci": "tsc --noEmit typescript-tests/*",
+    "typecheck": "run-p flow:ci tsc:ci"
   },
   "author": "Paul Armstrong",
   "contributors": [
@@ -76,8 +79,7 @@
     "rollup-plugin-babel": "^4.0.1",
     "rollup-plugin-filesize": "^6.1.0",
     "rollup-plugin-terser": "^5.0.0",
-    "typescript": "^3.4.5",
-    "typescript-definition-tester": "^0.0.6"
+    "typescript": "^3.4.5"
   },
   "dependencies": {}
 }

@@ -1,4 +1,4 @@
-import { denormalize, normalize, schema } from '../../../index';
+import { denormalize, normalize, schema } from '../index'
 
 type User = {
   id_str: string;

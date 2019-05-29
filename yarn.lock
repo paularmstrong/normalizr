@@ -1082,10 +1082,6 @@ assert-plus@1.0.0, assert-plus@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/assert-plus/-/assert-plus-1.0.0.tgz#f12e0f3c5d77b0b1cdd9146942e4e96c1e4dd525"
 
-assertion-error@^1.0.1:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/assertion-error/-/assertion-error-1.1.0.tgz#e60b6b0e8f301bd97e5375215bda406c85118c0b"
-
 assign-symbols@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/assign-symbols/-/assign-symbols-1.0.0.tgz#59667f41fadd4f20ccbc2bb96b8d4f7f78ec0367"
@@ -1228,7 +1224,7 @@ boxen@^2.0.0:
     term-size "^1.2.0"
     widest-line "^2.0.0"
 
-brace-expansion@^1.0.0, brace-expansion@^1.1.7:
+brace-expansion@^1.1.7:
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-1.1.8.tgz#c07b211c7c952ec1f8efd51a77ef0d1d3990a292"
   dependencies:
@@ -1742,13 +1738,6 @@ delegates@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/delegates/-/delegates-1.0.0.tgz#84c6e159b81904fdca59a0ef44cd870d31250f9a"
 
-detect-indent@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/detect-indent/-/detect-indent-0.2.0.tgz#042914498979ac2d9f3c73e4ff3e6877d3bc92b6"
-  dependencies:
-    get-stdin "^0.1.0"
-    minimist "^0.1.0"
-
 detect-libc@^1.0.2, detect-libc@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-1.0.3.tgz#fa137c4bd698edf55cd5cd02ac559f91a4c4ba9b"
@@ -1774,14 +1763,6 @@ domexception@^1.0.0:
   resolved "https://registry.yarnpkg.com/domexception/-/domexception-1.0.1.tgz#937442644ca6a31261ef36e3ec677fe805582c90"
   dependencies:
     webidl-conversions "^4.0.2"
-
-dts-bundle@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/dts-bundle/-/dts-bundle-0.2.0.tgz#e165e494b00f81a3b6eb64385cbf6d1b486b7a99"
-  dependencies:
-    detect-indent "^0.2.0"
-    glob "^4.0.2"
-    mkdirp "^0.5.0"
 
 duplexer@^0.1.1:
   version "0.1.1"
@@ -2313,10 +2294,6 @@ get-own-enumerable-property-symbols@^3.0.0:
   resolved "https://registry.yarnpkg.com/get-own-enumerable-property-symbols/-/get-own-enumerable-property-symbols-3.0.0.tgz#b877b49a5c16aefac3655f2ed2ea5b684df8d203"
   integrity sha512-CIJYJC4GGF06TakLg8z4GQKvDsx9EMspVxOYih7LerEL/WosUnFIww45CGfxfeKHqlg3twgUrYRT1O3WQqjGCg==
 
-get-stdin@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/get-stdin/-/get-stdin-0.1.0.tgz#5998af24aafc802d15c82c685657eeb8b10d4a91"
-
 get-stdin@^6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/get-stdin/-/get-stdin-6.0.0.tgz#9e09bf712b360ab9225e812048f71fde9c89657b"
@@ -2352,15 +2329,6 @@ github-from-package@0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/github-from-package/-/github-from-package-0.0.0.tgz#97fb5d96bfde8973313f20e8288ef9a167fa64ce"
   integrity sha1-l/tdlr/eiXMxPyDoKI75oWf6ZM4=
-
-glob@^4.0.2:
-  version "4.5.3"
-  resolved "https://registry.yarnpkg.com/glob/-/glob-4.5.3.tgz#c6cb73d3226c1efef04de3c56d012f03377ee15f"
-  dependencies:
-    inflight "^1.0.4"
-    inherits "2"
-    minimatch "^2.0.1"
-    once "^1.3.0"
 
 glob@^7.0.3, glob@^7.0.5, glob@^7.1.1, glob@^7.1.2:
   version "7.1.2"
@@ -3554,10 +3522,6 @@ lodash.sortby@^4.7.0:
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/lodash.sortby/-/lodash.sortby-4.7.0.tgz#edd14c824e2cc9c1e0b0a1b42bb5210516a42438"
 
-lodash@^3.6.0:
-  version "3.10.1"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
-
 lodash@^4.13.1:
   version "4.17.5"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.5.tgz#99a92d65c0272debe8c96b6057bc8fbfa3bed511"
@@ -3729,12 +3693,6 @@ mimic-response@^1.0.0:
   resolved "https://registry.yarnpkg.com/mimic-response/-/mimic-response-1.0.1.tgz#4923538878eef42063cb8a3e3b0798781487ab1b"
   integrity sha512-j5EctnkH7amfV/q5Hgmoal1g2QHFJRraOtmx0JpIqkxhBhI/lJSl1nMpQ45hVarwNETOoWEimndZ4QK0RHxuxQ==
 
-minimatch@^2.0.1:
-  version "2.0.10"
-  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-2.0.10.tgz#8d087c39c6b38c001b97fca7ce6d0e1e80afbac7"
-  dependencies:
-    brace-expansion "^1.0.0"
-
 minimatch@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
@@ -3744,10 +3702,6 @@ minimatch@^3.0.4:
 minimist@0.0.8, minimist@~0.0.1:
   version "0.0.8"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-0.0.8.tgz#857fcabfc3397d2625b8228262e86aa7a011b05d"
-
-minimist@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/minimist/-/minimist-0.1.0.tgz#99df657a52574c21c9057497df742790b2b4c0de"
 
 minimist@^1.1.1, minimist@^1.2.0:
   version "1.2.0"
@@ -5340,15 +5294,6 @@ type-fest@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.4.1.tgz#8bdf77743385d8a4f13ba95f610f5ccd68c728f8"
   integrity sha512-IwzA/LSfD2vC1/YDYMv/zHP4rDF1usCwllsDpbolT3D4fUepIO7f9K70jjmUewU/LmGUKJcwcVtDCpnKk4BPMw==
-
-typescript-definition-tester@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/typescript-definition-tester/-/typescript-definition-tester-0.0.6.tgz#097b02ac08ab9ebc2ca26b929273460130864dd9"
-  integrity sha512-DTUerqJ5DFtqkjggKCVVdYZGyXozqM+c+TKORm02ol3gwVcLOxeMkeBHKOBL/VnqeWWSnfoniw+AVDrl9lhVHw==
-  dependencies:
-    assertion-error "^1.0.1"
-    dts-bundle "^0.2.0"
-    lodash "^3.6.0"
 
 typescript@^3.4.5:
   version "3.4.5"
