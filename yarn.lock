@@ -5334,17 +5334,19 @@ type-fest@^0.4.1:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.4.1.tgz#8bdf77743385d8a4f13ba95f610f5ccd68c728f8"
   integrity sha512-IwzA/LSfD2vC1/YDYMv/zHP4rDF1usCwllsDpbolT3D4fUepIO7f9K70jjmUewU/LmGUKJcwcVtDCpnKk4BPMw==
 
-typescript-definition-tester@0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/typescript-definition-tester/-/typescript-definition-tester-0.0.5.tgz#91c574d78ea05b81ed81244d50ec30d8240c356f"
+typescript-definition-tester@^0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/typescript-definition-tester/-/typescript-definition-tester-0.0.6.tgz#097b02ac08ab9ebc2ca26b929273460130864dd9"
+  integrity sha512-DTUerqJ5DFtqkjggKCVVdYZGyXozqM+c+TKORm02ol3gwVcLOxeMkeBHKOBL/VnqeWWSnfoniw+AVDrl9lhVHw==
   dependencies:
     assertion-error "^1.0.1"
     dts-bundle "^0.2.0"
     lodash "^3.6.0"
 
-typescript@^2.1.4:
-  version "2.7.1"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.7.1.tgz#bb3682c2c791ac90e7c6210b26478a8da085c359"
+typescript@^3.4.5:
+  version "3.4.5"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.4.5.tgz#2d2618d10bb566572b8d7aad5180d84257d70a99"
+  integrity sha512-YycBxUb49UUhdNMU5aJ7z5Ej2XGmaIBL0x34vZ82fn3hGvD+bgrMrVDpatgz2f7YxUMJxMkbWxJZeAvDxVe7Vw==
 
 uglify-es@^3.3.7, uglify-es@^3.3.8:
   version "3.3.10"
