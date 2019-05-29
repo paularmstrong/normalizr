@@ -1,3 +1,13 @@
+# v3.4.0
+
+* **Changed** Now built with Babel 7
+* **Added** Support for circular references (gh-335)
+* **Added** Symbols are valid keys for Entity keys (gh-369)
+* **Added/Changed** Typescript definitions include generics for `normalize` (gh-363)
+* **Fixed** denormalization skipping of falsy valued ids used in `Object` schemas (gh-345)
+* **Chore** Update dev dependencies
+* **Chore** Added Greenkeeper
+
 # v3.3.0
 
 * **Added** ES Module builds
