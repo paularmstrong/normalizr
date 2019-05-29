@@ -40,6 +40,7 @@
     "@babel/plugin-proposal-class-properties": "^7.0.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
+    "@babel/preset-flow": "^7.0.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^9.0.0",
     "babel-jest": "^23.4.2",
@@ -62,8 +63,7 @@
     "rollup-plugin-uglify": "^3.0.0",
     "typescript": "^2.1.4",
     "typescript-definition-tester": "0.0.5",
-    "uglify-es": "^3.3.8",
-    "@babel/preset-flow": "^7.0.0"
+    "uglify-es": "^3.3.8"
   },
   "dependencies": {},
   "lint-staged": {
