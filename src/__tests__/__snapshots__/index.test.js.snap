@@ -52,6 +52,18 @@ Array [
 ]
 `;
 
+exports[`denormalize set to undefined if schema key is not in entities 1`] = `
+Object {
+  "author": undefined,
+  "comments": Array [
+    Object {
+      "user": undefined,
+    },
+  ],
+  "id": "123",
+}
+`;
+
 exports[`normalize can use fully custom entity classes 1`] = `
 Object {
   "entities": Object {

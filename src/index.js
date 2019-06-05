@@ -109,7 +109,11 @@ const getEntities = (entities) => {
       return entityOrId;
     }
 
-    return isImmutable ? entities.getIn([schemaKey, entityOrId.toString()]) : entities[schemaKey][entityOrId];
+    if (isImmutable) {
+      return entities.getIn([schemaKey, entityOrId.toString()]);
+    }
+
+    return entities[schemaKey] && entities[schemaKey][entityOrId];
   };
 };
 
