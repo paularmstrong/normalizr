@@ -7,6 +7,12 @@ about: If something isn't working as expected 🤔.
 
 A short explanation of your problem or use-case is helpful!
 
+<!-- 
+Instead of the below, please also consider
+forking the following Codesandbox: https://codesandbox.io/s/normalizr-test-case-0yfcf
+Paste your link here when done.
+-->
+
 **Input**
 
 Here's how I'm using normalizr:
