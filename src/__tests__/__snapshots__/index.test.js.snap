@@ -35,6 +35,22 @@ Object {
 }
 `;
 
+exports[`denormalize denormalizes schema with extra members 1`] = `
+Object {
+  "data": Array [
+    Object {
+      "id": 1,
+      "type": "foo",
+    },
+    Object {
+      "id": 2,
+      "type": "bar",
+    },
+  ],
+  "extra": "5",
+}
+`;
+
 exports[`denormalize denormalizes with function as idAttribute 1`] = `
 Array [
   Object {
@@ -187,6 +203,30 @@ Object {
     },
   },
   "result": "123",
+}
+`;
+
+exports[`normalize normalizes schema with extra members 1`] = `
+Object {
+  "entities": Object {
+    "tacos": Object {
+      "1": Object {
+        "id": 1,
+        "type": "foo",
+      },
+      "2": Object {
+        "id": 2,
+        "type": "bar",
+      },
+    },
+  },
+  "result": Object {
+    "data": Array [
+      1,
+      2,
+    ],
+    "extra": "five",
+  },
 }
 `;
 

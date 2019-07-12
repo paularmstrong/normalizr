@@ -18,6 +18,17 @@ describe('normalize', () => {
     expect(normalize([{ id: 1, type: 'foo' }, { id: 2, type: 'bar' }], [mySchema])).toMatchSnapshot();
   });
 
+  test('normalizes schema with extra members', () => {
+    const mySchema = new schema.Entity('tacos');
+
+    expect(
+      normalize(
+        { data: [{ id: 1, type: 'foo' }, { id: 2, type: 'bar' }], extra: 'five' },
+        { data: [mySchema], extra: '' }
+      )
+    ).toMatchSnapshot();
+  });
+
   test('normalizes entities with circular references', () => {
     const user = new schema.Entity('users');
     user.define({
@@ -177,6 +188,17 @@ describe('denormalize', () => {
       }
     };
     expect(denormalize([1, 2], [mySchema], entities)).toMatchSnapshot();
+  });
+
+  test('denormalizes schema with extra members', () => {
+    const mySchema = new schema.Entity('tacos');
+    const entities = {
+      tacos: {
+        1: { id: 1, type: 'foo' },
+        2: { id: 2, type: 'bar' }
+      }
+    };
+    expect(denormalize({ data: [1, 2], extra: '5' }, { data: [mySchema], extra: '' }, entities)).toMatchSnapshot();
   });
 
   test('denormalizes nested entities', () => {

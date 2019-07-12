@@ -4,38 +4,42 @@ declare namespace schema {
   export type MergeFunction = (entityA: any, entityB: any) => any;
 
   export class Array<T = any> {
-    constructor(definition: Schema<T>, schemaAttribute?: string | SchemaFunction)
-    define(definition: Schema): void
+    constructor(definition: Schema<T>, schemaAttribute?: string | SchemaFunction);
+    define(definition: Schema): void;
   }
 
   export interface EntityOptions<T = any> {
-    idAttribute?: string | SchemaFunction
-    mergeStrategy?: MergeFunction
-    processStrategy?: StrategyFunction<T>
+    idAttribute?: string | SchemaFunction;
+    mergeStrategy?: MergeFunction;
+    processStrategy?: StrategyFunction<T>;
   }
 
   export class Entity<T = any> {
-    constructor(key: string | symbol, definition?: Schema, options?: EntityOptions<T>)
-    define(definition: Schema): void
-    key: string
-    getId: SchemaFunction
-    _processStrategy: StrategyFunction<T>
+    constructor(key: string | symbol, definition?: Schema, options?: EntityOptions<T>);
+    define(definition: Schema): void;
+    key: string;
+    getId: SchemaFunction;
+    _processStrategy: StrategyFunction<T>;
   }
 
   export class Object<T = any> {
-    constructor(definition: {[key: string]: Schema<T>})
-    define(definition: Schema): void
+    constructor(definition: { [key: string]: Schema<T> });
+    define(definition: Schema): void;
   }
 
   export class Union<T = any> {
-    constructor(definition: Schema<T>, schemaAttribute?: string | SchemaFunction)
-    define(definition: Schema): void
+    constructor(definition: Schema<T>, schemaAttribute?: string | SchemaFunction);
+    define(definition: Schema): void;
   }
 
   export class Values<T = any> {
-    constructor(definition: Schema<T>, schemaAttribute?: string | SchemaFunction)
-    define(definition: Schema): void
+    constructor(definition: Schema<T>, schemaAttribute?: string | SchemaFunction);
+    define(definition: Schema): void;
   }
+}
+
+interface SimpleObject {
+  [key: string]: SimpleObject | string | number | boolean | void;
 }
 
 export type Schema<T = any> =
@@ -47,20 +51,16 @@ export type Schema<T = any> =
   | SchemaArray<T>;
 
 export interface SchemaObject<T> {
-  [key: string]: Schema<T>
+  [key: string]: Schema<T> | string | number | boolean | void | SimpleObject;
 }
 
 export interface SchemaArray<T> extends Array<Schema<T>> {}
 
-export type NormalizedSchema<E, R> = { entities: E, result: R };
+export type NormalizedSchema<E, R> = { entities: E; result: R };
 
-export function normalize<T = any, E = { [key:string]: { [key:string]: T }}, R = any>(
+export function normalize<T = any, E = { [key: string]: { [key: string]: T } }, R = any>(
   data: any,
   schema: Schema<T>
 ): NormalizedSchema<E, R>;
 
-export function denormalize(
-  input: any,
-  schema: Schema,
-  entities: any
-): any;
+export function denormalize(input: any, schema: Schema, entities: any): any;

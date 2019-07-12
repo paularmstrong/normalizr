@@ -95,7 +95,11 @@ const getUnvisit = (entities) => {
       return unvisitEntity(input, schema, unvisit, getEntity, cache);
     }
 
-    return schema.denormalize(input, unvisit);
+    if (typeof schema.denormalize === 'function') {
+      return schema.denormalize(input, unvisit);
+    }
+
+    return input;
   };
 };
 
