@@ -64,7 +64,7 @@
     "coveralls": "^3.0.3",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^5.0.0",
-    "eslint-plugin-jest": "^22.6.4",
+    "eslint-plugin-jest": "22.9.0",
     "eslint-plugin-json": "^1.4.0",
     "eslint-plugin-prettier": "^3.1.0",
     "flow-bin": "^0.101.0",
