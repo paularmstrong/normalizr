@@ -220,6 +220,33 @@ describe('denormalize', () => {
     expect(denormalize('123', article, entities)).toMatchSnapshot();
   });
 
+  test('set to undefined if schema key is not in entities', () => {
+    const user = new schema.Entity('users');
+    const comment = new schema.Entity('comments', {
+      user: user
+    });
+    const article = new schema.Entity('articles', {
+      author: user,
+      comments: [comment]
+    });
+
+    const entities = {
+      articles: {
+        '123': {
+          id: '123',
+          author: '8472',
+          comments: ['1']
+        }
+      },
+      comments: {
+        '1': {
+          user: '123'
+        }
+      }
+    };
+    expect(denormalize('123', article, entities)).toMatchSnapshot();
+  });
+
   test('does not modify the original entities', () => {
     const user = new schema.Entity('users');
     const article = new schema.Entity('articles', { author: user });
