@@ -12,6 +12,11 @@ describe('normalize', () => {
     expect(() => normalize({})).toThrow();
   });
 
+  test('cannot normalize with null input', () => {
+    const mySchema = new schema.Entity('tacos');
+    expect(() => normalize(null, mySchema)).toThrow(/null/);
+  });
+
   test('normalizes entities', () => {
     const mySchema = new schema.Entity('tacos');
 
