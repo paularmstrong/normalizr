@@ -64,6 +64,47 @@ Object {
 }
 `;
 
+exports[`normalize can normalize entity nested inside entity using property from parent 1`] = `
+Object {
+  "entities": Object {
+    "linkables": Object {
+      "1": Object {
+        "data": 2,
+        "id": 1,
+        "module_type": "article",
+        "schema_type": "media",
+      },
+    },
+    "media": Object {
+      "2": Object {
+        "id": 2,
+        "url": "catimage.jpg",
+      },
+    },
+  },
+  "result": 1,
+}
+`;
+
+exports[`normalize can normalize entity nested inside object using property from parent 1`] = `
+Object {
+  "entities": Object {
+    "media": Object {
+      "2": Object {
+        "id": 2,
+        "url": "catimage.jpg",
+      },
+    },
+  },
+  "result": Object {
+    "data": 2,
+    "id": 1,
+    "module_type": "article",
+    "schema_type": "media",
+  },
+}
+`;
+
 exports[`normalize can use fully custom entity classes 1`] = `
 Object {
   "entities": Object {
