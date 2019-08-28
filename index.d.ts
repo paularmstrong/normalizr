@@ -23,7 +23,7 @@ declare namespace schema {
   }
 
   export class Object<T = any> {
-    constructor(definition: {[key: string]: Schema<T>})
+    constructor(definition: SchemaObject<T>)
     define(definition: Schema): void
   }
 
