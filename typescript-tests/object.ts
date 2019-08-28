@@ -1,8 +1,9 @@
 import { normalize, schema } from '../index'
 
-const data = {
-  /* ...*/
-};
+type Response = {
+  users: Array<{ id: string }>
+}
+const data: Response = { users: [ { id: 'foo' } ] };
 const user = new schema.Entity('users');
 
 {
