@@ -17,5 +17,5 @@ export default {
     { file: `${destBase}.amd${destExtension}`, format: 'amd', name },
     { file: `${destBase}.browser${destExtension}`, format: 'iife', name }
   ],
-  plugins: [babel({}), isProduction && terser(), filesize()].filter(Boolean)
+  plugins: [babel({ runtimeHelpers: true }), isProduction && terser(), filesize()].filter(Boolean)
 };
