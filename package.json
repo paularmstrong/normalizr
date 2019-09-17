@@ -78,7 +78,9 @@
     "rimraf": "^2.6.3",
     "rollup": "^1.15.6",
     "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-filesize": "^6.1.1",
+    "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-terser": "^5.0.0",
     "typescript": "^3.4.5"
   },
