@@ -49,10 +49,15 @@ export default class EntitySchema {
   }
 
   normalize(input, parent, key, visit, addEntity, visitedEntities) {
-    if (visitedEntities.some((entity) => entity === input)) {
-      return this.getId(input, parent, key);
+    const id = this.getId(input, parent, key);
+
+    if (!(id in visitedEntities)) {
+      visitedEntities[id] = [];
     }
-    visitedEntities.push(input);
+    if (visitedEntities[id].some((entity) => entity === input)) {
+      return id;
+    }
+    visitedEntities[id].push(input);
 
     const processedEntity = this._processStrategy(input, parent, key);
     Object.keys(this.schema).forEach((key) => {
@@ -63,7 +68,7 @@ export default class EntitySchema {
     });
 
     addEntity(this, processedEntity, input, parent, key);
-    return this.getId(input, parent, key);
+    return id;
   }
 
   denormalize(entity, unvisit) {
