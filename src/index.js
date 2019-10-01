@@ -59,7 +59,12 @@ export const normalize = (input, schema) => {
 };
 
 const unvisitEntity = (id, schema, unvisit, getEntity, cache) => {
-  const entity = getEntity(id, schema);
+  let entity = getEntity(id, schema);
+
+  if (entity === undefined && schema instanceof EntitySchema) {
+    entity = schema.fallback(entity, id);
+  }
+
   if (typeof entity !== 'object' || entity === null) {
     return entity;
   }

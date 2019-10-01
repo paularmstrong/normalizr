@@ -292,4 +292,39 @@ describe(`${schema.Entity.name} denormalization`, () => {
     // NOTE: Given how immutable data works, referential equality can't be
     // maintained with nested denormalization.
   });
+
+  test('denormalizes with fallback strategy', () => {
+    const user = new schema.Entity(
+      'users',
+      {},
+      {
+        fallbackStrategy: (entity, id) => ({
+          id: id,
+          name: 'John Doe'
+        })
+      }
+    );
+    const report = new schema.Entity('reports', {
+      draftedBy: user,
+      publishedBy: user
+    });
+
+    const entities = {
+      reports: {
+        '123': {
+          id: '123',
+          title: 'Weekly report',
+          draftedBy: '456',
+          publishedBy: '456'
+        }
+      },
+      users: {}
+    };
+
+    const denormalizedReport = denormalize('123', report, entities);
+
+    expect(denormalizedReport.publishedBy).toBe(denormalizedReport.draftedBy);
+    expect(denormalizedReport.publishedBy.name).toBe('John Doe');
+    //
+  });
 });
