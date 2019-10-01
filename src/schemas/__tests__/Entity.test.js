@@ -298,8 +298,9 @@ describe(`${schema.Entity.name} denormalization`, () => {
       'users',
       {},
       {
-        fallbackStrategy: (entity, id) => ({
-          id: id,
+        idAttribute: 'userId',
+        fallbackStrategy: (id, schema) => ({
+          [schema.idAttribute]: id,
           name: 'John Doe'
         })
       }
@@ -325,6 +326,7 @@ describe(`${schema.Entity.name} denormalization`, () => {
 
     expect(denormalizedReport.publishedBy).toBe(denormalizedReport.draftedBy);
     expect(denormalizedReport.publishedBy.name).toBe('John Doe');
+    expect(denormalizedReport.publishedBy.userId).toBe('456');
     //
   });
 });

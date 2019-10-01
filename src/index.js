@@ -62,7 +62,7 @@ const unvisitEntity = (id, schema, unvisit, getEntity, cache) => {
   let entity = getEntity(id, schema);
 
   if (entity === undefined && schema instanceof EntitySchema) {
-    entity = schema.fallback(entity, id);
+    entity = schema.fallback(id, schema);
   }
 
   if (typeof entity !== 'object' || entity === null) {
