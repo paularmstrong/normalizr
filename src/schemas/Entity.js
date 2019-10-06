@@ -50,14 +50,18 @@ export default class EntitySchema {
 
   normalize(input, parent, key, visit, addEntity, visitedEntities) {
     const id = this.getId(input, parent, key);
+    const entityType = this.key;
 
-    if (!(id in visitedEntities)) {
-      visitedEntities[id] = [];
+    if (!(entityType in visitedEntities)) {
+      visitedEntities[entityType] = {};
     }
-    if (visitedEntities[id].some((entity) => entity === input)) {
+    if (!(id in visitedEntities[entityType])) {
+      visitedEntities[entityType][id] = [];
+    }
+    if (visitedEntities[entityType][id].some((entity) => entity === input)) {
       return id;
     }
-    visitedEntities[id].push(input);
+    visitedEntities[entityType][id].push(input);
 
     const processedEntity = this._processStrategy(input, parent, key);
     Object.keys(this.schema).forEach((key) => {
