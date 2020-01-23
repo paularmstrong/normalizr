@@ -43,7 +43,11 @@ export const schema = {
 
 export const normalize = (input, schema) => {
   if (!input || typeof input !== 'object') {
-    throw new Error(`Unexpected input given to normalize. Expected type to be "object", found "${typeof input}".`);
+    throw new Error(
+      `Unexpected input given to normalize. Expected type to be "object", found "${
+        input === null ? 'null' : typeof input
+      }".`
+    );
   }
 
   const entities = {};
