@@ -67,7 +67,15 @@ export default class EntitySchema {
     Object.keys(this.schema).forEach((key) => {
       if (processedEntity.hasOwnProperty(key) && typeof processedEntity[key] === 'object') {
         const schema = this.schema[key];
-        processedEntity[key] = visit(processedEntity[key], processedEntity, key, schema, addEntity, visitedEntities);
+        const resolvedSchema = typeof schema === 'function' ? schema(input) : schema;
+        processedEntity[key] = visit(
+          processedEntity[key],
+          processedEntity,
+          key,
+          resolvedSchema,
+          addEntity,
+          visitedEntities
+        );
       }
     });
 

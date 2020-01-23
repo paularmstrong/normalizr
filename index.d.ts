@@ -23,7 +23,7 @@ declare namespace schema {
   }
 
   export class Object<T = any> {
-    constructor(definition: {[key: string]: Schema<T>})
+    constructor(definition: SchemaObject<T>)
     define(definition: Schema): void
   }
 
@@ -46,8 +46,11 @@ export type Schema<T = any> =
   | SchemaObject<T>
   | SchemaArray<T>;
 
+export type SchemaValueFunction<T> = (t: T) => Schema<T>;
+export type SchemaValue<T> = Schema<T> | SchemaValueFunction<T>;
+
 export interface SchemaObject<T> {
-  [key: string]: Schema<T>
+  [key: string]: SchemaValue<T>
 }
 
 export interface SchemaArray<T> extends Array<Schema<T>> {}

@@ -162,6 +162,59 @@ describe('normalize', () => {
 
     expect(() => normalize(test, testEntity)).not.toThrow();
   });
+
+  test('can normalize entity nested inside entity using property from parent', () => {
+    const linkablesSchema = new schema.Entity('linkables');
+    const mediaSchema = new schema.Entity('media');
+    const listsSchema = new schema.Entity('lists');
+
+    const schemaMap = {
+      media: mediaSchema,
+      lists: listsSchema
+    };
+
+    linkablesSchema.define({
+      data: (parent) => schemaMap[parent.schema_type]
+    });
+
+    const input = {
+      id: 1,
+      module_type: 'article',
+      schema_type: 'media',
+      data: {
+        id: 2,
+        url: 'catimage.jpg'
+      }
+    };
+
+    expect(normalize(input, linkablesSchema)).toMatchSnapshot();
+  });
+
+  test('can normalize entity nested inside object using property from parent', () => {
+    const mediaSchema = new schema.Entity('media');
+    const listsSchema = new schema.Entity('lists');
+
+    const schemaMap = {
+      media: mediaSchema,
+      lists: listsSchema
+    };
+
+    const linkablesSchema = {
+      data: (parent) => schemaMap[parent.schema_type]
+    };
+
+    const input = {
+      id: 1,
+      module_type: 'article',
+      schema_type: 'media',
+      data: {
+        id: 2,
+        url: 'catimage.jpg'
+      }
+    };
+
+    expect(normalize(input, linkablesSchema)).toMatchSnapshot();
+  });
 });
 
 describe('denormalize', () => {
