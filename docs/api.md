@@ -76,7 +76,7 @@ const denormalizedData = denormalize({ users: [1, 2] }, mySchema, entities);
 
 ### `Array(definition, schemaAttribute)`
 
-Creates a schema to normalize an array of entities. If the input value is an `Object` instead of an `Array`, the normalized result will be an `Array` of the `Object`'s values.
+Creates a schema to normalize an array of schemas. If the input value is an `Object` instead of an `Array`, the normalized result will be an `Array` of the `Object`'s values.
 
 _Note: The same behavior can be defined with shorthand syntax: `[ mySchema ]`_
 
