@@ -52,7 +52,7 @@ export const normalize = (input, schema) => {
 
   const entities = {};
   const addEntity = addEntities(entities);
-  const visitedEntities = [];
+  const visitedEntities = {};
 
   const result = visit(input, input, null, schema, addEntity, visitedEntities);
   return { entities, result };
