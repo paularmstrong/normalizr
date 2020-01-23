@@ -66,6 +66,31 @@ Array [
 ]
 `;
 
+exports[`ArraySchema denormalization Class does not assume mapping of schema to attribute values when schemaAttribute is not set 1`] = `
+Object {
+  "entities": Object {
+    "cats": Object {
+      "1": Object {
+        "id": 1,
+      },
+      "2": Object {
+        "id": 2,
+      },
+    },
+  },
+  "result": Array [
+    Object {
+      "cat": 1,
+      "id": 5,
+    },
+    Object {
+      "cat": 2,
+      "id": 6,
+    },
+  ],
+}
+`;
+
 exports[`ArraySchema denormalization Class returns the input value if is not an array 1`] = `
 Object {
   "fillings": Object {},

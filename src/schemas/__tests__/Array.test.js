@@ -192,5 +192,17 @@ describe(`${schema.Array.name} denormalization`, () => {
       expect(denormalize('123', taco, entities)).toMatchSnapshot();
       expect(denormalize('123', taco, fromJS(entities))).toMatchSnapshot();
     });
+
+    test('does not assume mapping of schema to attribute values when schemaAttribute is not set', () => {
+      const cats = new schema.Entity('cats');
+      const catRecord = new schema.Object({
+        cat: cats
+      });
+      const catList = new schema.Array(catRecord);
+      const input = [{ cat: { id: 1 }, id: 5 }, { cat: { id: 2 }, id: 6 }];
+      const output = normalize(input, catList);
+      expect(output).toMatchSnapshot();
+      expect(denormalize(output.result, catList, output.entities)).toEqual(input);
+    });
   });
 });
