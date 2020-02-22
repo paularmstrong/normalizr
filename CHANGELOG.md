@@ -1,3 +1,8 @@
+# v3.6.0
+
+* **Added** `fallbackStrategy` for denormalization (#422)
+* **Fixed** entities can be `undefined` in TS defs if none found (#435)
+
 # v3.5.0
 
 - **Added** ability to dynamically set nested schema type (#415)
