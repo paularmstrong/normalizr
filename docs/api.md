@@ -175,6 +175,9 @@ const normalizedData = normalize(data, myArray);
     - `value`: The input value of the entity.
     - `parent`: The parent object of the input array.
     - `key`: The key at which the input array appears on the parent object.
+  - `fallbackStrategy(key, schema)`: Strategy to use when denormalizing data structures with id references to missing entities.
+    - `key`: The key at which the input array appears on the parent object.
+    - `schema`: The schema of the missing entity
 
 #### Instance Methods
 
@@ -251,6 +254,56 @@ normalize(data, [patronsSchema]);
   },
   result: ['1', '1-22']
 }
+```
+
+#### `fallbackStrategy` Usage
+```js
+const users = [
+  { id: '1', name: "Emily", requestState: 'SUCCEEDED' },
+  { id: '2', name: "Douglas", requestState: 'SUCCEEDED' }
+];
+const books = [
+  {id: '1', name: "Book 1", author: 1 },
+  {id: '2', name: "Book 2", author: 2 },
+  {id: '3', name: "Book 3", author: 3 }
+]
+
+const authorSchema = new schema.Entity('authors');
+const bookSchema = new schema.Entity('books', {
+  author: authorSchema
+}, {
+  fallbackStrategy: (key, schema) => {
+    return {
+      [schema.idAttribute]: key,
+      name: 'Unknown',
+      requestState: 'NONE'
+    };
+  }
+});
+
+```
+
+
+#### Output
+```js
+[
+  {
+    id: '1', 
+    name: "Book 1", 
+    author: { id: '1', name: "Emily", requestState: 'SUCCEEDED' }
+  },
+  {
+    id: '2', 
+    name: "Book 2", 
+    author: { id: '2', name: "Douglas", requestState: 'SUCCEEDED' },
+  },
+  {
+    id: '3', 
+    name: "Book 3", 
+    author: { id: '3', name: "Unknown", requestState: 'NONE' },
+  }
+]
+
 ```
 
 ### `Object(definition)`
