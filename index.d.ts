@@ -57,7 +57,7 @@ export interface SchemaArray<T> extends Array<Schema<T>> {}
 
 export type NormalizedSchema<E, R> = { entities: E, result: R };
 
-export function normalize<T = any, E = { [key:string]: { [key:string]: T }}, R = any>(
+export function normalize<T = any, E = { [key:string]: { [key:string]: T } | undefined}, R = any>(
   data: any,
   schema: Schema<T>
 ): NormalizedSchema<E, R>;
