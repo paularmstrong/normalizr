@@ -268,10 +268,7 @@ const books = [
   {id: '3', name: "Book 3", author: 3 }
 ]
 
-const authorSchema = new schema.Entity('authors');
-const bookSchema = new schema.Entity('books', {
-  author: authorSchema
-}, {
+const authorSchema = new schema.Entity('authors', {}, {
   fallbackStrategy: (key, schema) => {
     return {
       [schema.idAttribute]: key,
@@ -280,6 +277,23 @@ const bookSchema = new schema.Entity('books', {
     };
   }
 });
+const bookSchema = new schema.Entity('books', {
+  author: authorSchema
+});
+
+denormalize([1, 2, 3], [bookSchema], {
+  books: toEntity(books),
+  authors: toEntity(users)
+})
+
+function toEntity(arr, idAttribute = 'id') {
+  return arr.reduce((acc, x) => {
+    return {
+      ...acc,
+      [x[idAttribute]]: x
+    }
+  }, {})
+}
 
 ```
 
