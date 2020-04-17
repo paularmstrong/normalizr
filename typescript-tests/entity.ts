@@ -14,7 +14,11 @@ type Tweet = {
 const data = {
   /* ...*/
 };
-const user = new schema.Entity('users', {}, { idAttribute: 'id_str' });
+const user = new schema.Entity<User>(
+  'users',
+  {},
+  { idAttribute: 'id_str', fallbackStrategy: (key) => ({ id_str: key, name: 'Unknown' }) }
+);
 const tweet = new schema.Entity(
   'tweets',
   { user: user },
