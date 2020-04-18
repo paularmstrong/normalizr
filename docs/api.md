@@ -258,20 +258,17 @@ normalize(data, [patronsSchema]);
 
 #### `fallbackStrategy` Usage
 ```js
-const users = [
-  { id: '1', name: "Emily", requestState: 'SUCCEEDED' },
-  { id: '2', name: "Douglas", requestState: 'SUCCEEDED' }
-];
-const books = [
-  {id: '1', name: "Book 1", author: 1 },
-  {id: '2', name: "Book 2", author: 2 },
-  {id: '3', name: "Book 3", author: 3 }
-]
+const users = {
+  '1': { id: '1', name: "Emily", requestState: 'SUCCEEDED' },
+  '2': { id: '2', name: "Douglas", requestState: 'SUCCEEDED' }
+};
+const books = {
+  '1': {id: '1', name: "Book 1", author: 1 },
+  '2': {id: '2', name: "Book 2", author: 2 },
+  '3': {id: '3', name: "Book 3", author: 3 }
+};
 
-const authorSchema = new schema.Entity('authors');
-const bookSchema = new schema.Entity('books', {
-  author: authorSchema
-}, {
+const authorSchema = new schema.Entity('authors', {}, {
   fallbackStrategy: (key, schema) => {
     return {
       [schema.idAttribute]: key,
@@ -280,6 +277,14 @@ const bookSchema = new schema.Entity('books', {
     };
   }
 });
+const bookSchema = new schema.Entity('books', {
+  author: authorSchema
+});
+
+denormalize([1, 2, 3], [bookSchema], {
+  books,
+  authors: users
+})
 
 ```
 
