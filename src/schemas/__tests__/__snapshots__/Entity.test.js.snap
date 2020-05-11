@@ -289,7 +289,7 @@ Object {
 }
 `;
 
-exports[`EntitySchema normalization keyNamingStrategy normalizes nested entities 1`] = `
+exports[`EntitySchema normalization keyNamingStrategy normalizes nested entities with camelCase 1`] = `
 Object {
   "entities": Object {
     "articles": Object {
@@ -307,14 +307,40 @@ Object {
       "comment-123-4738": Object {
         "comment": "I like it!",
         "id": "comment-123-4738",
-        "userId": "10293",
       },
     },
     "users": Object {
-      "10293": Object {
-        "id": "10293",
-        "name": "Jane",
+      "8472": Object {
+        "id": "8472",
+        "name": "Paul",
       },
+    },
+  },
+  "result": "123",
+}
+`;
+
+exports[`EntitySchema normalization keyNamingStrategy normalizes nested entities with snakeCase 1`] = `
+Object {
+  "entities": Object {
+    "articles": Object {
+      "123": Object {
+        "author_id": "8472",
+        "body": "This article is great.",
+        "comments_ids": Array [
+          "comment-123-4738",
+        ],
+        "id": "123",
+        "title": "A Great Article",
+      },
+    },
+    "comments": Object {
+      "comment-123-4738": Object {
+        "comment": "I like it!",
+        "id": "comment-123-4738",
+      },
+    },
+    "users": Object {
       "8472": Object {
         "id": "8472",
         "name": "Paul",

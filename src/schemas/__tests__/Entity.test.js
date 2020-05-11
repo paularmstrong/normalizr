@@ -116,15 +116,9 @@ describe(`${schema.Entity.name} normalization`, () => {
   });
 
   describe('keyNamingStrategy', () => {
-    test('normalizes nested entities', () => {
+    test('normalizes nested entities with camelCase', () => {
       const user = new schema.Entity('users', {}, { keyNamingStrategy: 'camelCase' });
-      const comment = new schema.Entity(
-        'comments',
-        {
-          user: user
-        },
-        { keyNamingStrategy: 'camelCase' }
-      );
+      const comment = new schema.Entity('comments', {}, { keyNamingStrategy: 'camelCase' });
       const article = new schema.Entity(
         'articles',
         {
@@ -145,11 +139,37 @@ describe(`${schema.Entity.name} normalization`, () => {
         comments: [
           {
             id: 'comment-123-4738',
-            comment: 'I like it!',
-            user: {
-              id: '10293',
-              name: 'Jane'
-            }
+            comment: 'I like it!'
+          }
+        ]
+      };
+      expect(normalize(input, article)).toMatchSnapshot();
+    });
+
+    test('normalizes nested entities with snakeCase', () => {
+      const user = new schema.Entity('users', {}, { keyNamingStrategy: 'snakeCase' });
+      const comment = new schema.Entity('comments', {}, { keyNamingStrategy: 'snakeCase' });
+      const article = new schema.Entity(
+        'articles',
+        {
+          author: user,
+          comments: [comment]
+        },
+        { keyNamingStrategy: 'snakeCase' }
+      );
+
+      const input = {
+        id: '123',
+        title: 'A Great Article',
+        author: {
+          id: '8472',
+          name: 'Paul'
+        },
+        body: 'This article is great.',
+        comments: [
+          {
+            id: 'comment-123-4738',
+            comment: 'I like it!'
           }
         ]
       };

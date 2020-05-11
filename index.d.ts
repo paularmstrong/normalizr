@@ -13,7 +13,7 @@ declare namespace schema {
     idAttribute?: string | SchemaFunction
     mergeStrategy?: MergeFunction
     processStrategy?: StrategyFunction<T>
-    fallbackStrategy?: FallbackFunction<T>,
+    fallbackStrategy?: FallbackFunction<T>
     keyNamingStrategy?: 'camelCase' | 'snakeCase' | null
   }
 
