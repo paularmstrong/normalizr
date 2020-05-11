@@ -114,6 +114,48 @@ describe(`${schema.Entity.name} normalization`, () => {
       expect(normalize({ message: { id: '123', data: { attachment: { id: '456' } } } }, myEntity)).toMatchSnapshot();
     });
   });
+
+  describe('keyNamingStrategy', () => {
+    test('normalizes nested entities', () => {
+      const user = new schema.Entity('users', {}, { keyNamingStrategy: 'camelCase' });
+      const comment = new schema.Entity(
+        'comments',
+        {
+          user: user
+        },
+        { keyNamingStrategy: 'camelCase' }
+      );
+      const article = new schema.Entity(
+        'articles',
+        {
+          author: user,
+          comments: [comment]
+        },
+        { keyNamingStrategy: 'camelCase' }
+      );
+
+      const input = {
+        id: '123',
+        title: 'A Great Article',
+        author: {
+          id: '8472',
+          name: 'Paul'
+        },
+        body: 'This article is great.',
+        comments: [
+          {
+            id: 'comment-123-4738',
+            comment: 'I like it!',
+            user: {
+              id: '10293',
+              name: 'Jane'
+            }
+          }
+        ]
+      };
+      expect(normalize(input, article)).toMatchSnapshot();
+    });
+  });
 });
 
 describe(`${schema.Entity.name} denormalization`, () => {
@@ -328,5 +370,54 @@ describe(`${schema.Entity.name} denormalization`, () => {
     expect(denormalizedReport.publishedBy.name).toBe('John Doe');
     expect(denormalizedReport.publishedBy.userId).toBe('456');
     //
+  });
+
+  test('denormalizes nested entities with keyNamingStrategy', () => {
+    const user = new schema.Entity('users', {}, { keyNamingStrategy: 'camelCase' });
+    const comment = new schema.Entity(
+      'comments',
+      {
+        user: user
+      },
+      { keyNamingStrategy: 'camelCase' }
+    );
+    const article = new schema.Entity(
+      'articles',
+      {
+        author: user,
+        comments: [comment]
+      },
+      { keyNamingStrategy: 'camelCase' }
+    );
+
+    const entities = {
+      articles: {
+        '123': {
+          authorId: '8472',
+          body: 'This article is great.',
+          commentsIds: ['comment-123-4738'],
+          id: '123',
+          title: 'A Great Article'
+        }
+      },
+      comments: {
+        'comment-123-4738': {
+          comment: 'I like it!',
+          id: 'comment-123-4738',
+          userId: '10293'
+        }
+      },
+      users: {
+        '10293': {
+          id: '10293',
+          name: 'Jane'
+        },
+        '8472': {
+          id: '8472',
+          name: 'Paul'
+        }
+      }
+    };
+    expect(denormalize('123', article, entities)).toMatchSnapshot();
   });
 });
