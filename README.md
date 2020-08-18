@@ -61,22 +61,22 @@ Consider a typical blog post. The API response for a single post might look some
 }
 ```
 
-We have two nested entity types within our `article`: `users` and `comments`. Using various `schema`, we can normalize all three entity types down:
+We have two nested entity types within our `article`: `author` and `comments`. Using various `schema`, we can normalize all three entity types down:
 
 ```js
 import { normalize, schema } from 'normalizr';
 
-// Define a users schema
-const user = new schema.Entity('users');
+// Define a author schema
+const author = new schema.Entity('author');
 
 // Define your comments schema
 const comment = new schema.Entity('comments', {
-  commenter: user
+  commenter: author
 });
 
 // Define your article
 const article = new schema.Entity('articles', {
-  author: user,
+  author: author,
   comments: [comment]
 });
 
@@ -97,7 +97,7 @@ Now, `normalizedData` will be:
         comments: [ "324" ]
       }
     },
-    "users": {
+    "author": {
       "1": { "id": "1", "name": "Paul" },
       "2": { "id": "2", "name": "Nicole" }
     },
