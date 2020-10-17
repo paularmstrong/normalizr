@@ -12,8 +12,8 @@ export default function reducer(state = {}, action) {
           ...mergedUsers,
           [id]: {
             ...(mergedUsers[id] || {}),
-            ...user
-          }
+            ...user,
+          },
         };
       }, state);
 

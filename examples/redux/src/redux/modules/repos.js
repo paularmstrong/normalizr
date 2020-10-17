@@ -5,7 +5,7 @@ export default function reducer(state = {}, action) {
     case Action.SET_REPO:
       return {
         ...state,
-        ...action.payload
+        ...action.payload,
       };
 
     default:
@@ -14,14 +14,14 @@ export default function reducer(state = {}, action) {
 }
 
 const Action = {
-  SET_REPO: 'SET_REPO'
+  SET_REPO: 'SET_REPO',
 };
 
 export const setRepo = (slug) => {
   const [owner, repo] = slug.split('/');
   return {
     type: Action.SET_REPO,
-    payload: { owner, repo }
+    payload: { owner, repo },
   };
 };
 

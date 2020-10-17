@@ -16,7 +16,7 @@ const userMergeStrategy = (entityA, entityB) => {
     ...entityA,
     ...entityB,
     posts: [...(entityA.posts || []), ...(entityB.posts || [])],
-    comments: [...(entityA.comments || []), ...(entityB.comments || [])]
+    comments: [...(entityA.comments || []), ...(entityB.comments || [])],
   };
 };
 
@@ -25,25 +25,25 @@ const user = new schema.Entity(
   {},
   {
     mergeStrategy: userMergeStrategy,
-    processStrategy: userProcessStrategy
+    processStrategy: userProcessStrategy,
   }
 );
 
 const comment = new schema.Entity(
   'comments',
   {
-    commenter: user
+    commenter: user,
   },
   {
     processStrategy: (value, parent, key) => {
       return { ...value, post: parent.id };
-    }
+    },
   }
 );
 
 const post = new schema.Entity('posts', {
   author: user,
-  comments: [comment]
+  comments: [comment],
 });
 
 export default [post];

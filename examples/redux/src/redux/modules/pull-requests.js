@@ -10,7 +10,7 @@ export default function reducer(state = {}, action) {
     case ADD_ENTITIES:
       return {
         ...state,
-        ...action.payload.pullRequests
+        ...action.payload.pullRequests,
       };
 
     default:
@@ -25,7 +25,7 @@ export const getPullRequests = ({ page = 0 } = {}) => (dispatch, getState, { api
   return api.pullRequests
     .getAll({
       owner,
-      repo
+      repo,
     })
     .then((response) => {
       const data = normalize(response, [schema.pullRequest]);

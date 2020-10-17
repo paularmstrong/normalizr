@@ -11,8 +11,8 @@ const request = https.request(
     path: '/repos/paularmstrong/normalizr/issues',
     method: 'get',
     headers: {
-      'user-agent': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)'
-    }
+      'user-agent': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0)',
+    },
   },
   (res) => {
     res.on('data', (d) => {

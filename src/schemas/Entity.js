@@ -15,7 +15,7 @@ export default class EntitySchema {
         return { ...entityA, ...entityB };
       },
       processStrategy = (input) => ({ ...input }),
-      fallbackStrategy = (key, schema) => undefined
+      fallbackStrategy = (key, schema) => undefined,
     } = options;
 
     this._key = key;

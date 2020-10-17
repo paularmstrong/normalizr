@@ -5,20 +5,20 @@ module.exports = {
     ecmaVersion: 7,
     ecmaFeatures: {
       experimentalObjectRestSpread: true,
-      jsx: true
+      jsx: true,
     },
-    sourceType: 'module'
+    sourceType: 'module',
   },
   extends: ['plugin:jest/recommended', 'prettier'],
   plugins: ['json', 'prettier'],
   env: {
     es6: true,
-    node: true
+    node: true,
   },
   globals: {
     document: false,
     navigator: false,
-    window: false
+    window: false,
   },
   rules: {
     'accessor-pairs': 'error',
@@ -111,7 +111,7 @@ module.exports = {
     'spaced-comment': [
       'error',
       'always',
-      { markers: ['global', 'globals', 'eslint', 'eslint-disable', '*package', '!', ','] }
+      { markers: ['global', 'globals', 'eslint', 'eslint-disable', '*package', '!', ','] },
     ],
     'use-isnan': 'error',
     'valid-typeof': 'error',
@@ -127,6 +127,6 @@ module.exports = {
     'jest/prefer-to-have-length': 'error',
     'jest/valid-describe': 'error',
     'jest/valid-expect': 'error',
-    'jest/valid-expect-in-promise': 'error'
-  }
+    'jest/valid-expect-in-promise': 'error',
+  },
 };

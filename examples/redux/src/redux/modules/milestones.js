@@ -10,7 +10,7 @@ export default function reducer(state = {}, action) {
     case ADD_ENTITIES:
       return {
         ...state,
-        ...action.payload.milestones
+        ...action.payload.milestones,
       };
 
     default:
@@ -25,7 +25,7 @@ export const getMilestones = ({ page = 0 } = {}) => (dispatch, getState, { api, 
   return api.issues
     .getMilestones({
       owner,
-      repo
+      repo,
     })
     .then((response) => {
       const data = normalize(response, [schema.milestone]);

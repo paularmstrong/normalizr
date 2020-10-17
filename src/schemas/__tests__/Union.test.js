@@ -13,7 +13,7 @@ describe(`${schema.Union.name} normalization`, () => {
     const union = new schema.Union(
       {
         users: user,
-        groups: group
+        groups: group,
       },
       'type'
     );
@@ -28,7 +28,7 @@ describe(`${schema.Union.name} normalization`, () => {
     const union = new schema.Union(
       {
         users: user,
-        groups: group
+        groups: group,
       },
       (input) => {
         return input.username ? 'users' : input.groupname ? 'groups' : null;
@@ -46,18 +46,18 @@ describe(`${schema.Union.name} denormalization`, () => {
   const group = new schema.Entity('groups');
   const entities = {
     users: {
-      1: { id: 1, username: 'Janey', type: 'users' }
+      1: { id: 1, username: 'Janey', type: 'users' },
     },
     groups: {
-      2: { id: 2, groupname: 'People', type: 'groups' }
-    }
+      2: { id: 2, groupname: 'People', type: 'groups' },
+    },
   };
 
   test('denormalizes an object using string schemaAttribute', () => {
     const union = new schema.Union(
       {
         users: user,
-        groups: group
+        groups: group,
       },
       'type'
     );
@@ -73,7 +73,7 @@ describe(`${schema.Union.name} denormalization`, () => {
     const union = new schema.Union(
       {
         users: user,
-        groups: group
+        groups: group,
       },
       (input) => {
         return input.username ? 'users' : 'groups';
@@ -91,7 +91,7 @@ describe(`${schema.Union.name} denormalization`, () => {
     const union = new schema.Union(
       {
         users: user,
-        groups: group
+        groups: group,
       },
       (input) => {
         return input.username ? 'users' : 'groups';

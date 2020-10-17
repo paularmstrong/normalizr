@@ -15,7 +15,7 @@ export default {
     { file: `${destBase}.es${destExtension}`, format: 'es' },
     { file: `${destBase}.umd${destExtension}`, format: 'umd', name },
     { file: `${destBase}.amd${destExtension}`, format: 'amd', name },
-    { file: `${destBase}.browser${destExtension}`, format: 'iife', name }
+    { file: `${destBase}.browser${destExtension}`, format: 'iife', name },
   ],
-  plugins: [babel({}), isProduction && terser(), filesize()].filter(Boolean)
+  plugins: [babel({}), isProduction && terser(), filesize()].filter(Boolean),
 };

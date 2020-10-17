@@ -10,7 +10,7 @@ export default function reducer(state = {}, action) {
     case ADD_ENTITIES:
       return {
         ...state,
-        ...action.payload.commits
+        ...action.payload.commits,
       };
 
     default:
@@ -25,7 +25,7 @@ export const getCommits = ({ page = 0 } = {}) => (dispatch, getState, { api, sch
   return api.repos
     .getCommits({
       owner,
-      repo
+      repo,
     })
     .then((response) => {
       const data = normalize(response, [schema.commit]);
