@@ -1,7 +1,12 @@
+# v3.6.1
+
+- **Fixed** Add types for fallback strategy
+- **Chore** Upgraded development dependencies
+
 # v3.6.0
 
-* **Added** `fallbackStrategy` for denormalization (#422)
-* **Fixed** entities can be `undefined` in TS defs if none found (#435)
+- **Added** `fallbackStrategy` for denormalization (#422)
+- **Fixed** entities can be `undefined` in TS defs if none found (#435)
 
 # v3.5.0
 
