@@ -67,7 +67,7 @@
     "eslint-plugin-jest": "^24.1.0",
     "eslint-plugin-json": "^2.1.2",
     "eslint-plugin-prettier": "^3.1.4",
-    "flow-bin": "^0.101.0",
+    "flow-bin": "^0.136.0",
     "husky": "^2.3.0",
     "immutable": "^3.8.1",
     "jest": "^24.8.0",
