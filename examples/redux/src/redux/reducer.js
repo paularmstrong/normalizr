@@ -14,7 +14,7 @@ const reducer = combineReducers({
   [MILESTONES_STATE_KEY]: milestones,
   [PULLREQUESTS_STATE_KEY]: pullRequests,
   [REPO_STATE_KEY]: repos,
-  [USERS_STATE_KEY]: users
+  [USERS_STATE_KEY]: users,
 });
 
 export default reducer;

@@ -38,7 +38,7 @@ export const schema = {
   Entity: EntitySchema,
   Object: ObjectSchema,
   Union: UnionSchema,
-  Values: ValuesSchema
+  Values: ValuesSchema,
 };
 
 export const normalize = (input, schema) => {

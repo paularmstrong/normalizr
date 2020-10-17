@@ -18,8 +18,8 @@ const start = () => {
             return 'Repo slug must be in the form "user/project"';
           }
           return true;
-        }
-      }
+        },
+      },
     ])
     .then(({ repo }) => {
       store.dispatch(Action.setRepo(repo));
@@ -34,8 +34,8 @@ const main = () => {
         type: 'list',
         name: 'action',
         message: 'What would you like to do?',
-        choices: ['Browse current state', 'Get new data', new inquirer.Separator(), 'Quit']
-      }
+        choices: ['Browse current state', 'Get new data', new inquirer.Separator(), 'Quit'],
+      },
     ])
     .then(({ action }) => {
       switch (action) {
@@ -62,10 +62,10 @@ const browseMain = () => {
             new inquirer.Separator(),
             ...Object.keys(store.getState()).map((value) => ({ value, name: `Browse ${value}` })),
             new inquirer.Separator(),
-            { value: 'main', name: 'Go Back to Main Menu' }
+            { value: 'main', name: 'Go Back to Main Menu' },
           ];
-        }
-      }
+        },
+      },
     ])
     .then((answers) => {
       switch (answers.browseMainAction) {
@@ -95,16 +95,16 @@ const browse = (stateKey) => {
           { value: 'denormalize', name: 'Denormalize' },
           new inquirer.Separator(),
           { value: 'browseMain', name: 'Go Back to Browse Menu' },
-          { value: 'main', name: 'Go Back to Main Menu' }
-        ]
+          { value: 'main', name: 'Go Back to Main Menu' },
+        ],
       },
       {
         type: 'list',
         name: 'list',
         message: `Select the ${stateKey} to view:`,
         choices: Object.keys(store.getState()[stateKey]),
-        when: ({ action }) => action === 'view'
-      }
+        when: ({ action }) => action === 'view',
+      },
     ])
     .then(({ action, list }) => {
       const state = store.getState()[stateKey];
@@ -144,9 +144,9 @@ const browseDenormalized = (stateKey) => {
           ...Object.keys(store.getState()[stateKey]),
           new inquirer.Separator(),
           { value: 'browse', name: 'Go Back to Browse Menu' },
-          { value: 'main', name: 'Go Back to Main Menu' }
-        ]
-      }
+          { value: 'main', name: 'Go Back to Main Menu' },
+        ],
+      },
     ])
     .then(({ selector }) => {
       switch (selector) {
@@ -174,10 +174,10 @@ const pull = () => {
           return [
             ...Object.keys(store.getState()).map((value) => ({ value, name: value })),
             new inquirer.Separator(),
-            { value: 'main', name: 'Go Back to Main Menu' }
+            { value: 'main', name: 'Go Back to Main Menu' },
           ];
-        }
-      }
+        },
+      },
     ])
     .then((answers) => {
       switch (answers.pullAction) {

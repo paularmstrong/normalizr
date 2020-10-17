@@ -7,7 +7,7 @@ export default class ValuesSchema extends PolymorphicSchema {
       return value !== undefined && value !== null
         ? {
             ...output,
-            [key]: this.normalizeValue(value, input, key, visit, addEntity, visitedEntities)
+            [key]: this.normalizeValue(value, input, key, visit, addEntity, visitedEntities),
           }
         : output;
     }, {});
@@ -18,7 +18,7 @@ export default class ValuesSchema extends PolymorphicSchema {
       const entityOrId = input[key];
       return {
         ...output,
-        [key]: this.denormalizeValue(entityOrId, unvisit)
+        [key]: this.denormalizeValue(entityOrId, unvisit),
       };
     }, {});
   }
