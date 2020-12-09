@@ -36,6 +36,8 @@ export default class ArraySchema extends PolymorphicSchema {
   }
 
   denormalize(input, unvisit) {
-    return input && input.map ? input.map((value) => this.denormalizeValue(value, unvisit)) : input;
+    return input && input.map
+      ? input.map((value) => this.denormalizeValue(value, unvisit)).filter((value) => value !== undefined)
+      : input;
   }
 }
