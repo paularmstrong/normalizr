@@ -6,8 +6,8 @@
   - [Array](#arraydefinition-schemaattribute)
   - [Entity](#entitykey-definition---options--)
   - [Object](#objectdefinition)
-  - [Union](#uniondefinition-schemaattribute)
   - [Values](#valuesdefinition-schemaattribute)
+  - [Union](#uniondefinition-schemaattribute)
 
 ## `normalize(data, schema)`
 
