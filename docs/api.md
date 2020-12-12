@@ -451,14 +451,14 @@ const normalizedData = normalize(data, valuesSchema);
 #### Output
 
 ```js
-    {
-      entities: { 
-        items: { "1": { id: 1, type: 1 } },
-        others: { "2": { id: 2, type: 2 } }
-      },
-      result: [
-        { id: 1, schema: "item" },
-        { id: 2, schema: "other" }
-      ]
-    }
+{
+  entities: { 
+    items: { "1": { id: 1, type: 1 } },
+    others: { "2": { id: 2, type: 2 } }
+  },
+  result: [
+    { id: 1, schema: "item" },
+    { id: 2, schema: "other" }
+  ]
+}
 ```
