@@ -88,8 +88,6 @@ _Note: The same behavior can be defined with shorthand syntax: `[ mySchema ]`_
 
 #### Usage
 
-To describe a simple array of a singular entity type:
-
 ```js
 const data = [{ id: '123', name: 'Jim' }, { id: '456', name: 'Jane' }];
 const userSchema = new schema.Entity('users');
@@ -414,9 +412,13 @@ const normalizedData = normalize(data, valuesSchema);
 ```js
 {
   entities: {
-    items: { '1': { id: 1 }, '2': { id: 2 } }
+    items: { "1": { id: 1, type: 1 } },
+    others: { "2": { id: 2, type: 2 }}
   },
-  result: { firstThing: 1, secondThing: 2 }
+  result: {
+    firstThing: { id: 1, schema: "item" },
+    secondThing: { id: 2, schema: "other" }
+  }
 }
 ```
 
@@ -449,10 +451,14 @@ const normalizedData = normalize(data, valuesSchema);
 #### Output
 
 ```js
-{
-  entities: {
-    items: { '1': { id: 1 }, '2': { id: 2 } }
-  },
-  result: { firstThing: 1, secondThing: 2 }
-}
+    {
+      entities: { 
+        items: { "1": { id: 1, type: 1 } },
+        others: { "2": { id: 2, type: 2 } }
+      },
+      result: [
+        { id: 1, schema: "item" },
+        { id: 2, schema: "other" }
+      ]
+    }
 ```
