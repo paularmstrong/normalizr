@@ -80,7 +80,7 @@ Creates a schema to normalize an array of schemas. If the input value is an `Obj
 
 _Note: The same behavior can be defined with shorthand syntax: `[ mySchema ]`_
 
-- `definition`: **required** A singular schema that this array contains.
+- `definition`: **required** A schema that this array contains.
 
 #### Instance Methods
 
@@ -308,7 +308,7 @@ const normalizedData = normalize(data, responseSchema);
 
 Describes a map whose values follow the given schema.
 
-- `definition`: **required** A singular schema that this array contains.
+- `definition`: **required** A schema that this array contains.
 
 #### Instance Methods
 
