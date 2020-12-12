@@ -74,17 +74,13 @@ const denormalizedData = denormalize({ users: [1, 2] }, mySchema, entities);
 
 ## `schema`
 
-### `Array(definition, schemaAttribute)`
+### `Array(definition)`
 
 Creates a schema to normalize an array of schemas. If the input value is an `Object` instead of an `Array`, the normalized result will be an `Array` of the `Object`'s values.
 
 _Note: The same behavior can be defined with shorthand syntax: `[ mySchema ]`_
 
-- `definition`: **required** A singular schema that this array contains _or_ a mapping of schema to attribute values.
-- `schemaAttribute`: _optional_ (required if `definition` is not a singular schema) The attribute on each entity found that defines what schema, per the definition mapping, to use when normalizing.  
-  Can be a string or a function. If given a function, accepts the following arguments:  
-   _ `value`: The input value of the entity.
-  _ `parent`: The parent object of the input array. \* `key`: The key at which the input array appears on the parent object.
+- `definition`: **required** A singular schema that this array contains.
 
 #### Instance Methods
 
@@ -116,43 +112,6 @@ const normalizedData = normalize(data, userListSchema);
     }
   },
   result: [ '123', '456' ]
-}
-```
-
-If your input data is an array of more than one type of entity, it is necessary to define a schema mapping.
-
-_Note: If your data returns an object that you did not provide a mapping for, the original object will be returned in the result and an entity will not be created._
-
-For example:
-
-```js
-const data = [{ id: 1, type: 'admin' }, { id: 2, type: 'user' }];
-
-const userSchema = new schema.Entity('users');
-const adminSchema = new schema.Entity('admins');
-const myArray = new schema.Array(
-  {
-    admins: adminSchema,
-    users: userSchema
-  },
-  (input, parent, key) => `${input.type}s`
-);
-
-const normalizedData = normalize(data, myArray);
-```
-
-#### Output
-
-```js
-{
-  entities: {
-    admins: { '1': { id: 1, type: 'admin' } },
-    users: { '2': { id: 2, type: 'user' } }
-  },
-  result: [
-    { id: 1, schema: 'admins' },
-    { id: 2, schema: 'users' }
-  ]
 }
 ```
 
@@ -347,9 +306,41 @@ const normalizedData = normalize(data, responseSchema);
 }
 ```
 
+### `Values(definition)`
+
+Describes a map whose values follow the given schema.
+
+- `definition`: **required** A singular schema that this array contains.
+
+#### Instance Methods
+
+- `define(definition)`: When used, the `definition` passed in will be merged with the original definition passed to the `Values` constructor. This method tends to be useful for creating circular references in schema.
+
+#### Usage
+
+```js
+const data = { firstThing: { id: 1 }, secondThing: { id: 2 } };
+
+const item = new schema.Entity('items');
+const valuesSchema = new schema.Values(item);
+
+const normalizedData = normalize(data, valuesSchema);
+```
+
+#### Output
+
+```js
+{
+  entities: {
+    items: { '1': { id: 1 }, '2': { id: 2 } }
+  },
+  result: { firstThing: 1, secondThing: 2 }
+}
+```
+
 ### `Union(definition, schemaAttribute)`
 
-Describe a schema which is a union of multiple schemas. This is useful if you need the polymorphic behavior provided by `schema.Array` or `schema.Values` but for non-collection fields.
+Describe a schema which is a union of multiple schemas. This is useful if you need the polymorphic behavior.
 
 - `definition`: **required** An object mapping the definition of the nested entities found within the input array
 - `schemaAttribute`: **required** The attribute on each entity found that defines what schema, per the definition mapping, to use when normalizing.  
@@ -393,28 +384,27 @@ const normalizedData = normalize(data, { owner: unionSchema });
 }
 ```
 
-### `Values(definition, schemaAttribute)`
-
-Describes a map whose values follow the given schema.
-
-- `definition`: **required** A singular schema that this array contains _or_ a mapping of schema to attribute values.
-- `schemaAttribute`: _optional_ (required if `definition` is not a singular schema) The attribute on each entity found that defines what schema, per the definition mapping, to use when normalizing.  
-  Can be a string or a function. If given a function, accepts the following arguments:
-  - `value`: The input value of the entity.
-  - `parent`: The parent object of the input array.
-  - `key`: The key at which the input array appears on the parent object.
-
-#### Instance Methods
-
-- `define(definition)`: When used, the `definition` passed in will be merged with the original definition passed to the `Values` constructor. This method tends to be useful for creating circular references in schema.
-
-#### Usage
-
 ```js
-const data = { firstThing: { id: 1 }, secondThing: { id: 2 } };
+const data = { firstThing: { id: 1, type: 1 }, secondThing: { id: 2, type: 2 } };
 
 const item = new schema.Entity('items');
-const valuesSchema = new schema.Values(item);
+const other = new schema.Entity('others');
+
+const unionSchema = new schema.Union(
+  {
+    item: item,
+    other: other
+  },
+  (value, parent, key) => {
+    if(value.type === 1){
+      return 'item';
+    }
+    
+    return 'other';
+  }
+);
+
+const valuesSchema = new schema.Values(unionSchema);
 
 const normalizedData = normalize(data, valuesSchema);
 ```
@@ -430,27 +420,28 @@ const normalizedData = normalize(data, valuesSchema);
 }
 ```
 
-If your input data is an object that has values of more than one type of entity, but their schema is not easily defined by the key, you can use a mapping of schema, much like `schema.Union` and `schema.Array`.
-
-_Note: If your data returns an object that you did not provide a mapping for, the original object will be returned in the result and an entity will not be created._
-
-For example:
 
 ```js
-const data = {
-  '1': { id: 1, type: 'admin' },
-  '2': { id: 2, type: 'user' }
-};
+const data = [{ id: 1, type: 1 }, { id: 2, type: 2 } ];
 
-const userSchema = new schema.Entity('users');
-const adminSchema = new schema.Entity('admins');
-const valuesSchema = new schema.Values(
+const item = new schema.Entity('items');
+const other = new schema.Entity('others');
+
+const unionSchema = new schema.Union(
   {
-    admins: adminSchema,
-    users: userSchema
+    item: item,
+    other: other
   },
-  (input, parent, key) => `${input.type}s`
+  (value, parent, key) => {
+    if(value.type === 1){
+      return 'item';
+    }
+    
+    return 'other';
+  }
 );
+
+const valuesSchema = new schema.Array(unionSchema);
 
 const normalizedData = normalize(data, valuesSchema);
 ```
@@ -460,12 +451,8 @@ const normalizedData = normalize(data, valuesSchema);
 ```js
 {
   entities: {
-    admins: { '1': { id: 1, type: 'admin' } },
-    users: { '2': { id: 2, type: 'user' } }
+    items: { '1': { id: 1 }, '2': { id: 2 } }
   },
-  result: {
-    '1': { id: 1, schema: 'admins' },
-    '2': { id: 2, schema: 'users' }
-  }
+  result: { firstThing: 1, secondThing: 2 }
 }
 ```
