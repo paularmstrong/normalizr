@@ -3,10 +3,10 @@
 - [normalize](#normalizedata-schema)
 - [denormalize](#denormalizeinput-schema-entities)
 - [schema](#schema)
-  - [Array](#arraydefinition-schemaattribute)
+  - [Array](#arraydefinition)
   - [Entity](#entitykey-definition---options--)
   - [Object](#objectdefinition)
-  - [Values](#valuesdefinition-schemaattribute)
+  - [Values](#valuesdefinition)
   - [Union](#uniondefinition-schemaattribute)
 
 ## `normalize(data, schema)`
