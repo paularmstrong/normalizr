@@ -44,7 +44,7 @@
     "test": "jest && npx check-dts",
     "test:ci": "jest --ci",
     "test:coverage": "npm run test -- --coverage && cat ./coverage/lcov.info | coveralls",
-    "tsc:ci": "tsc --noEmit typescript-tests/*",
+    "tsc:ci": "tsc --noEmit",
     "typecheck": "run-p flow:ci tsc:ci"
   },
   "author": "Paul Armstrong",

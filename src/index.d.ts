@@ -1,13 +1,13 @@
 type KeyType = string | number;
 type Entities = Record<string, Record<KeyType, any> | undefined>;
-type AddEntityType = (schema: schema.Entity<any, any>, processedEntity: any, value: any, parent: any, key: string) => void;
+type AddEntityType = (schema: schema.Entity<any, any, any>, processedEntity: any, value: any, parent: any, key: string) => void;
 type VisitType = (value: any, parent: any, key: string, schema: ExtendedSchema , addEntity: AddEntityType, visitedEntities: Entities) => NormalizedResult;
 type UnvisitType = (input: NormalizedResult[], schema: ExtendedSchema) => any;
 type IdFunction<T> = (input: T, parent: any, key: string) => (string | null)
-type EntityOptions<T, IdType extends string | IdFunction<T>> = {
+type EntityOptions<T, IdType extends string | IdFunction<T>, ProcessType = T> = {
   idAttribute?: IdType,
   mergeStrategy?: (entityA: any, entityB: any) => any,
-  processStrategy?: (input: T, parent: any, key: string) => any,
+  processStrategy?: (input: T, parent: any, key: string) => ProcessType,
   fallbackStrategy?: (key: string, schema: schema.Entity<T, IdType>) => any
 };
 
@@ -27,26 +27,33 @@ export namespace schema {
     denormalizeValue(value: any, unvisit: UnvisitType): any
   }
 
-  export class Entity<T = any, IdType extends string | IdFunction<T> = string> extends Schema<T> {
-    constructor(key: string, definition?: Record<string, ExtendedSchema>, options?: EntityOptions<T, IdType>)
+  export class Entity<T = any, IdType extends string | IdFunction<T> = string, ProcessType = T> extends Schema<T> {
+    constructor(key: string, definition?: Record<string, ExtendedSchema>, options?: EntityOptions<T, IdType, ProcessType>)
     get key(): string
     get idAttribute(): IdType
     getId(value: any, parent: any, key: string): string | number
     merge(existingEntity: any, processedEntity: any): any
   }
 
+  // Adding 'type' to the rest of these schemas allows Typescript to differentiate them for the overloading of normalize
+  // and denormalize later on.
   export class Array<T> extends PolymorphicSchema<T[] | Record<string, T>> {
     constructor(definition: ExtendedSchema, schemaAttribute?: string | IdFunction<any>)
+    type: 'array'
   }
 
-  export class Object extends Schema {}
+  export class Object extends Schema {
+    type: 'object'
+  }
 
   export class Union extends PolymorphicSchema<any> {
     constructor(definition: Record<string, ExtendedSchema>, schemaAttribute?: string | IdFunction<any>)
+    type: 'union'
   }
 
   export class Values<T> extends PolymorphicSchema<Record<string, T>> {
     constructor(definition: Record<string, Schema>, schemaAttribute?: string | IdFunction<T>)
+    type: 'values'
   }
 }
 
@@ -58,7 +65,7 @@ type NormalizedResult = undefined | null | KeyType | { id: KeyType, schema: stri
 
 export function normalize<T = any>(
   data: T,
-  schema: schema.Entity<T>
+  schema: schema.Entity<any, any, T>
 ): {
   result: KeyType
   entities: Record<string, any>
@@ -115,7 +122,7 @@ export function denormalize(
 ): any;
 
 export function denormalize(
-  input: undefined | null | { id: KeyType, schema: string },
+  input: undefined | null | { id: KeyType, schema?: string },
   schema: schema.Union,
   entities: Record<string, any>
 ): any;

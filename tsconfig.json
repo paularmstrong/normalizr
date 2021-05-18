@@ -1,3 +1,4 @@
 {
-  "extends": "@tsconfig/recommended/tsconfig.json"
+  "extends": "@tsconfig/recommended/tsconfig.json",
+  "exclude": ["**/*.errors.ts"]
 }
