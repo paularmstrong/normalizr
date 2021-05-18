@@ -1,4 +1,4 @@
-import { normalize, schema } from '../index'
+import { normalize, schema } from '../../src';
 
 const userProcessStrategy = (value: any, parent: any, key: string) => {
   switch (key) {
@@ -16,7 +16,7 @@ const userMergeStrategy = (entityA: any, entityB: any) => {
     ...entityA,
     ...entityB,
     posts: [...(entityA.posts || []), ...(entityB.posts || [])],
-    comments: [...(entityA.comments || []), ...(entityB.comments || [])]
+    comments: [...(entityA.comments || []), ...(entityB.comments || [])],
   };
 };
 
@@ -25,25 +25,25 @@ const user = new schema.Entity(
   {},
   {
     mergeStrategy: userMergeStrategy,
-    processStrategy: userProcessStrategy
+    processStrategy: userProcessStrategy,
   }
 );
 
 const comment = new schema.Entity(
   'comments',
   {
-    commenter: user
+    commenter: user,
   },
   {
-    processStrategy: (value: any, parent: any, key: string) => {
+    processStrategy: (value: any, parent: any, _key: string) => {
       return { ...value, post: parent.id };
-    }
+    },
   }
 );
 
 const post = new schema.Entity('posts', {
   author: user,
-  comments: [comment]
+  comments: [comment],
 });
 
 const data = {

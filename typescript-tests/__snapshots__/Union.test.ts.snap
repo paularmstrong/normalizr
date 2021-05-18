@@ -1,0 +1,155 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UnionSchema denormalization denormalizes an array of multiple entities using a function to infer the schemaAttribute 1`] = `
+Object {
+  "id": 1,
+  "type": "users",
+  "username": "Janey",
+}
+`;
+
+exports[`UnionSchema denormalization denormalizes an array of multiple entities using a function to infer the schemaAttribute 2`] = `
+Immutable.Map {
+  "id": 1,
+  "username": "Janey",
+  "type": "users",
+}
+`;
+
+exports[`UnionSchema denormalization denormalizes an array of multiple entities using a function to infer the schemaAttribute 3`] = `
+Object {
+  "groupname": "People",
+  "id": 2,
+  "type": "groups",
+}
+`;
+
+exports[`UnionSchema denormalization denormalizes an array of multiple entities using a function to infer the schemaAttribute 4`] = `
+Immutable.Map {
+  "id": 2,
+  "groupname": "People",
+  "type": "groups",
+}
+`;
+
+exports[`UnionSchema denormalization denormalizes an object using string schemaAttribute 1`] = `
+Object {
+  "id": 1,
+  "type": "users",
+  "username": "Janey",
+}
+`;
+
+exports[`UnionSchema denormalization denormalizes an object using string schemaAttribute 2`] = `
+Immutable.Map {
+  "id": 1,
+  "username": "Janey",
+  "type": "users",
+}
+`;
+
+exports[`UnionSchema denormalization denormalizes an object using string schemaAttribute 3`] = `
+Object {
+  "groupname": "People",
+  "id": 2,
+  "type": "groups",
+}
+`;
+
+exports[`UnionSchema denormalization denormalizes an object using string schemaAttribute 4`] = `
+Immutable.Map {
+  "id": 2,
+  "groupname": "People",
+  "type": "groups",
+}
+`;
+
+exports[`UnionSchema denormalization returns the original value no schema is given 1`] = `
+Object {
+  "id": 1,
+}
+`;
+
+exports[`UnionSchema denormalization returns the original value no schema is given 2`] = `
+Immutable.Map {
+  "id": 1,
+}
+`;
+
+exports[`UnionSchema normalization normalizes an array of multiple entities using a function to infer the schemaAttribute 1`] = `
+Object {
+  "entities": Object {
+    "users": Object {
+      "1": Object {
+        "id": 1,
+        "username": "Janey",
+      },
+    },
+  },
+  "result": Object {
+    "id": 1,
+    "schema": "users",
+  },
+}
+`;
+
+exports[`UnionSchema normalization normalizes an array of multiple entities using a function to infer the schemaAttribute 2`] = `
+Object {
+  "entities": Object {
+    "groups": Object {
+      "2": Object {
+        "groupname": "People",
+        "id": 2,
+      },
+    },
+  },
+  "result": Object {
+    "id": 2,
+    "schema": "groups",
+  },
+}
+`;
+
+exports[`UnionSchema normalization normalizes an array of multiple entities using a function to infer the schemaAttribute 3`] = `
+Object {
+  "entities": Object {},
+  "result": Object {
+    "id": 3,
+    "notdefined": "yep",
+  },
+}
+`;
+
+exports[`UnionSchema normalization normalizes an object using string schemaAttribute 1`] = `
+Object {
+  "entities": Object {
+    "users": Object {
+      "1": Object {
+        "id": 1,
+        "type": "users",
+      },
+    },
+  },
+  "result": Object {
+    "id": 1,
+    "schema": "users",
+  },
+}
+`;
+
+exports[`UnionSchema normalization normalizes an object using string schemaAttribute 2`] = `
+Object {
+  "entities": Object {
+    "groups": Object {
+      "2": Object {
+        "id": 2,
+        "type": "groups",
+      },
+    },
+  },
+  "result": Object {
+    "id": 2,
+    "schema": "groups",
+  },
+}
+`;

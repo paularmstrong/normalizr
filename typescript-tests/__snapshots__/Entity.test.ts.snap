@@ -1,0 +1,372 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EntitySchema denormalization can denormalize already partially denormalized data 1`] = `
+Object {
+  "food": Object {
+    "id": 1,
+  },
+  "id": 1,
+}
+`;
+
+exports[`EntitySchema denormalization can denormalize already partially denormalized data 2`] = `
+Immutable.Map {
+  "id": 1,
+  "food": Immutable.Map {
+    "id": 1,
+  },
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes an entity 1`] = `
+Object {
+  "id": 1,
+  "type": "foo",
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes an entity 2`] = `
+Immutable.Map {
+  "id": 1,
+  "type": "foo",
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes deep entities 1`] = `
+Object {
+  "food": Object {
+    "id": 1,
+  },
+  "id": 1,
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes deep entities 2`] = `
+Immutable.Map {
+  "id": 1,
+  "food": Immutable.Map {
+    "id": 1,
+  },
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes deep entities 3`] = `
+Object {
+  "id": 2,
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes deep entities 4`] = `
+Immutable.Map {
+  "id": 2,
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes deep entities with records 1`] = `
+Immutable.Record {
+  "id": 1,
+  "food": Immutable.Record {
+    "id": 1,
+  },
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes deep entities with records 2`] = `
+Immutable.Record {
+  "id": 1,
+  "food": Immutable.Record {
+    "id": 1,
+  },
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes deep entities with records 3`] = `
+Immutable.Record {
+  "id": 2,
+  "food": null,
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes deep entities with records 4`] = `
+Immutable.Record {
+  "id": 2,
+  "food": null,
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes recursive dependencies 1`] = `
+Object {
+  "draftedBy": Object {
+    "id": "456",
+    "reports": Array [
+      [Circular],
+    ],
+    "role": "manager",
+  },
+  "id": "123",
+  "publishedBy": Object {
+    "id": "456",
+    "reports": Array [
+      [Circular],
+    ],
+    "role": "manager",
+  },
+  "title": "Weekly report",
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes recursive dependencies 2`] = `
+Immutable.Map {
+  "id": "123",
+  "title": "Weekly report",
+  "draftedBy": Immutable.Map {
+    "id": "456",
+    "role": "manager",
+    "reports": Immutable.List [
+      Immutable.Map {
+        "id": "123",
+        "title": "Weekly report",
+        "draftedBy": "456",
+        "publishedBy": "456",
+      },
+    ],
+  },
+  "publishedBy": Immutable.Map {
+    "id": "456",
+    "role": "manager",
+    "reports": Immutable.List [
+      Immutable.Map {
+        "id": "123",
+        "title": "Weekly report",
+        "draftedBy": "456",
+        "publishedBy": "456",
+      },
+    ],
+  },
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes recursive dependencies 3`] = `
+Object {
+  "id": "456",
+  "reports": Array [
+    Object {
+      "draftedBy": [Circular],
+      "id": "123",
+      "publishedBy": [Circular],
+      "title": "Weekly report",
+    },
+  ],
+  "role": "manager",
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes recursive dependencies 4`] = `
+Immutable.Map {
+  "id": "456",
+  "role": "manager",
+  "reports": Immutable.List [
+    Immutable.Map {
+      "id": "123",
+      "title": "Weekly report",
+      "draftedBy": Immutable.Map {
+        "id": "456",
+        "role": "manager",
+        "reports": Immutable.List [
+          "123",
+        ],
+      },
+      "publishedBy": Immutable.Map {
+        "id": "456",
+        "role": "manager",
+        "reports": Immutable.List [
+          "123",
+        ],
+      },
+    },
+  ],
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes to undefined for missing data 1`] = `
+Object {
+  "food": undefined,
+  "id": 1,
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes to undefined for missing data 2`] = `
+Immutable.Map {
+  "id": 1,
+  "food": undefined,
+}
+`;
+
+exports[`EntitySchema denormalization denormalizes to undefined for missing data 3`] = `undefined`;
+
+exports[`EntitySchema denormalization denormalizes to undefined for missing data 4`] = `undefined`;
+
+exports[`EntitySchema normalization idAttribute can build the entity's ID from the parent object 1`] = `
+Object {
+  "entities": Object {
+    "users": Object {
+      "tacos-user-4": Object {
+        "id": "4",
+        "name": "Jimmy",
+      },
+    },
+  },
+  "result": Object {
+    "name": "tacos",
+    "user": "tacos-user-4",
+  },
+}
+`;
+
+exports[`EntitySchema normalization idAttribute can normalize entity IDs based on their object key 1`] = `
+Object {
+  "entities": Object {
+    "users": Object {
+      "4": Object {
+        "name": "taco",
+      },
+      "56": Object {
+        "name": "burrito",
+      },
+    },
+  },
+  "result": Object {
+    "4": Object {
+      "id": "4",
+      "schema": "users",
+    },
+    "56": Object {
+      "id": "56",
+      "schema": "users",
+    },
+  },
+}
+`;
+
+exports[`EntitySchema normalization idAttribute can use a custom idAttribute string 1`] = `
+Object {
+  "entities": Object {
+    "users": Object {
+      "134351": Object {
+        "id_str": "134351",
+        "name": "Kathy",
+      },
+    },
+  },
+  "result": "134351",
+}
+`;
+
+exports[`EntitySchema normalization mergeStrategy can use a custom merging strategy 1`] = `
+Object {
+  "entities": Object {
+    "tacos": Object {
+      "1": Object {
+        "alias": "bar",
+        "id": 1,
+        "name": "foo",
+      },
+    },
+  },
+  "result": Array [
+    1,
+    1,
+  ],
+}
+`;
+
+exports[`EntitySchema normalization mergeStrategy defaults to plain merging 1`] = `
+Object {
+  "entities": Object {
+    "tacos": Object {
+      "1": Object {
+        "alias": "bar",
+        "id": 1,
+        "name": "bar",
+      },
+    },
+  },
+  "result": Array [
+    1,
+    1,
+  ],
+}
+`;
+
+exports[`EntitySchema normalization normalizes an entity 1`] = `
+Object {
+  "entities": Object {
+    "item": Object {
+      "1": Object {
+        "id": 1,
+      },
+    },
+  },
+  "result": 1,
+}
+`;
+
+exports[`EntitySchema normalization processStrategy can use a custom processing strategy 1`] = `
+Object {
+  "entities": Object {
+    "tacos": Object {
+      "1": Object {
+        "id": 1,
+        "name": "foo",
+        "slug": "thing-1",
+      },
+    },
+  },
+  "result": 1,
+}
+`;
+
+exports[`EntitySchema normalization processStrategy can use information from the parent in the process strategy 1`] = `
+Object {
+  "entities": Object {
+    "children": Object {
+      "4": Object {
+        "content": "child",
+        "id": 4,
+        "parentId": 1,
+        "parentKey": "child",
+      },
+    },
+    "parents": Object {
+      "1": Object {
+        "child": 4,
+        "content": "parent",
+        "id": 1,
+      },
+    },
+  },
+  "result": 1,
+}
+`;
+
+exports[`EntitySchema normalization processStrategy is run before and passed to the schema normalization 1`] = `
+Object {
+  "entities": Object {
+    "attachments": Object {
+      "456": Object {
+        "id": "456",
+      },
+    },
+    "entries": Object {
+      "123": Object {
+        "data": Object {
+          "attachment": "456",
+        },
+        "id": "123",
+        "type": "message",
+      },
+    },
+  },
+  "result": "123",
+}
+`;

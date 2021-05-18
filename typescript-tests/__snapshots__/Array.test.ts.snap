@@ -1,0 +1,487 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ArraySchema denormalization Class denormalizes a single entity 1`] = `
+Array [
+  Object {
+    "id": 1,
+    "name": "Milo",
+  },
+  Object {
+    "id": 2,
+    "name": "Jake",
+  },
+]
+`;
+
+exports[`ArraySchema denormalization Class denormalizes a single entity 2`] = `
+Array [
+  Immutable.Map {
+    "id": 1,
+    "name": "Milo",
+  },
+  Immutable.Map {
+    "id": 2,
+    "name": "Jake",
+  },
+]
+`;
+
+exports[`ArraySchema denormalization Class denormalizes multiple entities 1`] = `
+Array [
+  Object {
+    "id": "123",
+    "type": "cats",
+  },
+  Object {
+    "id": "123",
+    "type": "people",
+  },
+  Object {
+    "0": "7",
+    "1": "8",
+    "2": "9",
+  },
+  Object {
+    "id": "456",
+    "type": "cats",
+  },
+]
+`;
+
+exports[`ArraySchema denormalization Class denormalizes multiple entities 2`] = `
+Array [
+  Immutable.Map {
+    "id": "123",
+    "type": "cats",
+  },
+  Immutable.Map {
+    "id": "123",
+    "type": "people",
+  },
+  Object {
+    "0": "7",
+    "1": "8",
+    "2": "9",
+  },
+  Immutable.Map {
+    "id": "456",
+    "type": "cats",
+  },
+]
+`;
+
+exports[`ArraySchema denormalization Class does not assume mapping of schema to attribute values when schemaAttribute is not set 1`] = `
+Object {
+  "entities": Object {
+    "cats": Object {
+      "1": Object {
+        "id": 1,
+      },
+      "2": Object {
+        "id": 2,
+      },
+    },
+  },
+  "result": Array [
+    Object {
+      "cat": 1,
+      "id": 5,
+    },
+    Object {
+      "cat": 2,
+      "id": 6,
+    },
+  ],
+}
+`;
+
+exports[`ArraySchema denormalization Class returns the input value if is not an array 1`] = `
+Object {
+  "fillings": Object {},
+  "id": "123",
+}
+`;
+
+exports[`ArraySchema denormalization Class returns the input value if is not an array 2`] = `
+Immutable.Map {
+  "id": "123",
+  "fillings": Immutable.Map {},
+}
+`;
+
+exports[`ArraySchema denormalization Object denormalizes a single entity 1`] = `
+Array [
+  Object {
+    "id": 1,
+    "name": "Milo",
+  },
+  Object {
+    "id": 2,
+    "name": "Jake",
+  },
+]
+`;
+
+exports[`ArraySchema denormalization Object denormalizes a single entity 2`] = `
+Array [
+  Immutable.Map {
+    "id": 1,
+    "name": "Milo",
+  },
+  Immutable.Map {
+    "id": 2,
+    "name": "Jake",
+  },
+]
+`;
+
+exports[`ArraySchema denormalization Object returns the input value if is not an array 1`] = `
+Object {
+  "fillings": null,
+  "id": "123",
+}
+`;
+
+exports[`ArraySchema denormalization Object returns the input value if is not an array 2`] = `
+Immutable.Map {
+  "id": "123",
+  "fillings": null,
+}
+`;
+
+exports[`ArraySchema normalization Class filters out undefined and null normalized values 1`] = `
+Object {
+  "entities": Object {
+    "user": Object {
+      "123": Object {
+        "id": 123,
+      },
+    },
+  },
+  "result": Array [
+    123,
+  ],
+}
+`;
+
+exports[`ArraySchema normalization Class normalizes Objects using their values 1`] = `
+Object {
+  "entities": Object {
+    "user": Object {
+      "1": Object {
+        "id": 1,
+      },
+      "2": Object {
+        "id": 2,
+      },
+    },
+  },
+  "result": Array [
+    1,
+    2,
+  ],
+}
+`;
+
+exports[`ArraySchema normalization Class normalizes a single entity 1`] = `
+Object {
+  "entities": Object {
+    "cats": Object {
+      "1": Object {
+        "id": 1,
+      },
+      "2": Object {
+        "id": 2,
+      },
+    },
+  },
+  "result": Array [
+    1,
+    2,
+  ],
+}
+`;
+
+exports[`ArraySchema normalization Class normalizes multiple entities 1`] = `
+Object {
+  "entities": Object {
+    "cats": Object {
+      "123": Object {
+        "id": "123",
+        "type": "cats",
+      },
+      "456": Object {
+        "id": "456",
+        "type": "cats",
+      },
+    },
+    "person": Object {
+      "123": Object {
+        "id": "123",
+        "type": "people",
+      },
+    },
+  },
+  "result": Array [
+    Object {
+      "id": "123",
+      "schema": "cats",
+    },
+    Object {
+      "id": "123",
+      "schema": "people",
+    },
+    Object {
+      "id": "789",
+      "name": "fido",
+    },
+    Object {
+      "id": "456",
+      "schema": "cats",
+    },
+  ],
+}
+`;
+
+exports[`ArraySchema normalization Class normalizes multiple entities 2`] = `
+Array [
+  Array [
+    Object {
+      "id": "123",
+      "type": "cats",
+    },
+    Array [
+      Object {
+        "id": "123",
+        "type": "cats",
+      },
+      Object {
+        "id": "123",
+        "type": "people",
+      },
+      Object {
+        "id": "789",
+        "name": "fido",
+      },
+      Object {
+        "id": "456",
+        "type": "cats",
+      },
+    ],
+    null,
+  ],
+  Array [
+    Object {
+      "id": "123",
+      "type": "cats",
+    },
+    Array [
+      Object {
+        "id": "123",
+        "type": "cats",
+      },
+      Object {
+        "id": "123",
+        "type": "people",
+      },
+      Object {
+        "id": "789",
+        "name": "fido",
+      },
+      Object {
+        "id": "456",
+        "type": "cats",
+      },
+    ],
+    null,
+  ],
+  Array [
+    Object {
+      "id": "123",
+      "type": "people",
+    },
+    Array [
+      Object {
+        "id": "123",
+        "type": "cats",
+      },
+      Object {
+        "id": "123",
+        "type": "people",
+      },
+      Object {
+        "id": "789",
+        "name": "fido",
+      },
+      Object {
+        "id": "456",
+        "type": "cats",
+      },
+    ],
+    null,
+  ],
+  Array [
+    Object {
+      "id": "123",
+      "type": "people",
+    },
+    Array [
+      Object {
+        "id": "123",
+        "type": "cats",
+      },
+      Object {
+        "id": "123",
+        "type": "people",
+      },
+      Object {
+        "id": "789",
+        "name": "fido",
+      },
+      Object {
+        "id": "456",
+        "type": "cats",
+      },
+    ],
+    null,
+  ],
+  Array [
+    Object {
+      "id": "789",
+      "name": "fido",
+    },
+    Array [
+      Object {
+        "id": "123",
+        "type": "cats",
+      },
+      Object {
+        "id": "123",
+        "type": "people",
+      },
+      Object {
+        "id": "789",
+        "name": "fido",
+      },
+      Object {
+        "id": "456",
+        "type": "cats",
+      },
+    ],
+    null,
+  ],
+  Array [
+    Object {
+      "id": "456",
+      "type": "cats",
+    },
+    Array [
+      Object {
+        "id": "123",
+        "type": "cats",
+      },
+      Object {
+        "id": "123",
+        "type": "people",
+      },
+      Object {
+        "id": "789",
+        "name": "fido",
+      },
+      Object {
+        "id": "456",
+        "type": "cats",
+      },
+    ],
+    null,
+  ],
+  Array [
+    Object {
+      "id": "456",
+      "type": "cats",
+    },
+    Array [
+      Object {
+        "id": "123",
+        "type": "cats",
+      },
+      Object {
+        "id": "123",
+        "type": "people",
+      },
+      Object {
+        "id": "789",
+        "name": "fido",
+      },
+      Object {
+        "id": "456",
+        "type": "cats",
+      },
+    ],
+    null,
+  ],
+]
+`;
+
+exports[`ArraySchema normalization Object normalizes Objects using their values 1`] = `
+Object {
+  "entities": Object {
+    "user": Object {
+      "1": Object {
+        "id": 1,
+      },
+      "2": Object {
+        "id": 2,
+      },
+    },
+  },
+  "result": Array [
+    1,
+    2,
+  ],
+}
+`;
+
+exports[`ArraySchema normalization Object normalizes plain arrays as shorthand for ArraySchema 1`] = `
+Object {
+  "entities": Object {
+    "user": Object {
+      "1": Object {
+        "id": 1,
+      },
+      "2": Object {
+        "id": 2,
+      },
+    },
+  },
+  "result": Array [
+    1,
+    2,
+  ],
+}
+`;
+
+exports[`ArraySchema normalization Object passes its parent to its children when normalizing 1`] = `
+Object {
+  "entities": Object {
+    "children": Object {
+      "4": Object {
+        "content": "child",
+        "id": 4,
+        "parentId": 1,
+        "parentKey": "children",
+      },
+    },
+    "parents": Object {
+      "1": Object {
+        "children": Array [
+          4,
+        ],
+        "content": "parent",
+        "id": 1,
+      },
+    },
+  },
+  "result": 1,
+}
+`;

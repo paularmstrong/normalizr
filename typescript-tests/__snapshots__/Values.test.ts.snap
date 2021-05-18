@@ -1,0 +1,108 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ValuesSchema denormalization denormalizes the values of an object with the given schema 1`] = `
+Object {
+  "fido": Object {
+    "id": 1,
+    "type": "dogs",
+  },
+  "fluffy": Object {
+    "id": 1,
+    "type": "cats",
+  },
+}
+`;
+
+exports[`ValuesSchema denormalization denormalizes the values of an object with the given schema 2`] = `
+Object {
+  "fido": Immutable.Map {
+    "id": 1,
+    "type": "dogs",
+  },
+  "fluffy": Immutable.Map {
+    "id": 1,
+    "type": "cats",
+  },
+}
+`;
+
+exports[`ValuesSchema normalization can use a function to determine the schema when normalizing 1`] = `
+Object {
+  "entities": Object {
+    "cats": Object {
+      "1": Object {
+        "id": 1,
+        "type": "cat",
+      },
+    },
+    "dogs": Object {
+      "1": Object {
+        "id": 1,
+        "type": "dog",
+      },
+    },
+  },
+  "result": Object {
+    "fido": Object {
+      "id": 1,
+      "schema": "dogs",
+    },
+    "fluffy": Object {
+      "id": 1,
+      "schema": "cats",
+    },
+    "jim": Object {
+      "id": 2,
+      "type": "lizard",
+    },
+  },
+}
+`;
+
+exports[`ValuesSchema normalization filters out null and undefined values 1`] = `
+Object {
+  "entities": Object {
+    "cats": Object {
+      "1": Object {
+        "id": 1,
+        "type": "cats",
+      },
+    },
+  },
+  "result": Object {
+    "fluffy": Object {
+      "id": 1,
+      "schema": "cats",
+    },
+  },
+}
+`;
+
+exports[`ValuesSchema normalization normalizes the values of an object with the given schema 1`] = `
+Object {
+  "entities": Object {
+    "cats": Object {
+      "1": Object {
+        "id": 1,
+        "type": "cats",
+      },
+    },
+    "dogs": Object {
+      "1": Object {
+        "id": 1,
+        "type": "dogs",
+      },
+    },
+  },
+  "result": Object {
+    "fido": Object {
+      "id": 1,
+      "schema": "dogs",
+    },
+    "fluffy": Object {
+      "id": 1,
+      "schema": "cats",
+    },
+  },
+}
+`;

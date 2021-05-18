@@ -5,6 +5,6 @@ module.exports = {
     'post-checkout': `if [[ $HUSKY_GIT_PARAMS =~ 1$ ]]; then ${runYarnLock}; fi`,
     'post-merge': runYarnLock,
     'post-rebase': 'yarn install',
-    'pre-commit': 'yarn typecheck && yarn lint-staged',
+    // 'pre-commit': 'yarn typecheck && yarn lint-staged',
   },
 };

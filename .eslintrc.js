@@ -1,13 +1,9 @@
 module.exports = {
   // babel parser to support ES6/7 features
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
   parserOptions: {
-    ecmaVersion: 7,
-    ecmaFeatures: {
-      experimentalObjectRestSpread: true,
-      jsx: true,
-    },
     sourceType: 'module',
+    requireConfigFile: false,
   },
   extends: ['plugin:jest/recommended', 'prettier'],
   plugins: ['json', 'prettier'],

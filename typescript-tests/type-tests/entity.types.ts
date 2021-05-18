@@ -1,4 +1,4 @@
-import { denormalize, normalize, schema } from '../index'
+import { denormalize, normalize, schema, KeyType } from '../../src';
 
 type User = {
   id_str: string;
@@ -28,17 +28,15 @@ const tweet = new schema.Entity(
     mergeStrategy: (entityA, entityB) => ({
       ...entityA,
       ...entityB,
-      favorites: entityA.favorites
+      favorites: entityA.favorites,
     }),
     // Remove the URL field from the entity
-    processStrategy: (entity: Tweet, parent, key) => {
+    processStrategy: (entity: Tweet, _parent, _key) => {
       const { url, ...entityWithoutUrl } = entity;
       return entityWithoutUrl;
-    }
+    },
   }
 );
 
-const normalizedData = normalize(data, tweet);
-const denormalizedData = denormalize(normalizedData.result, tweet, normalizedData.entities);
-
-const isTweet = tweet.key === 'tweets';
+const normalizedData: {result: KeyType, entities: Record<string, any>} = normalize(data, tweet);
+denormalize(normalizedData.result, tweet, normalizedData.entities);

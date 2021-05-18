@@ -1,0 +1,3 @@
+{
+  "extends": "@tsconfig/recommended/tsconfig.json"
+}

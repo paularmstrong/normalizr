@@ -1,11 +1,11 @@
-import { normalize, schema } from '../index'
+import { normalize, schema } from '../../src';
 
 const user = new schema.Entity('users');
 
 const label = new schema.Entity('labels');
 
 const milestone = new schema.Entity('milestones', {
-  creator: user
+  creator: user,
 });
 
 const issue = new schema.Entity('issues', {
@@ -13,7 +13,7 @@ const issue = new schema.Entity('issues', {
   assignees: [user],
   labels: label,
   milestone,
-  user
+  user,
 });
 
 const pullRequest = new schema.Entity('pullRequests', {
@@ -21,13 +21,13 @@ const pullRequest = new schema.Entity('pullRequests', {
   assignees: [user],
   labels: label,
   milestone,
-  user
+  user,
 });
 
 const issueOrPullRequest = new schema.Array(
   {
     issues: issue,
-    pullRequests: pullRequest
+    pullRequests: pullRequest,
   },
   (entity: any) => (entity.pull_request ? 'pullRequests' : 'issues')
 );
