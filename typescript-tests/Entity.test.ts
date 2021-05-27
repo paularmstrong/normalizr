@@ -30,8 +30,7 @@ describe(`${schema.Entity.name} normalization`, () => {
         'users',
         {},
         {
-          idAttribute: (entity, parent, key) => `${parent.name}-${key}-${entity.id}`,
-          processStrategy: (input, _parent, _key) => input
+          idAttribute: (entity, parent, key) => `${parent.name}-${key}-${entity.id}`
         }
       );
       const inputSchema = new schema.Object({ user });
