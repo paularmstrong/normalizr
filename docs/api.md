@@ -163,7 +163,7 @@ const normalizedData = normalize(data, myArray);
   You _do not_ need to define any keys in your entity other than those that hold nested entities. All other values will be copied to the normalized entity's output.
 - `options`:
   - `idAttribute`: The attribute where unique IDs for each of this entity type can be found.  
-    Accepts either a string `key` or a function that returns the IDs `value`. Defaults to `'id'`.  
+    Accepts either a string `key` or a function that returns the IDs `value`. Defaults to `'id'`. This function can and will be run multiple times – which means your generated ID _must_ be the same every time the function is run. Using a random number/string generator like `uuid` will cause unexpected errors.
     As a function, accepts the following arguments, in order:
     - `value`: The input value of the entity.
     - `parent`: The parent object of the input array.
