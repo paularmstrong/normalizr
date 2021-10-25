@@ -1,5 +1,7 @@
 # normalizr [![build status](https://img.shields.io/travis/paularmstrong/normalizr/master.svg?style=flat-square)](https://travis-ci.org/paularmstrong/normalizr) [![Coverage Status](https://img.shields.io/coveralls/paularmstrong/normalizr/master.svg?style=flat-square)](https://coveralls.io/github/paularmstrong/normalizr?branch=master) [![npm version](https://img.shields.io/npm/v/normalizr.svg?style=flat-square)](https://www.npmjs.com/package/normalizr) [![npm downloads](https://img.shields.io/npm/dm/normalizr.svg?style=flat-square)](https://www.npmjs.com/package/normalizr)
 
+# [📣 🤝 Maintainer help wanted ](https://github.com/paularmstrong/normalizr/discussions/493)
+
 ## Install
 
 Install from the NPM repository using yarn or npm:
