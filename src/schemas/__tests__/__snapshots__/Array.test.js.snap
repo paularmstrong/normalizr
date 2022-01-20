@@ -131,6 +131,19 @@ Array [
 ]
 `;
 
+exports[`ArraySchema denormalization Object denormalizes partially normalized entities 1`] = `
+Array [
+  Object {
+    "author": Object {
+      "id": 1,
+      "name": "Milo",
+    },
+    "id": 2,
+    "name": "normalizr practise",
+  },
+]
+`;
+
 exports[`ArraySchema denormalization Object returns the input value if is not an array 1`] = `
 Object {
   "fillings": null,

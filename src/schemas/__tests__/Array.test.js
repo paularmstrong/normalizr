@@ -118,6 +118,18 @@ describe(`${schema.Array.name} denormalization`, () => {
       expect(denormalize('123', taco, entities)).toMatchSnapshot();
       expect(denormalize('123', taco, fromJS(entities))).toMatchSnapshot();
     });
+
+    test('denormalizes partially normalized entities', () => {
+      const userSchema = new schema.Entity('users');
+      const bookSchema = new schema.Entity('books', {
+        author: userSchema,
+      });
+      const entities = {
+        users: { 1: { id: 1, name: 'Milo' }, 2: { id: 2, name: 'Jake' } },
+      };
+      const books = [{ id: 2, name: 'normalizr practise', author: 1 }];
+      expect(denormalize(books, [bookSchema], entities)).toMatchSnapshot();
+    });
   });
 
   describe('Class', () => {

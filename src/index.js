@@ -58,11 +58,22 @@ export const normalize = (input, schema) => {
   return { entities, result };
 };
 
-const unvisitEntity = (id, schema, unvisit, getEntity, cache) => {
-  let entity = getEntity(id, schema);
+const getEntityId = (entityOrId, schema) => {
+  if (ImmutableUtils.isImmutable(entityOrId)) {
+    return entityOrId.get(schema.idAttribute);
+  }
+  if (typeof entityOrId === 'object') {
+    return entityOrId[schema.idAttribute];
+  }
+  return entityOrId;
+};
+
+const unvisitEntity = (entityOrId, schema, unvisit, getEntity, cache) => {
+  let entity = getEntity(entityOrId, schema);
+  const entityId = getEntityId(entityOrId, schema);
 
   if (entity === undefined && schema instanceof EntitySchema) {
-    entity = schema.fallback(id, schema);
+    entity = schema.fallback(entityId, schema);
   }
 
   if (typeof entity !== 'object' || entity === null) {
@@ -73,17 +84,17 @@ const unvisitEntity = (id, schema, unvisit, getEntity, cache) => {
     cache[schema.key] = {};
   }
 
-  if (!cache[schema.key][id]) {
+  if (!cache[schema.key][entityId]) {
     // Ensure we don't mutate it non-immutable objects
     const entityCopy = ImmutableUtils.isImmutable(entity) ? entity : { ...entity };
 
     // Need to set this first so that if it is referenced further within the
     // denormalization the reference will already exist.
-    cache[schema.key][id] = entityCopy;
-    cache[schema.key][id] = schema.denormalize(entityCopy, unvisit);
+    cache[schema.key][entityId] = entityCopy;
+    cache[schema.key][entityId] = schema.denormalize(entityCopy, unvisit);
   }
 
-  return cache[schema.key][id];
+  return cache[schema.key][entityId];
 };
 
 const getUnvisit = (entities) => {

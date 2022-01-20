@@ -18,6 +18,26 @@ Immutable.Map {
 }
 `;
 
+exports[`EntitySchema denormalization can denormalize already partially denormalized data 2 1`] = `
+Object {
+  "id": 1,
+  "rooms": Array [
+    Object {
+      "owner": Object {
+        "id": 1,
+        "name": "Jake Cook",
+      },
+    },
+    Object {
+      "owner": Object {
+        "id": 2,
+        "name": "John Smith",
+      },
+    },
+  ],
+}
+`;
+
 exports[`EntitySchema denormalization denormalizes an entity 1`] = `
 Object {
   "id": 1,

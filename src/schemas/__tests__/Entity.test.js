@@ -234,6 +234,25 @@ describe(`${schema.Entity.name} denormalization`, () => {
     expect(denormalize(1, menuSchema, fromJS(entities))).toMatchSnapshot();
   });
 
+  test('can denormalize already partially denormalized data 2', () => {
+    const ownerSchema = new schema.Entity('owners');
+    const homeSchema = new schema.Entity('homes', {
+      rooms: [{ owner: ownerSchema }],
+    });
+
+    const entities = {
+      owners: {
+        1: { id: 1, name: 'Jake' },
+        2: { id: 2, name: 'John' },
+      },
+      homes: {
+        1: { id: 1, rooms: [{ owner: { id: 1, name: 'Jake Cook' } }, { owner: { id: 2, name: 'John Smith' } }] },
+      },
+    };
+
+    expect(denormalize(1, homeSchema, entities)).toMatchSnapshot();
+  });
+
   test('denormalizes recursive dependencies', () => {
     const user = new schema.Entity('users');
     const report = new schema.Entity('reports');
