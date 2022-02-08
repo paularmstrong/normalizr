@@ -41,10 +41,10 @@ Normalizr is a small, but powerful utility for taking JSON with a schema definit
 
 ## Quick Start
 
-Consider a typical blog post. The API response for a single post might look something like this:
+Consider a typical blog post. The API response for might look something like this:
 
 ```json
-{
+[{
   "id": "123",
   "author": {
     "id": "1",
@@ -60,7 +60,7 @@ Consider a typical blog post. The API response for a single post might look some
       }
     }
   ]
-}
+}]
 ```
 
 We have two nested entity types within our `article`: `users` and `comments`. Using various `schema`, we can normalize all three entity types down:
@@ -82,7 +82,7 @@ const article = new schema.Entity('articles', {
   comments: [comment]
 });
 
-const normalizedData = normalize(originalData, article);
+const normalizedData = normalize(originalData, [article]);
 ```
 
 Now, `normalizedData` will be:
