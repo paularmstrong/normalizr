@@ -1,0 +1,13 @@
+name: Close Pull Request
+
+on:
+  pull_request_target:
+    types: [opened]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: superbrothers/close-pull-request@v3
+        with:
+          comment: 'Normalizr is no longer maintained and does not accept pull requests. Please maintain your own fork of this repository.'
